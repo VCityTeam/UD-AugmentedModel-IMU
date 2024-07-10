@@ -24,6 +24,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@ud-viz/utils_browser": "^4.3.0",
+    "@ud-viz/widget_slide_show": "^4.3.0",
     "buffer": "^6.0.3"
   }
 }

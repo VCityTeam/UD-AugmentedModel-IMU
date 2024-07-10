@@ -1,18 +1,21 @@
-const udviz = window.udviz;
+import { cameraFitRectangle, initScene, loadMultipleJSON } from "@ud-viz/utils_browser";
+import proj4 from "proj4";
+import * as itowns from "itowns";
+import * as THREE from "three"; 
+import { SlideShow } from "@ud-viz/widget_slide_show";
 
-udviz
-  .loadMultipleJSON([
-    './assets/config/extents.json',
-    './assets/config/crs.json',
-    './assets/config/widget/slide_show.json',
+loadMultipleJSON([
+    '../assets/config/extents.json',
+    '../assets/config/crs.json',
+    '../assets/config/widget/slide_show.json',
   ])
   .then((configs) => {
-    udviz.proj4.default.defs(
+    proj4.defs(
       configs['crs'][0].name,
       configs['crs'][0].transform
     );
 
-    const extent = new udviz.itowns.Extent(
+    const extent = new itowns.Extent(
       configs['extents'][0].name,
       parseInt(configs['extents'][0].west),
       parseInt(configs['extents'][0].east),
@@ -24,24 +27,24 @@ udviz
     const viewDomElement = document.createElement('div');
     viewDomElement.classList.add('full_screen');
     document.body.appendChild(viewDomElement);
-    const view = new udviz.itowns.PlanarView(viewDomElement, extent);
+    const view = new itowns.PlanarView(viewDomElement, extent);
 
     // eslint-disable-next-line no-constant-condition
     if ('RUN_MODE' == 'production')
       loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
 
     // init scene 3D
-    udviz.initScene(
+    initScene(
       view.camera.camera3D,
       view.mainLoop.gfxEngine.renderer,
       view.scene
     );
 
     const fitExtent = () => {
-      udviz.cameraFitRectangle(
+      cameraFitRectangle(
         view.camera.camera3D,
-        new udviz.THREE.Vector2(extent.west, extent.south),
-        new udviz.THREE.Vector2(extent.east, extent.north)
+        new THREE.Vector2(extent.west, extent.south),
+        new THREE.Vector2(extent.east, extent.north)
       );
       view.notifyChange(view.camera.camera3D);
     };
@@ -50,7 +53,7 @@ udviz
 
     // /// SLIDESHOW MODULE
     // 3D Setup
-    const slideShow = new udviz.widgetSlideShow.SlideShow(
+    const slideShow = new SlideShow(
       view,
       configs['slide_show'],
       extent
