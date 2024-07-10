@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Title of the document</title>
+    <meta charset="UTF-8">
+    <title>Digital replica</title>
+    <link rel="stylesheet" href="./assets/css/examples.css" />
+    <link rel="stylesheet" href="./assets/css/loading_screen.css" />
+    <link rel="stylesheet" href="./assets/css/widget_slide_show.css" />
 </head>
 <script src='./dist/bundle.js'></script>
+
 <body>
+    <script>
+        const intervalID = setInterval(getDate, 1000);
+
+        function getDate() {
+            const url = "http://localhost:8000/";
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onload = () => {
+                if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+            };
+            xhr.onerror = reject;
+            xhr.send();
+        }
+    </script>
 </body>
+
 </html>
