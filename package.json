@@ -1,0 +1,29 @@
+{
+  "name": "ud-augmentedmodel-imu",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VCityTeam/UD-AugmentedModel-IMU.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VCityTeam/UD-AugmentedModel-IMU/issues"
+  },
+  "homepage": "https://github.com/VCityTeam/UD-AugmentedModel-IMU#readme",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "express": "^4.19.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3"
+  }
+}
