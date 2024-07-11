@@ -21,8 +21,11 @@ app.get('/date', (req, res) => {
     res.send(date);
 })
 
+console.log(path.join(__dirname , "../app1"));
+app.use("/digital", express.static(path.join(__dirname, "../app1")));
+app.use("/tangible", express.static(path.join(__dirname, "../app2")));
 
-app.use(express.static(path.resolve(__dirname, '../')));
+// app.use(express.static(path.resolve(__dirname, '../')));
 
 
 app.listen(8000)
