@@ -16,15 +16,13 @@
 
         function getDate() {
             const baseUrl = "http://localhost:8000/";
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `${baseUrl}date`);
-            xhr.onload = () => {
-                if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
-                    resolve(JSON.parse(xhr.responseText));
-                }
-            };
-            // xhr.onerror = reject;
-            xhr.send();
+            fetch(`${baseUrl}date`, {
+                method: "GET",
+            }).then(
+                response => response.text()
+            ).then(
+                html => console.log(html)
+            );
         }
     </script>
 </body>
