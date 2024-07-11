@@ -23,9 +23,6 @@ app.get('/date', (req, res) => {
 
 console.log(path.join(__dirname , "../app1"));
 app.use("/digital", express.static(path.join(__dirname, "../digital/public")));
-app.use("/tangible", express.static(path.join(__dirname, "../tangible")));
-
-// app.use(express.static(path.resolve(__dirname, '../')));
-
+app.use("/tangible", express.static(path.join(__dirname, "../tangible/public")));
 
 app.listen(8000)

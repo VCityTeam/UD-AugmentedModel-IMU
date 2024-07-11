@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tangible replica</title>
+    <link rel="stylesheet" href="./assets/css/examples.css" />
+    <link rel="stylesheet" href="./assets/css/loading_screen.css" />
+    <link rel="stylesheet" href="./assets/css/widget_slide_show.css" />
+</head>
+<script src='./dist/bundle.js'></script>
+
+<body>
+    <script>
+        const intervalID = setInterval(getDate, 1000);
+
+        function getDate() {
+            const baseUrl = "http://localhost:8000/";
+            fetch(`${baseUrl}date`, {
+                method: "GET",
+            }).then(
+                response => response.text()
+            ).then(
+                html => console.log(html)
+            );
+        }
+    </script>
+</body>
+
+</html>
