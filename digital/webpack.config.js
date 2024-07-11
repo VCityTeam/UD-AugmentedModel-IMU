@@ -4,8 +4,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
-    publicPath: '/digital/',
-    path: path.resolve(__dirname, './dist'),
+    publicPath: './digital/public',
+    path: path.resolve(__dirname, './public/dist'),
   },
   module: {
     rules: [

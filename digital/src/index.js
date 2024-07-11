@@ -5,9 +5,9 @@ import * as THREE from "three";
 import { SlideShow } from "@ud-viz/widget_slide_show";
 
 loadMultipleJSON([
-    '../digital/assets/config/extents.json',
-    '../digital/assets/config/crs.json',
-    '../digital/assets/config/widget/slide_show.json',
+    './assets/config/extents.json',
+    './assets/config/crs.json',
+    './assets/config/widget/slide_show.json',
   ])
   .then((configs) => {
     proj4.defs(
