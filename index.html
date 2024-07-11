@@ -15,15 +15,15 @@
         const intervalID = setInterval(getDate, 1000);
 
         function getDate() {
-            const url = "http://localhost:8000/";
+            const baseUrl = "http://localhost:8000/";
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
+            xhr.open('GET', `${baseUrl}date`);
             xhr.onload = () => {
                 if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
                     resolve(JSON.parse(xhr.responseText));
                 }
             };
-            xhr.onerror = reject;
+            // xhr.onerror = reject;
             xhr.send();
         }
     </script>

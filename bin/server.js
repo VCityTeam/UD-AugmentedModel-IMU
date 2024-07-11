@@ -9,17 +9,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 let date = null;
 
-app.post('/', (req, res) => {
-    console.log(req.body.date);
+app.post('/date', (req, res) => {
+    console.log('POST');
     date = req.body.date;
+    // res.send(date);
+})
+
+app.get('/date', (req, res) => {
+    // res.send();
+    console.log('GET');
     res.send(date);
 })
 
-app.get('/', (req, res) => {
-    // res.send();
-    res.send(date);
-})
 
 app.use(express.static(path.resolve(__dirname, '../')));
+
 
 app.listen(8000)

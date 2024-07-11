@@ -8,8 +8,8 @@
 
 <body>
     <script>
-        const url = "http://localhost:8000/";
-        fetch(url, {
+        const baseUrl = "http://localhost:8000/";
+        fetch(`${baseUrl}date`, {
             method: "POST",
             body: JSON.stringify({ date: "2008" }),
             headers: {
