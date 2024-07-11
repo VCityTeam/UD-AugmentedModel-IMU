@@ -22,8 +22,8 @@ app.get('/date', (req, res) => {
 })
 
 console.log(path.join(__dirname , "../app1"));
-app.use("/digital", express.static(path.join(__dirname, "../app1")));
-app.use("/tangible", express.static(path.join(__dirname, "../app2")));
+app.use("/digital", express.static(path.join(__dirname, "../digital")));
+app.use("/tangible", express.static(path.join(__dirname, "../tangible")));
 
 // app.use(express.static(path.resolve(__dirname, '../')));
 
