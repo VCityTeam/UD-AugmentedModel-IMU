@@ -1,26 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Digital replica</title>
-</head>
+  </head>
+  <script src="./dist/bundle.js"></script>
 
-<body>
-    <script>
-        const baseUrl = "http://localhost:8000/";
-        fetch(`${baseUrl}date`, {
-            method: "POST",
-            body: JSON.stringify({ date: "2008" }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        }).then(
-            response => response.text()
-        ).then(
-            html => console.log(html)
-        );
-    </script>
-</body>
-
+  <body></body>
 </html>

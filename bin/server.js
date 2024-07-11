@@ -10,19 +10,20 @@ app.use(bodyParser.json());
 let date = null;
 
 app.post('/date', (req, res) => {
-    console.log('POST');
-    date = req.body.date;
-    // res.send(date);
-})
+  date = req.body.date;
+  // res.send(date);
+});
 
 app.get('/date', (req, res) => {
-    // res.send();
-    console.log('GET');
-    res.send(date);
-})
+  // res.send();
+  res.send(date);
+});
 
-console.log(path.join(__dirname , "../app1"));
-app.use("/digital", express.static(path.join(__dirname, "../digital/public")));
-app.use("/tangible", express.static(path.join(__dirname, "../tangible/public")));
+app.use('/digital', express.static(path.join(__dirname, '../digital/public')));
+app.use(
+  '/tangible',
+  express.static(path.join(__dirname, '../tangible/public'))
+);
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
-app.listen(8000)
+app.listen(8000);

@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "private": "true",
-  "bin": {
-    "ud-augmentedmodel-imu": "bin/server.js"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dig": "cross-env DIR_APP=digital webpack --config webpack.config.js",
-    "build-tan": "cross-env DIR_APP=tangible webpack --config webpack.config.js",
+    "build-dig-dev": "nodemon --watch ./digital/src -e js --exec 'cross-env MODE=development DIR_APP=digital webpack --config webpack.config.js'",
+    "build-tan-dev": "nodemon --watch ./tangible/src -e js --exec 'cross-env MODE=development DIR_APP=tangible webpack --config webpack.config.js'",
+    "build-dev": "npm run build-tan-dev & npm run build-dig-dev",
+    "host": "node ./bin/server.js",
+    "build-dig": "cross-env MODE=production DIR_APP=digital webpack --config webpack.config.js",
+    "build-tan": "cross-env MODE=production DIR_APP=tangible webpack --config webpack.config.js",
     "build": "npm run build-tan && npm run build-dig",
     "start": "npm run build && node ./bin/server.js"
   },
@@ -20,10 +20,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "body-parser": "^1.20.2",
-    "cross-env": "^7.0.3",
-    "express": "^4.19.2",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "body-parser": "1.20.2",
+    "cross-env": "7.0.3",
+    "express": "4.19.2",
+    "nodemon": "3.1.4",
+    "webpack": "5.92.1",
+    "webpack-cli": "5.1.4"
   }
 }

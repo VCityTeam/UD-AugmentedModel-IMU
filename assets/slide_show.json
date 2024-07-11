@@ -1,0 +1,15 @@
+{
+  "slides": [
+    {
+      "name": "diapo1",
+      "folder": "../assets/img",
+      "diapositives": ["city_tiler_colors.png", "2009.png", "2012.png"]
+    },
+    {
+      "name": "diapo2",
+      "folder": "../assets/img",
+      "diapositives": ["city_tiler_colors.png", "roads_after.png"]
+    }
+  ],
+  "textureRotation": 0
+}

@@ -1,11 +1,12 @@
-const path = require("path");
+const path = require('path');
 
 const DIR_APP = process.env.DIR_APP;
+const MODE = process.env.MODE;
 
-module.exports = {
+const webpackConfig = {
   entry: `./${DIR_APP}/src/index.js`,
   output: {
-    filename: "bundle.js",
+    filename: 'bundle.js',
     publicPath: `./${DIR_APP}/public`,
     path: path.resolve(__dirname, `./${DIR_APP}/public/dist`),
   },
@@ -13,10 +14,13 @@ module.exports = {
     rules: [
       {
         test: /\.css/,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
-  mode: "development",
-  devtool: "source-map",
 };
+
+webpackConfig.mode = MODE;
+webpackConfig.devtool = MODE == 'development' ? 'source-map' : undefined;
+
+module.exports = webpackConfig;
