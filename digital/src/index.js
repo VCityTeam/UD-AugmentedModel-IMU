@@ -16,26 +16,6 @@ loadMultipleJSON(['./assets/config/extents.json',
     (configs) => {
       proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
-      // const slides = configs['slide_show'].slides;
-
-      // for (let slide in slides) {
-      //   const button = document.createElement('button');
-      //   button.innerText = slides[slide].name;
-      //   document.body.appendChild(button);
-      //   button.onclick = () => {
-      //     const baseUrl = 'http://localhost:8000/';
-      //     fetch(`${baseUrl}date`, {
-      //       method: 'POST',
-      //       body: JSON.stringify({ date: slides[slide].name }),
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //     })
-      //       .then((response) => response.text())
-      //       .then((html) => console.log(html));
-      //   };
-      // }
-
       const extent = new itowns.Extent(
         configs['extents'][0].name,
         parseInt(configs['extents'][0].west),
@@ -390,6 +370,8 @@ loadMultipleJSON(['./assets/config/extents.json',
             uiCircle.hidden = false;
             radiusParameter.value = stsCircle.radius;
             heightParameter.value = stsCircle.height;
+            orbitControls.target = stsCircle.stLayer.rootObject3D.position;
+            orbitControls.update();
             break;
           case 'parabola':
             stsParabola.display(getCurrentMode());
@@ -397,6 +379,8 @@ loadMultipleJSON(['./assets/config/extents.json',
             parabolaDistAxisX.value = stsParabola.distAxisX;
             parabolaDistAxisY.value = stsParabola.distAxisY;
             parabolaHeight.value = stsParabola.height;
+            orbitControls.target = stsParabola.stLayer.rootObject3D.position;
+            orbitControls.update();
             break;
         }
       };
