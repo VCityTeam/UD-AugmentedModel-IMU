@@ -26,5 +26,8 @@
     "nodemon": "3.1.4",
     "webpack": "5.92.1",
     "webpack-cli": "5.1.4"
+  },
+  "dependencies": {
+    "@ud-viz/extensions_3d_tiles_temporal": "^4.3.0"
   }
 }
