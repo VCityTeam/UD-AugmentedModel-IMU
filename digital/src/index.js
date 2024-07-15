@@ -8,11 +8,11 @@ import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 
 loadMultipleJSON(['./assets/config/extents.json',
-          './assets/config/crs.json',
-          './assets/config/layer/3DTiles_temporal.json',
-          './assets/config/layer/3DTiles_STS_data.json',
-          './assets/config/layer/base_maps.json',
-          './assets/config/layer/elevation.json',]).then(
+  './assets/config/crs.json',
+  './assets/config/layer/3DTiles_temporal.json',
+  './assets/config/layer/3DTiles_STS_data.json',
+  './assets/config/layer/base_maps.json',
+  './assets/config/layer/elevation.json',]).then(
     (configs) => {
       proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -134,8 +134,8 @@ loadMultipleJSON(['./assets/config/extents.json',
       selectDataset.appendChild(datasetGratteCiel);
 
       const getDataset = () => {
-          return [configs['3DTiles_temporal'][2]];
-        }
+        return [configs['3DTiles_temporal'][2]];
+      }
 
       //SEQUENTIAL or CHRONOLOGICAL
       const selectMode = document.createElement('select');
@@ -428,12 +428,34 @@ loadMultipleJSON(['./assets/config/extents.json',
 
       selectDate.onchange = () => {
         stsCircle.selectVersion(selectDate.selectedOptions[0].value);
+        // Send to the server the correct value
+        const baseUrl = 'http://localhost:8000/';
+        fetch(`${baseUrl}date`, {
+          method: 'POST',
+          body: JSON.stringify({ date: selectDate.selectedOptions[0].value }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => response.text())
+          .then((html) => console.log(html));
       };
 
       selectDateParabola.onchange = () => {
         stsParabola.middleDate =
           selectDateParabola.selectedOptions[0].value;
         stsParabola.display(getCurrentMode());
+        // Send to the server the correct value
+        const baseUrl = 'http://localhost:8000/';
+        fetch(`${baseUrl}date`, {
+          method: 'POST',
+          body: JSON.stringify({ date: stsParabola.middleDate }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => response.text())
+          .then((html) => console.log(html));
       };
 
       parabolaDistAxisX.addEventListener('input', (event) => {
