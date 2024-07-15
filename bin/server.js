@@ -11,7 +11,7 @@ let date = null;
 
 app.post('/date', (req, res) => {
   date = req.body.date;
-  // res.send(date);
+  res.send(date);
 });
 
 app.get('/date', (req, res) => {
