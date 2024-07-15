@@ -370,8 +370,6 @@ loadMultipleJSON(['./assets/config/extents.json',
             uiCircle.hidden = false;
             radiusParameter.value = stsCircle.radius;
             heightParameter.value = stsCircle.height;
-            orbitControls.target = stsCircle.stLayer.rootObject3D.position;
-            orbitControls.update();
             break;
           case 'parabola':
             stsParabola.display(getCurrentMode());
@@ -379,8 +377,6 @@ loadMultipleJSON(['./assets/config/extents.json',
             parabolaDistAxisX.value = stsParabola.distAxisX;
             parabolaDistAxisY.value = stsParabola.distAxisY;
             parabolaHeight.value = stsParabola.height;
-            orbitControls.target = stsParabola.stLayer.rootObject3D.position;
-            orbitControls.update();
             break;
         }
       };

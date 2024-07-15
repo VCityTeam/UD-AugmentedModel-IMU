@@ -1,14 +1,29 @@
 {
   "slides": [
     {
-      "name": "diapo1",
+      "name": "init",
       "folder": "../assets/img",
-      "diapositives": ["2009.png", "2012.png"]
+      "diapositives": ["init.png"]
     },
     {
-      "name": "diapo2",
+      "name": "2009",
       "folder": "../assets/img",
-      "diapositives": ["city_tiler_colors.png", "roads_after.png"]
+      "diapositives": ["2009.png"]
+    },
+    {
+      "name": "2012",
+      "folder": "../assets/img",
+      "diapositives": ["2012.png"]
+    },
+    {
+      "name": "2015",
+      "folder": "../assets/img",
+      "diapositives": ["2015.png"]
+    },
+    {
+      "name": "2018",
+      "folder": "../assets/img",
+      "diapositives": ["2018.png"]
     }
   ],
   "textureRotation": 0
