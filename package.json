@@ -4,6 +4,8 @@
   "description": "",
   "private": "true",
   "scripts": {
+    "clean": "rm -f -r node_modules && rm -f package-lock.json && rm -f -r ./dist  && rm -f  -r ./packages/**/node_modules",
+    "reset": "npm run clean && npm i",
     "build-dig-dev": "nodemon --watch ./digital/src -e js --exec 'cross-env MODE=development DIR_APP=digital webpack --config webpack.config.js'",
     "build-tan-dev": "nodemon --watch ./tangible/src -e js --exec 'cross-env MODE=development DIR_APP=tangible webpack --config webpack.config.js'",
     "build-dev": "npm run build-tan-dev & npm run build-dig-dev",
@@ -26,9 +28,5 @@
     "nodemon": "3.1.4",
     "webpack": "^5.94.0",
     "webpack-cli": "5.1.4"
-  },
-  "dependencies": {
-    "@ud-viz/extensions_3d_tiles_temporal": "^4.3.0",
-    "@ud-viz/widget_guided_tour": "^4.3.0"
   }
 }
