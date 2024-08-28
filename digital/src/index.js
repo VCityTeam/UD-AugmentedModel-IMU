@@ -3,12 +3,14 @@ import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
+import * as widgetGuidedTour from '@ud-viz/widget_guided_tour';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
+  './assets/config/guided_tour.json',
   './assets/config/layer/3DTiles_temporal.json',
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
@@ -463,4 +465,18 @@ loadMultipleJSON([
     stsParabola.height = Number(event.target.value);
     stsParabola.display(getCurrentMode());
   });
+
+  // /// GUIDED TOUR MODULE
+  // 3D Setup
+  const guidedTour = new widgetGuidedTour.GuidedTour(
+    view,
+    configs['guided_tour'].tour,
+    configs['guided_tour'].media
+  );
+  guidedTour.goToStep(guidedTour.startIndex);
+  guidedTour.domElement.classList.add('widget_guided_tour');
+  guidedTour.mediaContainer.classList.add('media_container');
+  guidedTour.previousButton.innerText = 'Previous';
+  guidedTour.nextButton.innerText = 'Next';
+  document.body.appendChild(guidedTour.domElement);
 });
