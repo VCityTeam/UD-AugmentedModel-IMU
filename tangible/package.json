@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/VCityTeam/UD-AugmentedModel-IMU#readme",
   "dependencies": {
-    "@ud-viz/utils_browser": "^4.3.0",
-    "@ud-viz/widget_slide_show": "^4.3.0",
+    "@ud-viz/utils_browser": "../../UD-Viz/packages/utils_browser",
+    "@ud-viz/widget_slide_show": "../../UD-Viz/packages/widget_slide_show",
     "buffer": "^6.0.3"
   }
 }
