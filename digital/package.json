@@ -1,0 +1,21 @@
+{
+  "name": "ud-augmentedmodel-imu-digital",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VCityTeam/UD-AugmentedModel-IMU/issues"
+  },
+  "homepage": "https://github.com/VCityTeam/UD-AugmentedModel-IMU#readme",
+  "dependencies": {
+    "@ud-viz/extensions_3d_tiles_temporal": "^4.3.0",
+    "@ud-viz/widget_guided_tour": "^4.3.0"
+  }
+}
