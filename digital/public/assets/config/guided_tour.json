@@ -1,5 +1,6 @@
 {
     "tour": {
+        "id": "tour_0",
         "name": "Tour example",
         "description": "This is an example of guided tour",
         "startIndex": 0,

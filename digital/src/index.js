@@ -113,9 +113,9 @@ loadMultipleJSON([
   const getDataset = () => {
     switch (selectDataset.selectedOptions[0].value) {
       case 'fakeLyon':
-        return configs['3DTiles_STS_data'][0];
+        return configs['3DTiles_STS_data'][0].versions;
       case 'fakeGratteCiel':
-        return configs['3DTiles_STS_data'][1];
+        return configs['3DTiles_STS_data'][1].versions;
       case 'lyon':
         return [configs['3DTiles_temporal'][0]];
       case 'doua':
