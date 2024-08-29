@@ -1,4 +1,8 @@
-import { initScene, loadMultipleJSON } from '@ud-viz/utils_browser';
+import {
+  initScene,
+  loadMultipleJSON,
+  createLabelInput,
+} from '@ud-viz/utils_browser';
 import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
@@ -15,7 +19,7 @@ loadMultipleJSON([
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
-  'http://localhost:8000/assets/themes.json'
+  'http://localhost:8000/assets/themes.json',
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -111,17 +115,25 @@ loadMultipleJSON([
 
   // CREATE HTML
   const selectDataset = document.getElementById('select_dataset');
-  const datasetConfigs = {}
-  configs['3DTiles_STS_data'].concat(configs['3DTiles_temporal']).forEach((config) => {
-    datasetConfigs[config.id] = config.versions || [config];
-    const dataOption = document.createElement('option');
-    dataOption.value = config.id;
-    dataOption.innerText = config.name;
-    selectDataset.appendChild(dataOption);
-  })
+  const datasetConfigs = {};
+  configs['3DTiles_STS_data']
+    .concat(configs['3DTiles_temporal'])
+    .forEach((config) => {
+      datasetConfigs[config.id] = config.versions || [config];
+      const dataOption = document.createElement('option');
+      dataOption.value = config.id;
+      dataOption.innerText = config.name;
+      selectDataset.appendChild(dataOption);
+    });
 
   const getDataset = () => {
-    return datasetConfigs[selectDataset.selectedOptions[0].value]
+    return datasetConfigs[selectDataset.selectedOptions[0].value];
+  };
+
+  const getThemes = () => {
+    return configs['themes'].find(
+      (config) => config.dataId == selectDataset.selectedOptions[0].value
+    );
   };
 
   const selectMode = document.getElementById('select_mode');
@@ -139,6 +151,8 @@ loadMultipleJSON([
   const selectSTShape = document.getElementById('select_shape');
   const shapeName = document.getElementById('shape_name');
   const defaultShape = document.getElementById('default_shape');
+  const themeDiv = document.getElementById('theme_div');
+  const themesContainer = document.getElementById('themes_container');
 
   // CIRCLE HTML
   const uiCircle = document.getElementById('circle_div');
@@ -180,6 +194,19 @@ loadMultipleJSON([
       });
       versions = [];
     }
+
+    const themesConfigs = getThemes();
+    if (themesConfigs != undefined) {
+      themeDiv.hidden = false;
+      themesContainer.innerHTML = '';
+      themesConfigs.themes.forEach((config) => {
+        const themeLabelInput = createLabelInput(config.name, 'checkbox');
+        themesContainer.appendChild(themeLabelInput.parent);
+      });
+    } else {
+      themeDiv.hidden = true;
+    }
+
     const c3dtilesConfigs = getDataset();
     const promisesTileContentLoaded = [];
     c3dtilesConfigs.forEach((config) => {
@@ -210,9 +237,10 @@ loadMultipleJSON([
           })
         );
         if (isTemporal) {
-          const temporalsWrapper = new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
-            c3DTilesLayer
-          );
+          const temporalsWrapper =
+            new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
+              c3DTilesLayer
+            );
 
           if (date == Math.min(...datesJSON)) {
             temporalsWrapper.styleDate = date + 1;
@@ -224,7 +252,11 @@ loadMultipleJSON([
       });
     });
 
-    const stLayer = new extensions3DTilesTemporal.STLayer(view, new THREE.Object3D(), versions);
+    const stLayer = new extensions3DTilesTemporal.STLayer(
+      view,
+      new THREE.Object3D(),
+      versions
+    );
 
     Promise.all(promisesTileContentLoaded).then(() => {
       shapeName.hidden = true;
