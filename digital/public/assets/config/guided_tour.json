@@ -4,7 +4,7 @@
         "name": "Tour example",
         "description": "This is an example of guided tour",
         "startIndex": 0,
-        "endIndex": 3,
+        "endIndex": 6,
         "steps": [
             {
                 "previous": 0,
@@ -32,7 +32,31 @@
             },
             {
                 "previous": 2,
-                "next": 3,
+                "next": 4,
+                "media": [
+                    "VID_00",
+                    "AUD_00"
+                ]
+            },
+            {
+                "previous": 3,
+                "next": 5,
+                "media": [
+                    "VID_00",
+                    "AUD_00"
+                ]
+            },
+            {
+                "previous": 4,
+                "next": 6,
+                "media": [
+                    "VID_00",
+                    "AUD_00"
+                ]
+            },
+            {
+                "previous": 5,
+                "next": 6,
                 "media": [
                     "VID_00",
                     "AUD_00"

@@ -15,6 +15,7 @@ loadMultipleJSON([
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
+  'http://localhost:8000/assets/themes.json'
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 

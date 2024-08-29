@@ -1,34 +1,10 @@
 {
   "slides": [
     {
-      "id": "init",
-      "name": "init",
+      "id": "slide_0",
+      "name": "Gratte-Ciel temporel",
       "folder": "../assets/img",
-      "diapositives": ["init.png"]
-    },
-    {
-      "id": "2009",
-      "name": "2009",
-      "folder": "../assets/img",
-      "diapositives": ["2009.png"]
-    },
-    {
-      "id": "2012",
-      "name": "2012",
-      "folder": "../assets/img",
-      "diapositives": ["2012.png"]
-    },
-    {
-      "id": "2015",
-      "name": "2015",
-      "folder": "../assets/img",
-      "diapositives": ["2015.png"]
-    },
-    {
-      "id": "2018",
-      "name": "2018",
-      "folder": "../assets/img",
-      "diapositives": ["2018.png"]
+      "diapositives": ["init.png", "2009.png", "2009.png", "2012.png", "2015.png", "2018.png", "init.png"]
     }
   ],
   "textureRotation": 0
