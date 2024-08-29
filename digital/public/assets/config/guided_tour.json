@@ -1,89 +1,180 @@
-{
-    "tour": {
-        "id": "tour_0",
-        "name": "Tour example",
-        "description": "This is an example of guided tour",
-        "startIndex": 0,
-        "endIndex": 6,
-        "steps": [
+[
+    {
+        "tour": {
+            "id": "tour_0",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 6,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 1,
+                    "media": [
+                        "TEXT_00",
+                        "IMG_00"
+                    ]
+                },
+                {
+                    "previous": 0,
+                    "next": 2,
+                    "media": [
+                        "VID_00",
+                        "TEXT_00"
+                    ]
+                },
+                {
+                    "previous": 1,
+                    "next": 3,
+                    "media": [
+                        "AUD_00",
+                        "IMG_00"
+                    ]
+                },
+                {
+                    "previous": 2,
+                    "next": 4,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 3,
+                    "next": 5,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 4,
+                    "next": 6,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 5,
+                    "next": 6,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                }
+            ]
+        },
+        "media": [
             {
-                "previous": 0,
-                "next": 1,
-                "media": [
-                    "TEXT_00",
-                    "IMG_00"
-                ]
+                "id": "TEXT_00",
+                "type": "text",
+                "value": "This is an example"
             },
             {
-                "previous": 0,
-                "next": 2,
-                "media": [
-                    "VID_00",
-                    "TEXT_00"
-                ]
+                "id": "IMG_00",
+                "type": "image",
+                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
             },
             {
-                "previous": 1,
-                "next": 3,
-                "media": [
-                    "AUD_00",
-                    "IMG_00"
-                ]
+                "id": "VID_00",
+                "type": "video",
+                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             },
             {
-                "previous": 2,
-                "next": 4,
-                "media": [
-                    "VID_00",
-                    "AUD_00"
-                ]
-            },
-            {
-                "previous": 3,
-                "next": 5,
-                "media": [
-                    "VID_00",
-                    "AUD_00"
-                ]
-            },
-            {
-                "previous": 4,
-                "next": 6,
-                "media": [
-                    "VID_00",
-                    "AUD_00"
-                ]
-            },
-            {
-                "previous": 5,
-                "next": 6,
-                "media": [
-                    "VID_00",
-                    "AUD_00"
-                ]
+                "id": "AUD_00",
+                "type": "audio",
+                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
             }
         ]
     },
-    "media": [
-        {
-            "id": "TEXT_00",
-            "type": "text",
-            "value": "This is an example"
+    {
+        "tour": {
+            "id": "tour_1",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 6,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 1,
+                    "media": [
+                        "VID_00",
+                        "TEXT_00"
+                    ]
+                },
+                {
+                    "previous": 0,
+                    "next": 2,
+                    "media": [
+                        "VID_00",
+                        "TEXT_00"
+                    ]
+                },
+                {
+                    "previous": 1,
+                    "next": 3,
+                    "media": [
+                        "AUD_00",
+                        "IMG_00"
+                    ]
+                },
+                {
+                    "previous": 2,
+                    "next": 4,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 3,
+                    "next": 5,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 4,
+                    "next": 6,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 5,
+                    "next": 6,
+                    "media": [
+                        "VID_00",
+                        "AUD_00"
+                    ]
+                }
+            ]
         },
-        {
-            "id": "IMG_00",
-            "type": "image",
-            "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
-        },
-        {
-            "id": "VID_00",
-            "type": "video",
-            "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        },
-        {
-            "id": "AUD_00",
-            "type": "audio",
-            "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
-        }
-    ]
-}
+        "media": [
+            {
+                "id": "TEXT_00",
+                "type": "text",
+                "value": "This is an example"
+            },
+            {
+                "id": "IMG_00",
+                "type": "image",
+                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+            },
+            {
+                "id": "VID_00",
+                "type": "video",
+                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            {
+                "id": "AUD_00",
+                "type": "audio",
+                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+            }
+        ]
+    }
+]

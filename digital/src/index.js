@@ -7,7 +7,10 @@ import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
-import * as widgetGuidedTour from '@ud-viz/widget_guided_tour';
+import {
+  getTourConfigFromThemes,
+  createGuidedTourWidget,
+} from './guidedTourUtils';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -172,6 +175,7 @@ loadMultipleJSON([
 
   const stsCircle = new extensions3DTilesTemporal.STSCircle();
   const stsParabola = new extensions3DTilesTemporal.STSParabola();
+  let guidedTour = null;
 
   const getShapesWithUi = () => {
     return [
@@ -194,18 +198,49 @@ loadMultipleJSON([
       });
       versions = [];
     }
+    if (guidedTour != null) {
+      guidedTour.domElement.remove();
+      guidedTour = null;
+    }
 
     const themesConfigs = getThemes();
+    const themeInputs = [];
+    const themes = {};
     if (themesConfigs != undefined) {
       themeDiv.hidden = false;
       themesContainer.innerHTML = '';
       themesConfigs.themes.forEach((config) => {
+        themes[config.id] = config;
         const themeLabelInput = createLabelInput(config.name, 'checkbox');
         themesContainer.appendChild(themeLabelInput.parent);
+        themeLabelInput.input.id = config.id;
+        themeInputs.push(themeLabelInput.input);
       });
     } else {
       themeDiv.hidden = true;
     }
+    themeInputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        const selectedThemes = [];
+        themeInputs.forEach(({ checked, id }) => {
+          if (checked) {
+            selectedThemes.push(themes[id]);
+          }
+        });
+        if (guidedTour != null) {
+          guidedTour.domElement.remove();
+          guidedTour = null;
+        }
+        if (selectedThemes.length > 0) {
+          const tourConfig = getTourConfigFromThemes(
+            selectedThemes,
+            configs['guided_tour']
+          );
+          guidedTour = createGuidedTourWidget(view, tourConfig);
+          document.body.appendChild(guidedTour.domElement);
+        }
+      });
+    });
 
     const c3dtilesConfigs = getDataset();
     const promisesTileContentLoaded = [];
@@ -401,18 +436,4 @@ loadMultipleJSON([
       .then((response) => response.text())
       .then((html) => console.log(html));
   };
-
-  // /// GUIDED TOUR MODULE
-  // 3D Setup
-  const guidedTour = new widgetGuidedTour.GuidedTour(
-    view,
-    configs['guided_tour'].tour,
-    configs['guided_tour'].media
-  );
-  guidedTour.goToStep(guidedTour.startIndex);
-  guidedTour.domElement.classList.add('widget_guided_tour');
-  guidedTour.mediaContainer.classList.add('media_container');
-  guidedTour.previousButton.innerText = 'Previous';
-  guidedTour.nextButton.innerText = 'Next';
-  document.body.appendChild(guidedTour.domElement);
 });
