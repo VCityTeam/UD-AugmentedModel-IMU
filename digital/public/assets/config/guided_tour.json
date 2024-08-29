@@ -100,78 +100,78 @@
                     "previous": 0,
                     "next": 1,
                     "media": [
-                        "VID_00",
-                        "TEXT_00"
+                        "VID_01",
+                        "TEXT_01"
                     ]
                 },
                 {
                     "previous": 0,
                     "next": 2,
                     "media": [
-                        "VID_00",
-                        "TEXT_00"
+                        "VID_01",
+                        "TEXT_01"
                     ]
                 },
                 {
                     "previous": 1,
                     "next": 3,
                     "media": [
-                        "AUD_00",
-                        "IMG_00"
+                        "AUD_01",
+                        "IMG_01"
                     ]
                 },
                 {
                     "previous": 2,
                     "next": 4,
                     "media": [
-                        "VID_00",
-                        "AUD_00"
+                        "VID_01",
+                        "AUD_01"
                     ]
                 },
                 {
                     "previous": 3,
                     "next": 5,
                     "media": [
-                        "VID_00",
-                        "AUD_00"
+                        "VID_01",
+                        "AUD_01"
                     ]
                 },
                 {
                     "previous": 4,
                     "next": 6,
                     "media": [
-                        "VID_00",
-                        "AUD_00"
+                        "VID_01",
+                        "AUD_01"
                     ]
                 },
                 {
                     "previous": 5,
                     "next": 6,
                     "media": [
-                        "VID_00",
-                        "AUD_00"
+                        "VID_01",
+                        "AUD_01"
                     ]
                 }
             ]
         },
         "media": [
             {
-                "id": "TEXT_00",
+                "id": "TEXT_01",
                 "type": "text",
                 "value": "This is an example"
             },
             {
-                "id": "IMG_00",
+                "id": "IMG_01",
                 "type": "image",
                 "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
             },
             {
-                "id": "VID_00",
+                "id": "VID_01",
                 "type": "video",
                 "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             },
             {
-                "id": "AUD_00",
+                "id": "AUD_01",
                 "type": "audio",
                 "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
             }
