@@ -111,19 +111,17 @@ loadMultipleJSON([
 
   // CREATE HTML
   const selectDataset = document.getElementById('select_dataset');
+  const datasetConfigs = {}
+  configs['3DTiles_STS_data'].concat(configs['3DTiles_temporal']).forEach((config) => {
+    datasetConfigs[config.id] = config.versions || [config];
+    const dataOption = document.createElement('option');
+    dataOption.value = config.id;
+    dataOption.innerText = config.name;
+    selectDataset.appendChild(dataOption);
+  })
+
   const getDataset = () => {
-    switch (selectDataset.selectedOptions[0].value) {
-      case 'fakeLyon':
-        return configs['3DTiles_STS_data'][0].versions;
-      case 'fakeGratteCiel':
-        return configs['3DTiles_STS_data'][1].versions;
-      case 'lyon':
-        return [configs['3DTiles_temporal'][0]];
-      case 'doua':
-        return [configs['3DTiles_temporal'][1]];
-      case 'gratteCiel':
-        return [configs['3DTiles_temporal'][2]];
-    }
+    return datasetConfigs[selectDataset.selectedOptions[0].value]
   };
 
   const selectMode = document.getElementById('select_mode');
