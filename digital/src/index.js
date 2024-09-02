@@ -7,8 +7,7 @@ import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
-import { GuidedTourController } from './guidedTourUtils';
-import { rSlider } from './rSlider/rSlider.min.js';
+import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -173,9 +172,7 @@ loadMultipleJSON([
 
   const stsCircle = new extensions3DTilesTemporal.STSCircle();
   const stsParabola = new extensions3DTilesTemporal.STSParabola();
-  const guidedTourController = new GuidedTourController();
-  let guidedTour = null;
-  let slider = null;
+  let themeController = null;
 
   const getShapesWithUi = () => {
     return [
@@ -198,12 +195,7 @@ loadMultipleJSON([
       });
       versions = [];
     }
-    if (guidedTour != null) {
-      guidedTour.domElement.remove();
-      guidedTour = null;
-      document.getElementsByClassName('rs-container')[0].remove();
-      slider = null;
-    }
+    if (themeController != null) themeController.dispose();
 
     const themesConfigs = getThemes();
     const themeInputs = [];
@@ -229,29 +221,14 @@ loadMultipleJSON([
             selectedThemes.push(themes[id]);
           }
         });
-        if (guidedTour != null) {
-          guidedTour.domElement.remove();
-          guidedTour = null;
-          document.getElementsByClassName('rs-container')[0].remove();
-          slider = null;
-        }
+        if (themeController != null) themeController.dispose();
         if (selectedThemes.length > 0) {
-          const tourConfig = guidedTourController.getTourConfigFromThemes(
+          themeController = new ThemeController(
+            view,
             selectedThemes,
             configs['guided_tour']
           );
-          guidedTour = guidedTourController.createWidget(view, tourConfig);
-          document.body.appendChild(guidedTour.domElement);
-          const dates = Object.keys(guidedTourController.stepByDate);
-          slider = new rSlider({
-            target: '#theme_slider',
-            values: dates,
-            labels: true,
-            set: [dates[0]],
-            onChange: function (val) {
-              console.log(val);
-            },
-          });
+          document.body.appendChild(themeController.guidedTour.domElement);
         }
       });
     });
