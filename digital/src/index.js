@@ -195,7 +195,10 @@ loadMultipleJSON([
       });
       versions = [];
     }
-    if (themeController != null) themeController.dispose();
+    if (themeController != null) {
+      themeController.dispose();
+      themeController = null;
+    }
 
     const themesConfigs = getThemes();
     const themeInputs = [];
@@ -221,7 +224,10 @@ loadMultipleJSON([
             selectedThemes.push(themes[id]);
           }
         });
-        if (themeController != null) themeController.dispose();
+        if (themeController != null) {
+          themeController.dispose();
+          themeController = null;
+        }
         if (selectedThemes.length > 0) {
           themeController = new ThemeController(
             view,

@@ -1,7 +1,6 @@
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
 import { rSlider } from './rSlider/rSlider.min.js';
 
-
 export class ThemeController {
   constructor(view, themeConfigs, tourConfigs) {
     this.stepByDate = {};
@@ -74,7 +73,9 @@ export class ThemeController {
       labels: true,
       set: [dates[0]],
       onChange: function (val) {
-        this.guidedTour.goToStep(this.stepByDate[val]);
+        if (this.guidedTour != null) {
+          this.guidedTour.goToStep(this.stepByDate[val]);
+        }
       }.bind(this),
     });
   }
