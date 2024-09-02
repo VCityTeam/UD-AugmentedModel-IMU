@@ -154,7 +154,6 @@ loadMultipleJSON([
   const defaultShape = document.getElementById('default_shape');
   const themeDiv = document.getElementById('theme_div');
   const themesContainer = document.getElementById('themes_container');
-  const sliderDiv = document.getElementById('slider_div');
 
   // CIRCLE HTML
   const uiCircle = document.getElementById('circle_div');
@@ -193,7 +192,6 @@ loadMultipleJSON([
   selectDataset.onchange = () => {
     selectMode.hidden = false;
     defaultShape.selected = true;
-    sliderDiv.hidden = true;
     if (versions.length > 0) {
       versions.forEach((v) => {
         view.removeLayer(v.c3DTLayer.id);
@@ -254,7 +252,6 @@ loadMultipleJSON([
               console.log(val);
             },
           });
-          sliderDiv.hidden = false;
         }
       });
     });
