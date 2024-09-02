@@ -7,10 +7,8 @@ import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
-import {
-  getTourConfigFromThemes,
-  createGuidedTourWidget,
-} from './guidedTourUtils';
+import { GuidedTourController } from './guidedTourUtils';
+import { rSlider } from './rSlider/rSlider.min.js';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -156,6 +154,7 @@ loadMultipleJSON([
   const defaultShape = document.getElementById('default_shape');
   const themeDiv = document.getElementById('theme_div');
   const themesContainer = document.getElementById('themes_container');
+  const sliderDiv = document.getElementById('slider_div');
 
   // CIRCLE HTML
   const uiCircle = document.getElementById('circle_div');
@@ -175,7 +174,9 @@ loadMultipleJSON([
 
   const stsCircle = new extensions3DTilesTemporal.STSCircle();
   const stsParabola = new extensions3DTilesTemporal.STSParabola();
+  const guidedTourController = new GuidedTourController();
   let guidedTour = null;
+  let slider = null;
 
   const getShapesWithUi = () => {
     return [
@@ -192,6 +193,7 @@ loadMultipleJSON([
   selectDataset.onchange = () => {
     selectMode.hidden = false;
     defaultShape.selected = true;
+    sliderDiv.hidden = true;
     if (versions.length > 0) {
       versions.forEach((v) => {
         view.removeLayer(v.c3DTLayer.id);
@@ -201,6 +203,8 @@ loadMultipleJSON([
     if (guidedTour != null) {
       guidedTour.domElement.remove();
       guidedTour = null;
+      document.getElementsByClassName('rs-container')[0].remove();
+      slider = null;
     }
 
     const themesConfigs = getThemes();
@@ -230,14 +234,27 @@ loadMultipleJSON([
         if (guidedTour != null) {
           guidedTour.domElement.remove();
           guidedTour = null;
+          document.getElementsByClassName('rs-container')[0].remove();
+          slider = null;
         }
         if (selectedThemes.length > 0) {
-          const tourConfig = getTourConfigFromThemes(
+          const tourConfig = guidedTourController.getTourConfigFromThemes(
             selectedThemes,
             configs['guided_tour']
           );
-          guidedTour = createGuidedTourWidget(view, tourConfig);
+          guidedTour = guidedTourController.createWidget(view, tourConfig);
           document.body.appendChild(guidedTour.domElement);
+          const dates = Object.keys(guidedTourController.stepByDate);
+          slider = new rSlider({
+            target: '#theme_slider',
+            values: dates,
+            labels: true,
+            set: [dates[0]],
+            onChange: function (val) {
+              console.log(val);
+            },
+          });
+          sliderDiv.hidden = false;
         }
       });
     });
