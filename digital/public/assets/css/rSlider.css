@@ -1,6 +1,7 @@
 /* From https://github.com/slawomir-zaziablo/range-slider/blob/master/src/css/rSlider.css, under MIT licence */
 
 .rs-container * {
+  cursor: pointer;
   box-sizing: border-box;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

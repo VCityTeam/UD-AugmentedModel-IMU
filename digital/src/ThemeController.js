@@ -5,8 +5,9 @@ export class ThemeController {
   constructor(view, themeConfigs, tourConfigs) {
     this.stepByDate = {};
     this.guidedTour = null;
-    this.slider = null;
     this.mergedTourConfig = null;
+    this.slider = null;
+
     this.view = view;
     this.themeConfigs = themeConfigs;
     this.tourConfigs = tourConfigs;

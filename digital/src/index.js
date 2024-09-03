@@ -11,6 +11,8 @@ import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+const baseUrl = 'http://localhost:8000/';
+
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
@@ -19,7 +21,7 @@ loadMultipleJSON([
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
-  'http://localhost:8000/assets/themes.json',
+  `${baseUrl}assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -200,6 +202,18 @@ loadMultipleJSON([
       themeController = null;
     }
 
+    fetch(`${baseUrl}selectedDataId`, {
+      method: 'POST',
+      body: JSON.stringify({
+        selectedDataId: selectDataset.selectedOptions[0].value,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.text())
+      .then((html) => console.log(html));
+
     const themesConfigs = getThemes();
     const themeInputs = [];
     const themes = {};
@@ -219,9 +233,11 @@ loadMultipleJSON([
     themeInputs.forEach((input) => {
       input.addEventListener('input', () => {
         const selectedThemes = [];
+        const selectedThemeIds = [];
         themeInputs.forEach(({ checked, id }) => {
           if (checked) {
             selectedThemes.push(themes[id]);
+            selectedThemeIds.push(id);
           }
         });
         if (themeController != null) {
@@ -229,6 +245,16 @@ loadMultipleJSON([
           themeController = null;
         }
         if (selectedThemes.length > 0) {
+          fetch(`${baseUrl}selectedThemeIds`, {
+            method: 'POST',
+            body: JSON.stringify({ selectedThemeIds }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.json())
+            .then((html) => console.log(html));
+
           themeController = new ThemeController(
             view,
             selectedThemes,
@@ -406,7 +432,6 @@ loadMultipleJSON([
   selectDate.onchange = () => {
     stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     // Send to the server the correct value
-    const baseUrl = 'http://localhost:8000/';
     fetch(`${baseUrl}date`, {
       method: 'POST',
       body: JSON.stringify({ date: selectDate.selectedOptions[0].value }),
@@ -422,7 +447,6 @@ loadMultipleJSON([
     stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
     stsParabola.display(getCurrentMode());
     // Send to the server the correct value
-    const baseUrl = 'http://localhost:8000/';
     fetch(`${baseUrl}date`, {
       method: 'POST',
       body: JSON.stringify({ date: stsParabola.middleDate }),
