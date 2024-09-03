@@ -105,9 +105,8 @@ loadMultipleJSON([
       })
       .then((json) => {
         if (
-          forceRefresh ||
-          (json.length &&
-            JSON.stringify(json) != JSON.stringify(dataThemes.selectedThemeIds))
+          (forceRefresh && json.length) ||
+          JSON.stringify(json) != JSON.stringify(dataThemes.selectedThemeIds)
         ) {
           dataThemes.selectedThemeIds = json;
           if (themeController) {
