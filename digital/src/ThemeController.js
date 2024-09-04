@@ -79,6 +79,25 @@ export class ThemeController {
         }
       }.bind(this),
     });
+    const updateSlider = function () {
+      const closestIndex = Math.max(
+        ...Object.values(this.stepByDate).filter(
+          (x) => x <= this.guidedTour.currentIndex
+        )
+      );
+      const date = Object.keys(this.stepByDate).find(
+        (d) => this.stepByDate[d] == closestIndex
+      );
+      this.slider.setCursor(null, date);
+    };
+    this.guidedTour.nextButton.addEventListener(
+      'click',
+      updateSlider.bind(this)
+    );
+    this.guidedTour.previousButton.addEventListener(
+      'click',
+      updateSlider.bind(this)
+    );
   }
 
   dispose() {
