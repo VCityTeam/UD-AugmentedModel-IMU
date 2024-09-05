@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 let date = null;
 let selectedDataId = null;
 let selectedThemeIds = [];
+let stepIndex = null;
 
 app.post('/date', (req, res) => {
   date = req.body.date;
@@ -44,6 +45,15 @@ app.post('/selectedDataId', (req, res) => {
 
 app.get('/selectedDataId', (req, res) => {
   res.send(selectedDataId);
+});
+
+app.post('/stepIndex', (req, res) => {
+  stepIndex = req.body.stepIndex.toString();
+  res.send(stepIndex);
+});
+
+app.get('/stepIndex', (req, res) => {
+  res.send(stepIndex);
 });
 
 app.use('/digital', express.static(path.join(__dirname, '../digital/public')));

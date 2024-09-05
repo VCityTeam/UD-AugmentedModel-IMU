@@ -56,9 +56,11 @@ loadMultipleJSON([
   document.body.appendChild(uiDomElement);
 
   const intervalID = setInterval(getDataId, 1000);
+  const intervalStep = setInterval(getStepIndex, 1000);
 
   let themeController = null;
   const dataThemes = { dataId: null, selectedThemeIds: [] };
+  let stepIndex = 0;
 
   const getThemesByIds = (ids) => {
     const themeConfig = configs['themes'].find((config) => {
@@ -89,6 +91,30 @@ loadMultipleJSON([
       });
   }
 
+  function getStepIndex() {
+    fetch(`${baseUrl}stepIndex`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((text) => {
+        if (parseInt(text) != stepIndex) {
+          stepIndex = parseInt(text);
+          if (themeController) {
+            themeController.slideShow.setTexture(stepIndex);
+          }
+        }
+      });
+  }
+
   function getSelectedThemeIds(forceRefresh) {
     fetch(`${baseUrl}selectedThemeIds`, {
       method: 'GET',
@@ -113,7 +139,7 @@ loadMultipleJSON([
             themeController.dispose();
             themeController = null;
           }
-
+          stepIndex = 0;
           themeController = new ThemeController(
             view,
             getThemesByIds(dataThemes.selectedThemeIds),

@@ -76,14 +76,15 @@ export class ThemeController {
       onChange: function (val) {
         if (this.guidedTour != null) {
           this.guidedTour.goToStep(this.stepByDate[val]);
+          this.sendEventUpdate(this.stepByDate[val]);
         }
       }.bind(this),
     });
     const updateSlider = function () {
+      const stepIndex = this.guidedTour.currentIndex;
+      this.sendEventUpdate(stepIndex);
       const closestIndex = Math.max(
-        ...Object.values(this.stepByDate).filter(
-          (x) => x <= this.guidedTour.currentIndex
-        )
+        ...Object.values(this.stepByDate).filter((x) => x <= stepIndex)
       );
       const date = Object.keys(this.stepByDate).find(
         (d) => this.stepByDate[d] == closestIndex
@@ -98,6 +99,19 @@ export class ThemeController {
       'click',
       updateSlider.bind(this)
     );
+  }
+
+  sendEventUpdate(stepIndex) {
+    const baseUrl = 'http://localhost:8000/';
+    fetch(`${baseUrl}stepIndex`, {
+      method: 'POST',
+      body: JSON.stringify({
+        stepIndex: stepIndex,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   dispose() {
