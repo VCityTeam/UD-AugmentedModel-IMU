@@ -17,6 +17,7 @@ let date = null;
 let selectedDataId = null;
 let selectedThemeIds = [];
 let stepIndex = null;
+let guidedTourConfig = null;
 
 app.post('/date', (req, res) => {
   date = req.body.date;
@@ -54,6 +55,15 @@ app.post('/stepIndex', (req, res) => {
 
 app.get('/stepIndex', (req, res) => {
   res.send(stepIndex);
+});
+
+app.post('/guidedTourConfig', (req, res) => {
+  guidedTourConfig = req.body;
+  res.send(guidedTourConfig);
+});
+
+app.get('/guidedTourConfig', (req, res) => {
+  res.send(guidedTourConfig);
 });
 
 app.use('/digital', express.static(path.join(__dirname, '../digital/public')));

@@ -1,7 +1,8 @@
 import { SlideShow } from '@ud-viz/widget_slide_show';
+import { GuidedTour } from '@ud-viz/widget_guided_tour';
 
 export class ThemeController {
-  constructor(view, themeConfigs, slideShowConfigs, extent) {
+  constructor(view, themeConfigs, slideShowConfigs, guidedTourConfig, extent) {
     this.slideShow = null;
     this.mergedSlideShowConfig = null;
 
@@ -9,9 +10,11 @@ export class ThemeController {
     this.extent = extent;
     this.themeConfigs = themeConfigs;
     this.slideShowConfigs = slideShowConfigs;
+    this.guidedTourConfig = guidedTourConfig;
 
     this.setSlideShowConfig();
     this.createSlideShowWidget();
+    if (guidedTourConfig != null) this.createGuidedTourWidget();
   }
 
   setSlideShowConfig() {
@@ -63,8 +66,21 @@ export class ThemeController {
     );
   }
 
+  createGuidedTourWidget() {
+    this.guidedTour = new GuidedTour(
+      this.view,
+      this.guidedTourConfig.tour,
+      this.guidedTourConfig.media
+    );
+    this.guidedTour.domElement.classList.add('widget_guided_tour');
+    this.guidedTour.mediaContainer.classList.add('media_container');
+    this.guidedTour.previousButton.remove();
+    this.guidedTour.nextButton.remove();
+    document.body.appendChild(this.guidedTour.domElement);
+  }
+
   dispose() {
     this.slideShow.dispose();
-    this.guidedTour = null;
+    if (this.guidedTour) this.guidedTour.domElement.remove();
   }
 }

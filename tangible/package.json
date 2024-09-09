@@ -19,6 +19,7 @@
   "dependencies": {
     "@ud-viz/utils_browser": "../../UD-Viz/packages/utils_browser",
     "@ud-viz/widget_slide_show": "../../UD-Viz/packages/widget_slide_show",
+    "@ud-viz/widget_guided_tour": "../../UD-Viz/packages/widget_guided_tour",
     "buffer": "^6.0.3"
   }
 }

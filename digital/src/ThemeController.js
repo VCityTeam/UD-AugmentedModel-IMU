@@ -7,6 +7,7 @@ export class ThemeController {
     this.guidedTour = null;
     this.mergedTourConfig = null;
     this.slider = null;
+    this.baseUrl = 'http://localhost:8000/';
 
     this.view = view;
     this.themeConfigs = themeConfigs;
@@ -15,6 +16,7 @@ export class ThemeController {
     this.setTourConfig();
     this.createGuidedTourWidget();
     this.createSlider();
+    this.sendEventUpdate(this.guidedTour.currentIndex);
   }
 
   setTourConfig() {
@@ -64,6 +66,13 @@ export class ThemeController {
     this.guidedTour.mediaContainer.classList.add('media_container');
     this.guidedTour.previousButton.innerText = 'Previous';
     this.guidedTour.nextButton.innerText = 'Next';
+    fetch(`${this.baseUrl}guidedTourConfig`, {
+      method: 'POST',
+      body: JSON.stringify(this.mergedTourConfig),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   createSlider() {
@@ -102,8 +111,7 @@ export class ThemeController {
   }
 
   sendEventUpdate(stepIndex) {
-    const baseUrl = 'http://localhost:8000/';
-    fetch(`${baseUrl}stepIndex`, {
+    fetch(`${this.baseUrl}stepIndex`, {
       method: 'POST',
       body: JSON.stringify({
         stepIndex: stepIndex,

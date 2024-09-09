@@ -61,12 +61,12 @@ loadMultipleJSON([
   let themeController = null;
   const dataThemes = { dataId: null, selectedThemeIds: [] };
   let stepIndex = 0;
+  let guidedTourConfig = null;
 
   const getThemesByIds = (ids) => {
     const themeConfig = configs['themes'].find((config) => {
       return config.dataId == dataThemes.dataId;
     });
-    console.log(themeConfig);
     return themeConfig.themes.filter((config) => ids.includes(config.id));
   };
 
@@ -88,30 +88,6 @@ loadMultipleJSON([
         let forceRefresh = text != dataThemes.dataId;
         dataThemes.dataId = text;
         getSelectedThemeIds(forceRefresh);
-      });
-  }
-
-  function getStepIndex() {
-    fetch(`${baseUrl}stepIndex`, {
-      method: 'GET',
-    })
-      .then((response) => {
-        try {
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-          return response.text();
-        } catch (error) {
-          console.error(error.message);
-        }
-      })
-      .then((text) => {
-        if (parseInt(text) != stepIndex) {
-          stepIndex = parseInt(text);
-          if (themeController) {
-            themeController.slideShow.setTexture(stepIndex);
-          }
-        }
       });
   }
 
@@ -138,16 +114,65 @@ loadMultipleJSON([
           if (themeController) {
             themeController.dispose();
             themeController = null;
+            guidedTourConfig = null;
           }
           stepIndex = 0;
-          themeController = new ThemeController(
-            view,
-            getThemesByIds(dataThemes.selectedThemeIds),
-            configs['slide_show'],
-            extent
-          );
-          themeController.slideShow.addListeners();
-          view.scene.add(themeController.slideShow.plane);
+          getGuidedTourConfig();
+        }
+      });
+  }
+
+  function getGuidedTourConfig() {
+    fetch(`${baseUrl}guidedTourConfig`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((text) => {
+        guidedTourConfig = JSON.parse(text);
+        themeController = new ThemeController(
+          view,
+          getThemesByIds(dataThemes.selectedThemeIds),
+          configs['slide_show'],
+          guidedTourConfig,
+          extent
+        );
+        themeController.slideShow.addListeners();
+        themeController.guidedTour.goToStep(stepIndex);
+        view.scene.add(themeController.slideShow.plane);
+      });
+  }
+
+  function getStepIndex() {
+    fetch(`${baseUrl}stepIndex`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((text) => {
+        if (parseInt(text) != stepIndex) {
+          stepIndex = parseInt(text);
+          if (themeController) {
+            themeController.slideShow.setTexture(stepIndex);
+            if (themeController.guidedTour)
+              themeController.guidedTour.goToStep(stepIndex);
+          }
         }
       });
   }
