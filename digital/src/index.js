@@ -429,32 +429,26 @@ loadMultipleJSON([
     stsParabola.display(getCurrentMode());
   });
 
-  selectDate.onchange = () => {
-    stsCircle.selectVersion(selectDate.selectedOptions[0].value);
-    // Send to the server the correct value
-    fetch(`${baseUrl}date`, {
-      method: 'POST',
-      body: JSON.stringify({ date: selectDate.selectedOptions[0].value }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.text())
-      .then((html) => console.log(html));
-  };
-
-  selectDateParabola.onchange = () => {
-    stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
-    stsParabola.display(getCurrentMode());
-    // Send to the server the correct value
-    fetch(`${baseUrl}date`, {
-      method: 'POST',
-      body: JSON.stringify({ date: stsParabola.middleDate }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.text())
-      .then((html) => console.log(html));
-  };
+  document.body.addEventListener('valuechanged', () => {
+    if (
+      themeController != null &&
+      themeController.slider &&
+      versions.length > 0
+    ) {
+      const date = parseInt(themeController.slider.getValue());
+      const closestDate = Math.max(
+        ...versions.map((v) => v.date).filter((d) => d <= date),
+        versions[0].date
+      );
+      if (stsCircle && stsCircle.displayed) {
+        stsCircle.selectVersion(closestDate);
+        selectDate.value = closestDate.toString();
+      }
+      if (stsParabola && stsParabola.displayed) {
+        stsParabola.middleDate = closestDate;
+        stsParabola.display(getCurrentMode());
+        selectDateParabola.value = closestDate.toString();
+      }
+    }
+  });
 });
