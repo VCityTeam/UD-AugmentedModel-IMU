@@ -46,8 +46,19 @@ body {
 }
 
 #nav_buttons_div button {
-  width: 120px;
+  cursor: pointer;
+  width: 80px;
   height: 40px;
+  background: url('../img/arrow.png') no-repeat;
+  border: none;
+}
+
+#nav_buttons_div button:hover {
+    filter: brightness(90%);
+}
+
+#previous {
+  transform: rotate(180deg);
 }
 
 #slider_div {

@@ -64,8 +64,8 @@ export class ThemeController {
     );
     this.guidedTour.domElement.classList.add('widget_guided_tour');
     this.guidedTour.mediaContainer.classList.add('media_container');
-    this.guidedTour.previousButton.innerText = 'Previous';
-    this.guidedTour.nextButton.innerText = 'Next';
+    this.guidedTour.previousButton.id = 'previous';
+    this.guidedTour.nextButton.id = 'next';
     fetch(`${this.baseUrl}guidedTourConfig`, {
       method: 'POST',
       body: JSON.stringify(this.mergedTourConfig),
@@ -85,12 +85,14 @@ export class ThemeController {
       onChange: function (val) {
         if (this.guidedTour != null) {
           this.guidedTour.goToStep(this.stepByDate[val]);
+          this.updateButtonsVisibility();
           this.sendEventUpdate(this.stepByDate[val]);
         }
       }.bind(this),
     });
     const updateSlider = function () {
       const stepIndex = this.guidedTour.currentIndex;
+      this.updateButtonsVisibility();
       this.sendEventUpdate(stepIndex);
       const closestIndex = Math.max(
         ...Object.values(this.stepByDate).filter((x) => x <= stepIndex)
@@ -122,10 +124,16 @@ export class ThemeController {
     });
   }
 
+  updateButtonsVisibility() {
+    const step = this.guidedTour.currentIndex;
+    this.guidedTour.previousButton.hidden = step == this.guidedTour.startIndex;
+    this.guidedTour.nextButton.hidden = step == this.guidedTour.endIndex;
+  }
+
   dispose() {
     this.guidedTour.domElement.remove();
-    this.guidedTour = null;
+    this.guidedTour.previousButton.remove();
+    this.guidedTour.nextButton.remove();
     document.getElementsByClassName('rs-container')[0].remove();
-    this.slider = null;
   }
 }
