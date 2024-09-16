@@ -155,6 +155,7 @@ loadMultipleJSON([
   const defaultShape = document.getElementById('default_shape');
   const themeDiv = document.getElementById('theme_div');
   const themesContainer = document.getElementById('themes_container');
+  const navButtonsDiv = document.getElementById('nav_buttons_div');
 
   // CIRCLE HTML
   const uiCircle = document.getElementById('circle_div');
@@ -261,6 +262,8 @@ loadMultipleJSON([
             configs['guided_tour']
           );
           document.body.appendChild(themeController.guidedTour.domElement);
+          navButtonsDiv.appendChild(themeController.guidedTour.previousButton);
+          navButtonsDiv.appendChild(themeController.guidedTour.nextButton);
         }
       });
     });

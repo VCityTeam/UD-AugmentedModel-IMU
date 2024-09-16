@@ -27,11 +27,29 @@ body {
   max-height: 80px;
 }
 
-#slider_div {
+#nav_div {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   bottom: 120px;
-  left: 50%;
-  width: 75%;
-  transform: translateX(-50%);
   z-index: 3;
+  width: 100%;
+}
+
+#nav_buttons_div {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 35px;
+  width: 50%;
+  justify-content: space-evenly;
+}
+
+#nav_buttons_div button {
+  width: 120px;
+  height: 40px;
+}
+
+#slider_div {
+  width: 75%;
 }

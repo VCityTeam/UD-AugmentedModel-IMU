@@ -19,10 +19,6 @@
   color: black;
   margin: 10px;
 }
-.widget_guided_tour button {
-  width: 80px;
-  height: 30px;
-}
 
 .media_container {
   overflow: auto;
