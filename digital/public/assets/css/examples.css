@@ -40,7 +40,7 @@ body {
 #nav_buttons_div {
   display: flex;
   flex-direction: row;
-  padding-bottom: 35px;
+  padding-bottom: 45px;
   width: 50%;
   justify-content: space-evenly;
 }
