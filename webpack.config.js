@@ -18,7 +18,7 @@ const webpackConfig = {
       },
     ],
   },
-  resolve: { modules: ['../UD-Viz/node_modules', './node_modules'] },
+  resolve: { modules: ['./node_modules'] },
 };
 
 webpackConfig.mode = MODE;
