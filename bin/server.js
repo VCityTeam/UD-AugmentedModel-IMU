@@ -19,15 +19,6 @@ let selectedThemeIds = [];
 let stepIndex = null;
 let guidedTourConfig = null;
 
-app.post('/date', (req, res) => {
-  date = req.body.date;
-  res.send(date);
-});
-
-app.get('/date', (req, res) => {
-  res.send(date);
-});
-
 app.post('/selectedThemeIds', (req, res) => {
   selectedThemeIds = req.body.selectedThemeIds;
   console.log('New Selected Theme IDs:', selectedThemeIds);
