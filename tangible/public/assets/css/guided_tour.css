@@ -4,13 +4,13 @@
   flex-direction: column;
   width: fit-content;
   height: fit-content;
-  max-width: 30vw;
   max-height: 96vh;
   color: white;
   z-index: 5;
   position: absolute;
   top: 0%;
-  right: 0%;
+  left: 70vw;
+  width: 25vw;
   border-radius: 15px;
   padding: 10px;
   resize: both;
