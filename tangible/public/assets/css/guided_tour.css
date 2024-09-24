@@ -28,10 +28,15 @@
 
 .media_container {
   overflow: auto;
+  cursor: move;
 }
 
 img,
 video,
 audio {
   max-width: 100%;
+}
+
+video {
+  cursor: pointer;
 }
