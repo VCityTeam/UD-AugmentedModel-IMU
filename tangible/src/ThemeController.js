@@ -1,5 +1,6 @@
 import { SlideShow } from '@ud-viz/widget_slide_show';
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
+import { dragElement } from './draggable';
 
 export class ThemeController {
   constructor(view, themeConfigs, slideShowConfigs, guidedTourConfig, extent) {
@@ -76,6 +77,7 @@ export class ThemeController {
     this.guidedTour.mediaContainer.classList.add('media_container');
     this.guidedTour.previousButton.remove();
     this.guidedTour.nextButton.remove();
+    dragElement(this.guidedTour.mediaContainer, this.guidedTour.domElement);
     document.body.appendChild(this.guidedTour.domElement);
   }
 
