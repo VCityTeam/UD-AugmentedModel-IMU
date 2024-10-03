@@ -66,6 +66,8 @@ Each theme must have:
 
 Slide shows can be configured in [`slide_show.json`](./tangible/public/assets/config/widget/slide_show.json).
 
+To configure the slide show, see the [widget doc](https://github.com/VCityTeam/UD-Viz/tree/master/packages/widget_slide_show).
+
 ### Guided tour
 
 Guided tours can be configured in [`guided_tour.json`](./digital/public/assets/config/guided_tour.json).
