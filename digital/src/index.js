@@ -1,18 +1,27 @@
-import { initScene, loadMultipleJSON } from '@ud-viz/utils_browser';
+import {
+  initScene,
+  loadMultipleJSON,
+  createLabelInput,
+} from '@ud-viz/utils_browser';
 import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
+import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const baseUrl = 'http://localhost:8000/';
 
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
+  './assets/config/guided_tour.json',
   './assets/config/layer/3DTiles_temporal.json',
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
+  `${baseUrl}assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -31,10 +40,6 @@ loadMultipleJSON([
   const view = new itowns.PlanarView(viewDomElement, extent, {
     noControls: true,
   });
-
-  // eslint-disable-next-line no-constant-condition
-  if ('RUN_MODE' == 'production')
-    loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
 
   // init scene 3D
   initScene(
@@ -107,37 +112,29 @@ loadMultipleJSON([
   });
 
   // CREATE HTML
-  const ui = document.createElement('div');
-  ui.id = 'stp_ui';
-  document.body.appendChild(ui);
-
-  const divSelect = document.createElement('div');
-  ui.appendChild(divSelect);
-
-  const divUiSTS = document.createElement('div');
-  ui.appendChild(divUiSTS);
-
-  const selectDataset = document.createElement('select');
-  divSelect.appendChild(selectDataset);
-  const datasetGratteCiel = document.createElement('option');
-  datasetGratteCiel.value = 'gratteCiel';
-  datasetGratteCiel.innerText = 'GratteCiel temporal';
-  selectDataset.appendChild(datasetGratteCiel);
+  const selectDataset = document.getElementById('select_dataset');
+  const datasetConfigs = {};
+  configs['3DTiles_STS_data']
+    .concat(configs['3DTiles_temporal'])
+    .forEach((config) => {
+      datasetConfigs[config.id] = config.versions || [config];
+      const dataOption = document.createElement('option');
+      dataOption.value = config.id;
+      dataOption.innerText = config.name;
+      selectDataset.appendChild(dataOption);
+    });
 
   const getDataset = () => {
-    return [configs['3DTiles_temporal'][2]];
+    return datasetConfigs[selectDataset.selectedOptions[0].value];
   };
 
-  //SEQUENTIAL or CHRONOLOGICAL
-  const selectMode = document.createElement('select');
-  // selectMode.hidden = true;
-  divSelect.appendChild(selectMode);
-  const optionDefaultMode = document.createElement('option');
-  optionDefaultMode.innerText = 'Choose a Mode';
-  optionDefaultMode.selected = true;
-  optionDefaultMode.disabled = true;
-  optionDefaultMode.hidden = true;
-  selectMode.appendChild(optionDefaultMode);
+  const getThemes = () => {
+    return configs['themes'].find(
+      (config) => config.dataId == selectDataset.selectedOptions[0].value
+    );
+  };
+
+  const selectMode = document.getElementById('select_mode');
 
   for (const mode in extensions3DTilesTemporal.STS_DISPLAY_MODE) {
     const optionMode = document.createElement('option');
@@ -146,209 +143,35 @@ loadMultipleJSON([
   }
 
   const getCurrentMode = () => {
-    if (selectMode.selectedOptions[0] != optionDefaultMode)
-      return selectMode.selectedOptions[0].value;
-    return undefined;
+    return selectMode.selectedOptions[0].value;
   };
 
-  const selectSTShape = document.createElement('select');
-  selectSTShape.hidden = true;
-  divSelect.appendChild(selectSTShape);
-  const optionDefaultShape = document.createElement('option');
-  optionDefaultShape.innerText = 'Choose a Shape';
-  optionDefaultShape.disabled = true;
-  optionDefaultShape.hidden = true;
-  selectSTShape.appendChild(optionDefaultShape);
+  const selectSTShape = document.getElementById('select_shape');
+  const shapeName = document.getElementById('shape_name');
+  const defaultShape = document.getElementById('default_shape');
+  const themeDiv = document.getElementById('theme_div');
+  const themesContainer = document.getElementById('themes_container');
+  const navButtonsDiv = document.getElementById('nav_buttons_div');
 
   // CIRCLE HTML
-  const optionCircle = document.createElement('option');
-  optionCircle.value = 'circle';
-  optionCircle.innerText = 'Circle';
-  selectSTShape.appendChild(optionCircle);
-
-  const uiCircle = document.createElement('div');
-  uiCircle.hidden = true;
-  divUiSTS.appendChild(uiCircle);
-
-  const radiusParameterLabel = document.createElement('label');
-  radiusParameterLabel.innerText = 'Radius';
-  uiCircle.appendChild(radiusParameterLabel);
-  const radiusParameter = document.createElement('input');
-  radiusParameter.type = 'number';
-  radiusParameter.name = 'Radius';
-  uiCircle.appendChild(radiusParameter);
-
-  const heightParameterLabel = document.createElement('label');
-  heightParameterLabel.innerText = 'Height';
-  uiCircle.appendChild(heightParameterLabel);
-  const heightParameter = document.createElement('input');
-  heightParameter.type = 'number';
-  heightParameter.name = 'Height';
-  uiCircle.appendChild(heightParameter);
-
-  const dateSelectLabel = document.createElement('label');
-  dateSelectLabel.innerText = 'Year';
-  uiCircle.appendChild(dateSelectLabel);
-  const selectDate = document.createElement('select');
-  uiCircle.appendChild(selectDate);
-
-  const updateCheckBoxLabel = document.createElement('label');
-  updateCheckBoxLabel.innerText = 'Freeze rotation';
-  uiCircle.appendChild(updateCheckBoxLabel);
-  const updateCheckBox = document.createElement('input');
-  updateCheckBox.type = 'checkbox';
-  updateCheckBox.name = 'update';
-  uiCircle.appendChild(updateCheckBox);
+  const uiCircle = document.getElementById('circle_div');
+  const radiusParameter = document.getElementById('circle_radius');
+  const heightParameter = document.getElementById('circle_height');
+  const selectDate = document.getElementById('circle_year');
+  const updateCheckBox = document.getElementById('circle_rotation');
 
   // PARABOLA HTML
-  const optionParabola = document.createElement('option');
-  optionParabola.value = 'parabola';
-  optionParabola.innerText = 'Parabola';
-  selectSTShape.appendChild(optionParabola);
+  const uiParabola = document.getElementById('parabola_div');
+  const parabolaDistAxisX = document.getElementById('parabola_distx');
+  const parabolaDistAxisY = document.getElementById('parabola_disty');
+  const parabolaHeight = document.getElementById('parabola_height');
+  const selectDateParabola = document.getElementById('parabola_year');
 
-  const uiParabola = document.createElement('div');
-  uiParabola.hidden = true;
-  divUiSTS.appendChild(uiParabola);
+  // CREATE SHAPES AND 3DTILES
 
-  const labelDistAxisX = document.createElement('label');
-  labelDistAxisX.innerText = 'Distance on X axis';
-  uiParabola.appendChild(labelDistAxisX);
-
-  const parabolaDistAxisX = document.createElement('input');
-  parabolaDistAxisX.type = 'number';
-  parabolaDistAxisX.name = 'distAxisX';
-  uiParabola.appendChild(parabolaDistAxisX);
-
-  const labelDistAxisY = document.createElement('label');
-  labelDistAxisY.innerText = 'Distance on Y axis';
-  uiParabola.appendChild(labelDistAxisY);
-  const parabolaDistAxisY = document.createElement('input');
-  parabolaDistAxisY.type = 'number';
-  parabolaDistAxisY.name = 'distAxisY';
-  uiParabola.appendChild(parabolaDistAxisY);
-
-  const labelHeight = document.createElement('label');
-  labelHeight.innerText = 'Height';
-  uiParabola.appendChild(labelHeight);
-  const parabolaHeight = document.createElement('input');
-  parabolaHeight.type = 'number';
-  parabolaHeight.name = 'Height';
-  uiParabola.appendChild(parabolaHeight);
-
-  const parabolaDateSelectLabel = document.createElement('label');
-  parabolaDateSelectLabel.innerText = 'Year';
-  uiParabola.appendChild(parabolaDateSelectLabel);
-  const selectDateParabola = document.createElement('select');
-  uiParabola.appendChild(selectDateParabola);
-
-  // CREATE 3DTILES
-
-  let versions = [];
-  let stsCircle = null;
-  let stsParabola = null;
-
-  optionDefaultShape.selected = true;
-  if (versions.length > 0) {
-    versions.forEach((v) => {
-      view.removeLayer(v.c3DTLayer.id);
-    });
-    versions = [];
-  }
-  const c3dtilesConfigs = getDataset();
-  const temporalsWrappers = [];
-  const promisesTileContentLoaded = [];
-  c3dtilesConfigs.forEach((config) => {
-    const isTemporal = !!config.dates;
-    const datesJSON = isTemporal ? config.dates : [config.date];
-    const registerExtensions = isTemporal ? extensions : null;
-    datesJSON.forEach((date) => {
-      const c3DTilesLayer = new itowns.C3DTilesLayer(
-        config.id + '_' + date.toString(),
-        {
-          name: config.id + date.toString(),
-          source: new itowns.C3DTilesSource({
-            url: config.url,
-          }),
-          registeredExtensions: registerExtensions,
-        },
-        view
-      );
-      itowns.View.prototype.addLayer.call(view, c3DTilesLayer);
-      promisesTileContentLoaded.push(
-        new Promise((resolve) => {
-          c3DTilesLayer.addEventListener(
-            itowns.C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED,
-            () => {
-              resolve();
-            }
-          );
-        })
-      );
-      if (isTemporal) {
-        temporalsWrappers.push(
-          new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
-            c3DTilesLayer
-          )
-        );
-
-        if (date == Math.min(...datesJSON)) {
-          temporalsWrappers[temporalsWrappers.length - 1].styleDate = date + 1;
-        } else {
-          temporalsWrappers[temporalsWrappers.length - 1].styleDate = date - 2;
-        }
-      }
-      versions.push({ date: date, c3DTLayer: c3DTilesLayer });
-    });
-  });
-
-  const stLayer = new extensions3DTilesTemporal.STLayer(
-    view,
-    new THREE.Object3D(),
-    versions
-  );
-
-  Promise.all(promisesTileContentLoaded).then(() => {
-    // STSCircle
-    if (stsCircle != null) {
-      stsCircle.dispose();
-      stsCircle.setSTLayer(stLayer);
-      uiCircle.hidden = true;
-    } else {
-      stsCircle = new extensions3DTilesTemporal.STSCircle(stLayer);
-    }
-
-    selectDate.innerHTML = '';
-    versions.forEach((v) => {
-      const date = v.date;
-      const optionDate = document.createElement('option');
-      optionDate.innerText = date.toString();
-      if (versions.indexOf(v) == 0) {
-        optionDate.selected = true;
-        stsCircle.selectedDate = date;
-      }
-      selectDate.appendChild(optionDate);
-    });
-
-    // STSParabola
-    if (stsParabola != null) {
-      stsParabola.dispose();
-      stsParabola.setSTLayer(stLayer);
-      uiParabola.hidden = true;
-    } else {
-      stsParabola = new extensions3DTilesTemporal.STSParabola(stLayer);
-    }
-
-    selectDateParabola.innerHTML = '';
-    versions.forEach((v) => {
-      const date = v.date;
-      const optionDate = document.createElement('option');
-      optionDate.innerText = date.toString();
-      if (date == stsParabola.middleDate) optionDate.selected = true;
-      selectDateParabola.appendChild(optionDate);
-    });
-  });
-
-  // EVENTS
+  const stsCircle = new extensions3DTilesTemporal.STSCircle();
+  const stsParabola = new extensions3DTilesTemporal.STSParabola();
+  let themeController = null;
 
   const getShapesWithUi = () => {
     return [
@@ -360,8 +183,177 @@ loadMultipleJSON([
     ];
   };
 
+  let versions = [];
+
+  selectDataset.onchange = () => {
+    selectMode.hidden = false;
+    defaultShape.selected = true;
+    if (versions.length > 0) {
+      versions.forEach((v) => {
+        view.removeLayer(v.c3DTLayer.id);
+      });
+      versions = [];
+    }
+    if (themeController != null) {
+      themeController.dispose();
+      themeController = null;
+    }
+
+    fetch(`${baseUrl}selectedDataId`, {
+      method: 'POST',
+      body: JSON.stringify({
+        selectedDataId: selectDataset.selectedOptions[0].value,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.text());
+
+    const themesConfigs = getThemes();
+    const themeInputs = [];
+    const themes = {};
+    if (themesConfigs != undefined) {
+      themeDiv.hidden = false;
+      themesContainer.innerHTML = '';
+      themesConfigs.themes.forEach((config) => {
+        themes[config.id] = config;
+        const themeLabelInput = createLabelInput(config.name, 'checkbox');
+        themesContainer.appendChild(themeLabelInput.parent);
+        themeLabelInput.input.id = config.id;
+        themeInputs.push(themeLabelInput.input);
+      });
+    } else {
+      themeDiv.hidden = true;
+    }
+    themeInputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        const selectedThemes = [];
+        const selectedThemeIds = [];
+        themeInputs.forEach(({ checked, id }) => {
+          if (checked) {
+            selectedThemes.push(themes[id]);
+            selectedThemeIds.push(id);
+          }
+        });
+        if (themeController != null) {
+          themeController.dispose();
+          themeController = null;
+        }
+        if (selectedThemes.length > 0) {
+          fetch(`${baseUrl}selectedThemeIds`, {
+            method: 'POST',
+            body: JSON.stringify({ selectedThemeIds }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.json());
+
+          themeController = new ThemeController(
+            view,
+            selectedThemes,
+            configs['guided_tour']
+          );
+          document.body.appendChild(themeController.guidedTour.domElement);
+          navButtonsDiv.appendChild(themeController.guidedTour.previousButton);
+          navButtonsDiv.appendChild(themeController.guidedTour.nextButton);
+        }
+      });
+    });
+
+    const c3dtilesConfigs = getDataset();
+    const promisesTileContentLoaded = [];
+    c3dtilesConfigs.forEach((config) => {
+      const isTemporal = !!config.dates;
+      const datesJSON = isTemporal ? config.dates : [config.date];
+      const registerExtensions = isTemporal ? extensions : null;
+      datesJSON.forEach((date) => {
+        const c3DTilesLayer = new itowns.C3DTilesLayer(
+          config.id + '_' + date.toString(),
+          {
+            name: config.id + date.toString(),
+            source: new itowns.C3DTilesSource({
+              url: config.url,
+            }),
+            registeredExtensions: registerExtensions,
+          },
+          view
+        );
+        itowns.View.prototype.addLayer.call(view, c3DTilesLayer);
+        promisesTileContentLoaded.push(
+          new Promise((resolve) => {
+            c3DTilesLayer.addEventListener(
+              itowns.C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED,
+              () => {
+                resolve();
+              }
+            );
+          })
+        );
+        if (isTemporal) {
+          const temporalsWrapper =
+            new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
+              c3DTilesLayer
+            );
+
+          if (date == Math.min(...datesJSON)) {
+            temporalsWrapper.styleDate = date + 1;
+          } else {
+            temporalsWrapper.styleDate = date - 2;
+          }
+        }
+        versions.push({ date: date, c3DTLayer: c3DTilesLayer });
+      });
+    });
+
+    const stLayer = new extensions3DTilesTemporal.STLayer(
+      view,
+      new THREE.Object3D(),
+      versions
+    );
+
+    Promise.all(promisesTileContentLoaded).then(() => {
+      shapeName.hidden = true;
+
+      getShapesWithUi().forEach((element) => {
+        if (element.stShape.displayed) {
+          element.stShape.dispose();
+          element.ui.hidden = true;
+        }
+        element.stShape.setSTLayer(stLayer);
+      });
+
+      // STSCircle
+      selectDate.innerHTML = '';
+      versions.forEach((v) => {
+        const date = v.date;
+        const optionDate = document.createElement('option');
+        optionDate.innerText = date.toString();
+        if (versions.indexOf(v) == 0) {
+          optionDate.selected = true;
+          stsCircle.selectedDate = date;
+        }
+        selectDate.appendChild(optionDate);
+      });
+
+      // STSParabola
+      selectDateParabola.innerHTML = '';
+      versions.forEach((v) => {
+        const date = v.date;
+        const optionDate = document.createElement('option');
+        optionDate.innerText = date.toString();
+        if (date == stsParabola.middleDate) optionDate.selected = true;
+        selectDateParabola.appendChild(optionDate);
+      });
+    });
+  };
+
+  // EVENTS
+
   selectSTShape.onchange = () => {
-    console.log(selectSTShape.selectedOptions[0].value);
+    shapeName.hidden = false;
+    shapeName.innerText = selectSTShape.selectedOptions[0].innerText;
     getShapesWithUi().forEach((element) => {
       if (element.stShape != null && element.stShape.displayed) {
         element.stShape.dispose();
@@ -374,10 +366,6 @@ loadMultipleJSON([
         uiCircle.hidden = false;
         radiusParameter.value = stsCircle.radius;
         heightParameter.value = stsCircle.height;
-        orbitControls.target.copy(
-          stsCircle.stLayer.rootObject3D.position.clone()
-        );
-        orbitControls.update();
         break;
       case 'parabola':
         stsParabola.display(getCurrentMode());
@@ -385,10 +373,6 @@ loadMultipleJSON([
         parabolaDistAxisX.value = stsParabola.distAxisX;
         parabolaDistAxisY.value = stsParabola.distAxisY;
         parabolaHeight.value = stsParabola.height;
-        orbitControls.target.copy(
-          stsParabola.stLayer.rootObject3D.position.clone()
-        );
-        orbitControls.update();
         break;
     }
   };
@@ -420,33 +404,11 @@ loadMultipleJSON([
 
   selectDate.onchange = () => {
     stsCircle.selectVersion(selectDate.selectedOptions[0].value);
-    // Send to the server the correct value
-    const baseUrl = 'http://localhost:8000/';
-    fetch(`${baseUrl}date`, {
-      method: 'POST',
-      body: JSON.stringify({ date: selectDate.selectedOptions[0].value }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.text())
-      .then((html) => console.log(html));
   };
 
   selectDateParabola.onchange = () => {
     stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
     stsParabola.display(getCurrentMode());
-    // Send to the server the correct value
-    const baseUrl = 'http://localhost:8000/';
-    fetch(`${baseUrl}date`, {
-      method: 'POST',
-      body: JSON.stringify({ date: stsParabola.middleDate }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.text())
-      .then((html) => console.log(html));
   };
 
   parabolaDistAxisX.addEventListener('input', (event) => {
@@ -462,5 +424,28 @@ loadMultipleJSON([
   parabolaHeight.addEventListener('input', (event) => {
     stsParabola.height = Number(event.target.value);
     stsParabola.display(getCurrentMode());
+  });
+
+  document.body.addEventListener('valuechanged', () => {
+    if (
+      themeController != null &&
+      themeController.slider &&
+      versions.length > 0
+    ) {
+      const date = parseInt(themeController.slider.getValue());
+      const closestDate = Math.max(
+        ...versions.map((v) => v.date).filter((d) => d <= date),
+        versions[0].date
+      );
+      if (stsCircle && stsCircle.displayed) {
+        stsCircle.selectVersion(closestDate);
+        selectDate.value = closestDate.toString();
+      }
+      if (stsParabola && stsParabola.displayed) {
+        stsParabola.middleDate = closestDate;
+        stsParabola.display(getCurrentMode());
+        selectDateParabola.value = closestDate.toString();
+      }
+    }
   });
 });

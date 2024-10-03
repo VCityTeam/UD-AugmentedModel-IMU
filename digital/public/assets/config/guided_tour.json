@@ -1,0 +1,262 @@
+[
+    {
+        "tour": {
+            "id": "tour_0",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 6,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 1,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_01",
+                        "VID_00"
+                    ]
+                },
+                {
+                    "previous": 0,
+                    "next": 2,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_02",
+                        "VID_00"
+                    ]
+                },
+                {
+                    "previous": 1,
+                    "next": 3,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_03",
+                        "IMG_00"
+                    ]
+                },
+                {
+                    "previous": 2,
+                    "next": 4,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_04",
+                        "IMG_00"
+                    ]
+                },
+                {
+                    "previous": 3,
+                    "next": 5,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_05"
+                    ]
+                },
+                {
+                    "previous": 4,
+                    "next": 6,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_06",
+                        "AUD_00"
+                    ]
+                },
+                {
+                    "previous": 5,
+                    "next": 6,
+                    "media": [
+                        "TEXT_00",
+                        "TEXT_07",
+                        "AUD_00"
+                    ]
+                }
+            ]
+        },
+        "media": [
+            {
+                "id": "TEXT_00",
+                "type": "text",
+                "value": "Industrie"
+            },
+            {
+                "id": "TEXT_01",
+                "type": "text",
+                "value": "2000"
+            },
+            {
+                "id": "TEXT_02",
+                "type": "text",
+                "value": "2009"
+            },
+            {
+                "id": "TEXT_03",
+                "type": "text",
+                "value": "2011"
+            },
+            {
+                "id": "TEXT_04",
+                "type": "text",
+                "value": "2012"
+            },
+            {
+                "id": "TEXT_05",
+                "type": "text",
+                "value": "2015"
+            },
+            {
+                "id": "TEXT_06",
+                "type": "text",
+                "value": "2018"
+            },
+            {
+                "id": "TEXT_07",
+                "type": "text",
+                "value": "2030"
+            },
+            {
+                "id": "IMG_00",
+                "type": "image",
+                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+            },
+            {
+                "id": "VID_00",
+                "type": "video",
+                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            {
+                "id": "AUD_00",
+                "type": "audio",
+                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+            }
+        ]
+    },
+    {
+        "tour": {
+            "id": "tour_1",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 6,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 1,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_11",
+                        "VID_01"
+                    ]
+                },
+                {
+                    "previous": 0,
+                    "next": 2,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_12",
+                        "VID_01"
+                    ]
+                },
+                {
+                    "previous": 1,
+                    "next": 3,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_13",
+                        "IMG_01"
+                    ]
+                },
+                {
+                    "previous": 2,
+                    "next": 4,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_14",
+                        "IMG_01"
+                    ]
+                },
+                {
+                    "previous": 3,
+                    "next": 5,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_15"
+                    ]
+                },
+                {
+                    "previous": 4,
+                    "next": 6,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_16",
+                        "AUD_01"
+                    ]
+                },
+                {
+                    "previous": 5,
+                    "next": 6,
+                    "media": [
+                        "TEXT_10",
+                        "TEXT_17",
+                        "AUD_01"
+                    ]
+                }
+            ]
+        },
+        "media": [
+            {
+                "id": "TEXT_10",
+                "type": "text",
+                "value": "Histoire"
+            },
+            {
+                "id": "TEXT_11",
+                "type": "text",
+                "value": "1960"
+            },
+            {
+                "id": "TEXT_12",
+                "type": "text",
+                "value": "2007"
+            },
+            {
+                "id": "TEXT_13",
+                "type": "text",
+                "value": "2012"
+            },
+            {
+                "id": "TEXT_14",
+                "type": "text",
+                "value": "2015"
+            },
+            {
+                "id": "TEXT_15",
+                "type": "text",
+                "value": "2018"
+            },
+            {
+                "id": "TEXT_16",
+                "type": "text",
+                "value": "2019"
+            },
+            {
+                "id": "TEXT_17",
+                "type": "text",
+                "value": "2024"
+            },
+            {
+                "id": "IMG_01",
+                "type": "image",
+                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+            },
+            {
+                "id": "VID_01",
+                "type": "video",
+                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            {
+                "id": "AUD_01",
+                "type": "audio",
+                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+            }
+        ]
+    }
+]

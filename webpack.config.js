@@ -18,6 +18,7 @@ const webpackConfig = {
       },
     ],
   },
+  resolve: { modules: ['./node_modules'] },
 };
 
 webpackConfig.mode = MODE;

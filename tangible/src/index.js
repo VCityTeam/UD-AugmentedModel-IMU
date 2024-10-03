@@ -6,12 +6,15 @@ import {
 import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
-import { SlideShow } from '@ud-viz/widget_slide_show';
+import { ThemeController } from './ThemeController';
+
+const baseUrl = 'http://localhost:8000/';
 
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
-  'http://localhost:8000/assets/slide_show.json',
+  './assets/config/widget/slide_show.json',
+  `${baseUrl}assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -29,10 +32,6 @@ loadMultipleJSON([
   document.body.appendChild(viewDomElement);
   const view = new itowns.PlanarView(viewDomElement, extent);
 
-  // eslint-disable-next-line no-constant-condition
-  if ('RUN_MODE' == 'production')
-    loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
-
   // init scene 3D
   initScene(view.camera.camera3D, view.mainLoop.gfxEngine.renderer, view.scene);
 
@@ -47,54 +46,130 @@ loadMultipleJSON([
   fitExtent();
   view.camera.camera3D.rotation.set(0, 0, 0);
 
-  // /// SLIDESHOW MODULE
-  // 3D Setup
-  const slideShow = new SlideShow(view, configs['slide_show'], extent);
-  slideShow.domElement.classList.add('widget_slide_show');
-
-  slideShow.addListeners();
-  view.scene.add(slideShow.plane);
-
   // Add UI
   const uiDomElement = document.createElement('div');
   uiDomElement.classList.add('full_screen');
   document.body.appendChild(uiDomElement);
 
-  uiDomElement.appendChild(slideShow.domElement);
+  const intervalID = setInterval(getDataId, 1000);
+  const intervalStep = setInterval(getStepIndex, 1000);
 
-  const intervalID = setInterval(getDate, 1000);
+  let themeController = null;
+  const dataThemes = { dataId: null, selectedThemeIds: [] };
+  let stepIndex = 0;
+  let guidedTourConfig = null;
 
-  let currentDiapo = null;
+  const getThemesByIds = (ids) => {
+    const themeConfig = configs['themes'].find((config) => {
+      return config.dataId == dataThemes.dataId;
+    });
+    return themeConfig.themes.filter((config) => ids.includes(config.id));
+  };
 
-  function getDate() {
-    const baseUrl = 'http://localhost:8000/';
-    fetch(`${baseUrl}date`, {
+  function getDataId() {
+    fetch(`${baseUrl}selectedDataId`, {
       method: 'GET',
     })
-      .then((response) => response.text())
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
       .then((text) => {
-        console.log(text);
+        let forceRefresh = text != dataThemes.dataId;
+        dataThemes.dataId = text;
+        getSelectedThemeIds(forceRefresh);
+      });
+  }
 
-        for (let i = 0; i < slideShow.slides.length; i++) {
-          if (slideShow.slides[i].name == text) {
-            if (text != currentDiapo) {
-              slideShow.setSlideshowInConfig(i);
-              currentDiapo = text;
-            }
+  function getSelectedThemeIds(forceRefresh) {
+    fetch(`${baseUrl}selectedThemeIds`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.json();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((json) => {
+        if (
+          (forceRefresh && json.length) ||
+          JSON.stringify(json) != JSON.stringify(dataThemes.selectedThemeIds)
+        ) {
+          dataThemes.selectedThemeIds = json;
+          if (themeController) {
+            themeController.dispose();
+            themeController = null;
+            guidedTourConfig = null;
+          }
+          stepIndex = 0;
+          getGuidedTourConfig();
+        }
+      });
+  }
+
+  function getGuidedTourConfig() {
+    fetch(`${baseUrl}guidedTourConfig`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((text) => {
+        guidedTourConfig = JSON.parse(text);
+        themeController = new ThemeController(
+          view,
+          getThemesByIds(dataThemes.selectedThemeIds),
+          configs['slide_show'],
+          guidedTourConfig,
+          extent
+        );
+        themeController.slideShow.addListeners();
+        themeController.guidedTour.goToStep(stepIndex);
+        view.scene.add(themeController.slideShow.plane);
+      });
+  }
+
+  function getStepIndex() {
+    fetch(`${baseUrl}stepIndex`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        try {
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          return response.text();
+        } catch (error) {
+          console.error(error.message);
+        }
+      })
+      .then((text) => {
+        if (parseInt(text) != stepIndex) {
+          stepIndex = parseInt(text);
+          if (themeController) {
+            themeController.slideShow.setTexture(stepIndex);
+            if (themeController.guidedTour)
+              themeController.guidedTour.goToStep(stepIndex);
           }
         }
       });
   }
-  const hideUIListener = (event) => {
-    if (event.key.toLowerCase() != 's') return;
-
-    if (slideShow.domElement.style.display == 'none') {
-      slideShow.domElement.style.display = '';
-    } else {
-      slideShow.domElement.style.display = 'none';
-    }
-  };
-
-  /* Hide the domElement without dispose the widget */
-  window.addEventListener('keydown', hideUIListener);
 });
