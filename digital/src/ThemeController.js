@@ -82,15 +82,15 @@ export class ThemeController {
       values: dates,
       labels: true,
       set: [dates[0]],
-      onChange: function (val) {
+      onChange: (val) => {
         if (this.guidedTour != null) {
           this.guidedTour.goToStep(this.stepByDate[val]);
           this.updateButtonsVisibility();
           this.sendEventUpdate(this.stepByDate[val]);
         }
-      }.bind(this),
+      },
     });
-    const updateSlider = function () {
+    const updateSlider = () => {
       const stepIndex = this.guidedTour.currentIndex;
       this.updateButtonsVisibility();
       this.sendEventUpdate(stepIndex);
@@ -104,11 +104,11 @@ export class ThemeController {
     };
     this.guidedTour.nextButton.addEventListener(
       'click',
-      updateSlider.bind(this)
+      updateSlider
     );
     this.guidedTour.previousButton.addEventListener(
       'click',
-      updateSlider.bind(this)
+      updateSlider
     );
   }
 
