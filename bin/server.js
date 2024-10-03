@@ -13,7 +13,6 @@ console.info(`
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-let date = null;
 let selectedDataId = null;
 let selectedThemeIds = [];
 let stepIndex = null;
