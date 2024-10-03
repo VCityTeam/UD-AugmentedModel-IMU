@@ -208,8 +208,7 @@ loadMultipleJSON([
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => response.text())
-      .then((html) => console.log(html));
+      .then((response) => response.text());
 
     const themesConfigs = getThemes();
     const themeInputs = [];
@@ -249,8 +248,7 @@ loadMultipleJSON([
               'Content-Type': 'application/json',
             },
           })
-            .then((response) => response.json())
-            .then((html) => console.log(html));
+            .then((response) => response.json());
 
           themeController = new ThemeController(
             view,
