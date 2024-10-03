@@ -32,10 +32,6 @@ loadMultipleJSON([
   document.body.appendChild(viewDomElement);
   const view = new itowns.PlanarView(viewDomElement, extent);
 
-  // eslint-disable-next-line no-constant-condition
-  if ('RUN_MODE' == 'production')
-    loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
-
   // init scene 3D
   initScene(view.camera.camera3D, view.mainLoop.gfxEngine.renderer, view.scene);
 

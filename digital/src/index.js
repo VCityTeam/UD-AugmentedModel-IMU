@@ -41,10 +41,6 @@ loadMultipleJSON([
     noControls: true,
   });
 
-  // eslint-disable-next-line no-constant-condition
-  if ('RUN_MODE' == 'production')
-    loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
-
   // init scene 3D
   initScene(
     view.camera.camera3D,
