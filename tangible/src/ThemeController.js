@@ -65,6 +65,20 @@ export class ThemeController {
       this.mergedSlideShowConfig,
       this.extent
     );
+    this.slideShow.domElement.classList.add('widget_slide_show');
+    document.body.appendChild(this.slideShow.domElement);
+    const hideUIListener = (event) => {
+      if (event.key.toLowerCase() != 's') return;
+
+      if (this.slideShow.domElement.style.display == 'none') {
+        this.slideShow.domElement.style.display = '';
+      } else {
+        this.slideShow.domElement.style.display = 'none';
+      }
+    };
+
+    /* Hide the domElement without dispose the widget */
+    window.addEventListener('keydown', hideUIListener);
   }
 
   createGuidedTourWidget() {
