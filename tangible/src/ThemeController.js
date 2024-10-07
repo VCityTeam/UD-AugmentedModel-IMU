@@ -80,6 +80,7 @@ export class ThemeController {
       );
     }
     this.slideShow.domElement.classList.add('widget_slide_show');
+    this.slideShow.domElement.style.display = 'none';
     document.body.appendChild(this.slideShow.domElement);
     const hideUIListener = (event) => {
       if (event.key.toLowerCase() != 's') return;
