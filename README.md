@@ -68,6 +68,25 @@ Slide shows can be configured in [`slide_show.json`](./tangible/public/assets/co
 
 To configure the slide show, see the [widget doc](https://github.com/VCityTeam/UD-Viz/tree/master/packages/widget_slide_show).
 
+An additional `canvasConfig` can be used to configure the size and the position of the slide show canvas:
+
+```json
+{
+  "slides": ["..."],
+  "canvasConfig": {
+    "position": {
+      "x": 1841453.5,
+      "y": 5173061,
+      "z": 0.1
+    },
+    "size": {
+      "height": 26187,
+      "width": 15828
+    }
+  }
+}
+```
+
 ### Guided tour
 
 Guided tours can be configured in [`guided_tour.json`](./digital/public/assets/config/guided_tour.json).

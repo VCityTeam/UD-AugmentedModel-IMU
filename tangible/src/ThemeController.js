@@ -1,3 +1,4 @@
+import { Vector2, Vector3 } from 'three';
 import { SlideShow } from '@ud-viz/widget_slide_show';
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
 import { dragElement } from './draggable';
@@ -11,6 +12,7 @@ export class ThemeController {
     this.extent = extent;
     this.themeConfigs = themeConfigs;
     this.slideShowConfigs = slideShowConfigs;
+    this.canvasConfig = this.slideShowConfigs.canvasConfig;
     this.guidedTourConfig = guidedTourConfig;
 
     this.setSlideShowConfig();
@@ -65,6 +67,18 @@ export class ThemeController {
       this.mergedSlideShowConfig,
       this.extent
     );
+    if (this.canvasConfig) {
+      this.slideShow.setSizeInputs(
+        new Vector2(this.canvasConfig.size.height, this.canvasConfig.size.width)
+      );
+      this.slideShow.setCoordinatesInputs(
+        new Vector3(
+          this.canvasConfig.position.x,
+          this.canvasConfig.position.y,
+          this.canvasConfig.position.z
+        )
+      );
+    }
     this.slideShow.domElement.classList.add('widget_slide_show');
     document.body.appendChild(this.slideShow.domElement);
     const hideUIListener = (event) => {

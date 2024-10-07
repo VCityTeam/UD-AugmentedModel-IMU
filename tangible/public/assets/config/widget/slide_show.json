@@ -29,5 +29,16 @@
       ]
     }
   ],
-  "textureRotation": 0
+  "textureRotation": 0,
+  "canvasConfig": {
+    "position": {
+      "x": 1841453.5,
+      "y": 5173061,
+      "z": 0.1
+    },
+    "size": {
+      "height": 26187,
+      "width": 15828
+    }
+  }
 }
