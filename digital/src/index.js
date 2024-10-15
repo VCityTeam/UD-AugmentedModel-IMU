@@ -10,6 +10,7 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { hideElement } from './uiUtils';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -207,8 +208,7 @@ loadMultipleJSON([
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-      .then((response) => response.text());
+    }).then((response) => response.text());
 
     const themesConfigs = getThemes();
     const themeInputs = [];
@@ -247,8 +247,7 @@ loadMultipleJSON([
             headers: {
               'Content-Type': 'application/json',
             },
-          })
-            .then((response) => response.json());
+          }).then((response) => response.json());
 
           themeController = new ThemeController(
             view,
@@ -448,4 +447,6 @@ loadMultipleJSON([
       }
     }
   });
+
+  hideElement('shape_div');
 });
