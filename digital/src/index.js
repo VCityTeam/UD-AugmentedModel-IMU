@@ -10,7 +10,7 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { hideElement } from './uiUtils';
+import { hideElement, toggleShowHide } from './uiUtils';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -185,6 +185,7 @@ loadMultipleJSON([
   };
 
   let versions = [];
+  const listenersToggle = [];
 
   selectDataset.onchange = () => {
     selectMode.hidden = false;
@@ -221,10 +222,26 @@ loadMultipleJSON([
         const themeLabelInput = createLabelInput(config.name, 'checkbox');
         themesContainer.appendChild(themeLabelInput.parent);
         themeLabelInput.input.id = config.id;
+        /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
+       element and dispatches a new input event */
+        if (config.eventCode) {
+          const newListener = (event) => {
+            if (event.code == config.eventCode) {
+              themeLabelInput.input.checked = !themeLabelInput.input.checked;
+              themeLabelInput.input.dispatchEvent(new Event('input'));
+            }
+          };
+          listenersToggle.push(newListener);
+          window.addEventListener('keypress', newListener);
+        }
         themeInputs.push(themeLabelInput.input);
       });
     } else {
       themeDiv.hidden = true;
+      /* Removing event listeners from all the functions in the `listenersToggle`*/
+      listenersToggle.forEach((listener) => {
+        window.removeEventListener('keypress', listener);
+      });
     }
     themeInputs.forEach((input) => {
       input.addEventListener('input', () => {
