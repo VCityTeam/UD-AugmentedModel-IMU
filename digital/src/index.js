@@ -11,6 +11,7 @@ import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { hideElement, toggleShowHide } from './uiUtils';
+import { CameraController } from './CameraController';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -48,6 +49,10 @@ loadMultipleJSON([
     view.mainLoop.gfxEngine.getRenderer(),
     view.scene
   );
+
+  //init Camera Controller
+  const cameraController = new CameraController(view.camera3D, view);
+  cameraController.setListeners();
 
   // view.controls.enabled = false;
   const orbitControls = new OrbitControls(
