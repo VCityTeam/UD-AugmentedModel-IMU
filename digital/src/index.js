@@ -2,6 +2,7 @@ import {
   initScene,
   loadMultipleJSON,
   createLabelInput,
+  RequestAnimationFrameProcess,
 } from '@ud-viz/utils_browser';
 import proj4 from 'proj4';
 import * as itowns from 'itowns';
@@ -10,7 +11,7 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { hideElement, toggleShowHide } from './uiUtils';
+import { hideElement } from './uiUtils';
 import { CameraController } from './CameraController';
 
 const baseUrl = 'http://localhost:8000/';
@@ -50,15 +51,27 @@ loadMultipleJSON([
     view.scene
   );
 
+  const cameraProcess = new RequestAnimationFrameProcess(30);
+
   //init Camera Controller
-  const cameraController = new CameraController(view.camera3D, view);
+  const cameraController = new CameraController(view.camera3D);
   cameraController.setListeners();
+  cameraController.speed = 1000;
+  cameraProcess.start(() => {
+    if (!cameraController.isTargetBehindNextCamera()) {
+      cameraController.moveCamera();
+      view.notifyChange(
+        view.camera3D
+      ); /** Give camera3D param to trigger redraw of depthBuffer {@link https://github.com/iTowns/itowns/blob/b991878fb7b8ccd409c6ad53adbfbb398003aca0/src/Core/View.js#L470}*/
+    }
+  });
 
   // view.controls.enabled = false;
   const orbitControls = new OrbitControls(
     view.camera.camera3D,
     view.mainLoop.gfxEngine.label2dRenderer.domElement
   );
+  cameraController.targetPosition = orbitControls.target;
 
   orbitControls.target.copy(extent.center().toVector3().clone());
   orbitControls.update();
