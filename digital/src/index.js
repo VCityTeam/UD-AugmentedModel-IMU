@@ -51,6 +51,12 @@ loadMultipleJSON([
     view.scene
   );
 
+  // view.controls.enabled = false;
+  const orbitControls = new OrbitControls(
+    view.camera.camera3D,
+    view.mainLoop.gfxEngine.label2dRenderer.domElement
+  );
+
   const cameraProcess = new RequestAnimationFrameProcess(30);
 
   //init Camera Controller
@@ -65,13 +71,26 @@ loadMultipleJSON([
       ); /** Give camera3D param to trigger redraw of depthBuffer {@link https://github.com/iTowns/itowns/blob/b991878fb7b8ccd409c6ad53adbfbb398003aca0/src/Core/View.js#L470}*/
     }
   });
-
-  // view.controls.enabled = false;
-  const orbitControls = new OrbitControls(
-    view.camera.camera3D,
-    view.mainLoop.gfxEngine.label2dRenderer.domElement
-  );
   cameraController.targetPosition = orbitControls.target;
+
+  const divSaveLoad = document.createElement('div');
+  divSaveLoad.style.position = 'absolute';
+  divSaveLoad.style.right = '0';
+  divSaveLoad.style.zIndex = '3';
+  divSaveLoad.style.display = 'flex';
+  document.body.appendChild(divSaveLoad);
+  const loadCameraButton = document.createElement('button');
+  loadCameraButton.innerText = 'LOAD CAMERA SAVED';
+  divSaveLoad.appendChild(loadCameraButton);
+  loadCameraButton.onclick = () => {
+    cameraController.loadCameraTransform();
+  };
+  const saveCameraButton = document.createElement('button');
+  saveCameraButton.innerText = 'SAVE CAMERA';
+  divSaveCameraButtonLoad.appendChild(saveCameraButton);
+  saveCameraButton.onclick = () => {
+    cameraController.saveCameraTransform();
+  };
 
   orbitControls.target.copy(extent.center().toVector3().clone());
   orbitControls.update();

@@ -3,7 +3,18 @@
     "name": "ign",
     "source": {
       "url": "https://data.geopf.fr/wms-r",
-      "name": "CADASTRALPARCELS.PARCELS",
+      "name": "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+      "version": "1.3.0",
+      "format": "image/jpeg",
+      "layer_name": "Base_Map",
+      "transparent": true
+    }
+  },
+  {
+    "name": "ign",
+    "source": {
+      "url": "https://data.geopf.fr/wms-r",
+      "name": "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
       "version": "1.3.0",
       "format": "image/jpeg",
       "layer_name": "Base_Map",
