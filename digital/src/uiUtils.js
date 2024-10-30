@@ -1,9 +1,10 @@
-export function setDefaultSelectValue(selectId, defaultValue) {
+export function setSelectValue(selectId, defaultValue) {
   const selectElement = document.getElementById(selectId);
   if (selectElement) {
     for (let i = 0; i < selectElement.options.length; i++) {
       if (selectElement.options[i].value === defaultValue) {
         selectElement.selectedIndex = i;
+        selectElement.dispatchEvent(new Event('change'));
         break;
       }
     }

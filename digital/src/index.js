@@ -11,7 +11,7 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { hideElement } from './uiUtils';
+import { hideElement, setSelectValue } from './uiUtils';
 import { CameraController } from './CameraController';
 import { DATA_ID, load, save } from './saveAndLoad.js';
 
@@ -230,6 +230,7 @@ loadMultipleJSON([
     ];
   };
 
+  // EVENTS
   let versions = [];
   const listenersToggle = [];
 
@@ -408,10 +409,10 @@ loadMultipleJSON([
         if (date == stsParabola.middleDate) optionDate.selected = true;
         selectDateParabola.appendChild(optionDate);
       });
+
+      setSelectValue(selectSTShape.id, 'circle');
     });
   };
-
-  // EVENTS
 
   selectSTShape.onchange = () => {
     shapeName.hidden = false;
@@ -512,4 +513,10 @@ loadMultipleJSON([
   });
 
   hideElement('shape_div');
+
+  setSelectValue(selectDataset.id, 'sts_lyon');
+  setSelectValue(
+    selectMode.id,
+    extensions3DTilesTemporal.STS_DISPLAY_MODE.SEQUENTIAL
+  );
 });
