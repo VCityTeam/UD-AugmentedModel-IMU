@@ -13,6 +13,7 @@ import { ThemeController } from './ThemeController';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { hideElement } from './uiUtils';
 import { CameraController } from './CameraController';
+import { DATA_ID, load, save } from './saveAndLoad.js';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -79,17 +80,25 @@ loadMultipleJSON([
   divSaveLoad.style.zIndex = '3';
   divSaveLoad.style.display = 'flex';
   document.body.appendChild(divSaveLoad);
+
   const loadCameraButton = document.createElement('button');
   loadCameraButton.innerText = 'LOAD CAMERA SAVED';
   divSaveLoad.appendChild(loadCameraButton);
   loadCameraButton.onclick = () => {
-    cameraController.loadCameraTransform();
+    cameraController.loadCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
+    orbitControls.target.copy(
+      new THREE.Vector3().fromArray(load(DATA_ID.ORBIT_CONTROLS).arrayTarget)
+    );
   };
+
   const saveCameraButton = document.createElement('button');
   saveCameraButton.innerText = 'SAVE CAMERA';
-  divSaveCameraButtonLoad.appendChild(saveCameraButton);
+  divSaveLoad.appendChild(saveCameraButton);
   saveCameraButton.onclick = () => {
-    cameraController.saveCameraTransform();
+    save(DATA_ID.CAMERA, cameraController.toJSON());
+    save(DATA_ID.ORBIT_CONTROLS, {
+      arrayTarget: orbitControls.target.toArray(),
+    });
   };
 
   orbitControls.target.copy(extent.center().toVector3().clone());

@@ -1,4 +1,4 @@
-import { Quaternion, Vector3 } from 'three';
+import { Matrix4, Quaternion, Vector3 } from 'three';
 import { isPositionBehindObject3D } from './object3DUtil';
 
 export class CameraController {
@@ -7,7 +7,6 @@ export class CameraController {
     this.speed = speed || 250;
     this.moveAxis = new Vector3(0, 0, 0);
     this.targetPosition = null;
-    this.cameraTransformSaved = this.camera.matrixWorld.clone();
     this.listeners = [];
   }
 
@@ -15,15 +14,13 @@ export class CameraController {
     this.targetPosition = position;
   }
 
-  saveCameraTransform() {
-    this.cameraTransformSaved = this.camera.matrixWorld.clone();
-  }
+  loadCameraFromArray(transform) {
+    transform = new Matrix4().fromArray(transform);
 
-  loadCameraTransform() {
     const position = new Vector3();
     const quaternion = new Quaternion();
     const scale = new Vector3();
-    this.cameraTransformSaved.decompose(position, quaternion, scale);
+    transform.decompose(position, quaternion, scale);
 
     this.camera.position.copy(position);
     this.camera.quaternion.copy(quaternion);
@@ -71,6 +68,12 @@ export class CameraController {
     };
     window.addEventListener('keydown', unZoomListener);
     this.listeners.push(unZoomListener);
+  }
+
+  toJSON() {
+    return {
+      arrayMatrixWorld: this.camera.matrixWorld.toArray(),
+    };
   }
 }
 
