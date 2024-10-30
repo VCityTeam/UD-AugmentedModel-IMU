@@ -85,7 +85,7 @@ loadMultipleJSON([
   loadCameraButton.innerText = 'LOAD CAMERA SAVED';
   divSaveLoad.appendChild(loadCameraButton);
   loadCameraButton.onclick = () => {
-    cameraController.loadCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
+    cameraController.setCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
     orbitControls.target.copy(
       new THREE.Vector3().fromArray(load(DATA_ID.ORBIT_CONTROLS).arrayTarget)
     );
@@ -228,6 +228,12 @@ loadMultipleJSON([
       },
       { stShape: stsParabola, ui: uiParabola },
     ];
+  };
+
+  const getCurrentSTShape = () => {
+    return getShapesWithUi().find((element) => {
+      return element.stShape.displayed;
+    }).stShape;
   };
 
   // EVENTS
@@ -409,8 +415,6 @@ loadMultipleJSON([
         if (date == stsParabola.middleDate) optionDate.selected = true;
         selectDateParabola.appendChild(optionDate);
       });
-
-      setSelectValue(selectSTShape.id, 'circle');
     });
   };
 
@@ -512,11 +516,29 @@ loadMultipleJSON([
     }
   });
 
-  hideElement('shape_div');
+  const computeCameraConsistentOrientation = () => {
+    const currentSTShape = getCurrentSTShape();
 
-  setSelectValue(selectDataset.id, 'sts_lyon');
-  setSelectValue(
-    selectMode.id,
-    extensions3DTilesTemporal.STS_DISPLAY_MODE.SEQUENTIAL
-  );
+    const rootObject3D = currentSTShape.stLayer.rootObject3D.clone();
+    rootObject3D.translateOnAxis(new THREE.Vector3(1, 0, 1), 1000); // HARCODE
+    rootObject3D.updateMatrixWorld();
+    return rootObject3D.matrixWorld.clone();
+  };
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key == '*') {
+      console.log(computeCameraConsistentOrientation().toArray());
+      cameraController.setCameraFromArray(
+        computeCameraConsistentOrientation().toArray()
+      );
+      console.log(getCurrentSTShape().stLayer.rootObject3D.position);
+      console.log(orbitControls.target);
+      orbitControls.target.setFromMatrixPosition(
+        getCurrentSTShape().stLayer.rootObject3D.matrixWorld
+      );
+      orbitControls.update();
+    }
+  });
+
+  hideElement('shape_div');
 });

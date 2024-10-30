@@ -10,7 +10,7 @@ export class CameraController {
     this.listeners = [];
   }
 
-  loadCameraFromArray(transform) {
+  setCameraFromArray(transform) {
     transform = new Matrix4().fromArray(transform);
 
     const position = new Vector3();
