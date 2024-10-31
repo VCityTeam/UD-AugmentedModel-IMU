@@ -11,7 +11,7 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { hideElement, setSelectValue } from './uiUtils';
+import { hideElement } from './uiUtils';
 import { CameraController } from './CameraController';
 import { DATA_ID, load, save } from './saveAndLoad.js';
 import { degToRad } from 'three/src/math/MathUtils.js';
@@ -43,9 +43,9 @@ loadMultipleJSON([
   viewDomElement.classList.add('full_screen');
   document.body.appendChild(viewDomElement);
   const view = new itowns.PlanarView(viewDomElement, extent, {
-    noControls: true,
+    noControls: false,
   });
-
+  view.controls.enabled = false;
   // init scene 3D
   initScene(
     view.camera.camera3D,
@@ -231,10 +231,14 @@ loadMultipleJSON([
     ];
   };
 
-  const getCurrentSTShape = () => {
-    return getShapesWithUi().find((element) => {
-      return element.stShape.displayed;
-    }).stShape;
+  const tryGetCurrentSTShape = () => {
+    try {
+      return getShapesWithUi().find((element) => {
+        return element.stShape.displayed;
+      }).stShape;
+    } catch {
+      return false;
+    }
   };
 
   // EVENTS
@@ -523,7 +527,7 @@ loadMultipleJSON([
    */
   const getFocusTransformForCurrentSTShape = () => {
     // Get the current shape in the scene (assumed to be an object in 3D space)
-    const currentSTShape = getCurrentSTShape();
+    const currentSTShape = tryGetCurrentSTShape();
 
     // Create a clone of the 3D object to manipulate without altering the original
     const cloneObject = currentSTShape.stLayer.rootObject3D.clone();
@@ -568,21 +572,18 @@ loadMultipleJSON([
   let bHelpers = [];
   window.addEventListener('keydown', (event) => {
     if (event.key == '*') {
-      // console.log(getFocusTransformForCurrentSTShape().toArray());
+      if (!tryGetCurrentSTShape()) return;
       view.camera3D.position.copy(
         getFocusTransformForCurrentSTShape().position
       );
 
-      // console.log(getCurrentSTShape().stLayer.rootObject3D.position);
-      // console.log(orbitControls.target);
-
       orbitControls.target.setFromMatrixPosition(
-        getCurrentSTShape().stLayer.rootObject3D.matrixWorld
+        tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
       );
       orbitControls.update();
     }
     if (event.key == 'b') {
-      const rootObject3D = getCurrentSTShape().stLayer.rootObject3D;
+      const rootObject3D = tryGetCurrentSTShape().stLayer.rootObject3D;
       const box3 = new THREE.Box3Helper(
         new THREE.Box3().setFromObject(rootObject3D),
         0xff0000
