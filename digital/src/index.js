@@ -14,6 +14,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { hideElement, setSelectValue } from './uiUtils';
 import { CameraController } from './CameraController';
 import { DATA_ID, load, save } from './saveAndLoad.js';
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -516,27 +517,85 @@ loadMultipleJSON([
     }
   });
 
-  const computeCameraConsistentOrientation = () => {
+  /**
+   * Computes an orientation of a 3D object that is consistent with the current camera view.
+   * @returns {THREE.Object3D} - The reoriented clone of the 3D object positioned for a consistent camera view.
+   */
+  const getFocusTransformForCurrentSTShape = () => {
+    // Get the current shape in the scene (assumed to be an object in 3D space)
     const currentSTShape = getCurrentSTShape();
 
-    const rootObject3D = currentSTShape.stLayer.rootObject3D.clone();
-    rootObject3D.translateOnAxis(new THREE.Vector3(1, 0, 1), 1000); // HARCODE
-    rootObject3D.updateMatrixWorld();
-    return rootObject3D.matrixWorld.clone();
+    // Create a clone of the 3D object to manipulate without altering the original
+    const cloneObject = currentSTShape.stLayer.rootObject3D.clone();
+
+    // Reset the rotation of the clone to align it to a base orientation
+    cloneObject.rotation.set(0, 0, 0);
+
+    // Calculate the bounding box of the clone object
+    const bounds = new THREE.Box3().setFromObject(cloneObject);
+
+    // Get the size (width, height, depth) of the bounding box
+    const objectSizes = bounds.getSize(new THREE.Vector3());
+
+    // Determine the largest dimension and double it as a reference size
+    const objectSize =
+      Math.max(objectSizes.x, objectSizes.y, objectSizes.z) * 2;
+
+    // Calculate the vertical field of view for a 1-meter distance from the camera
+    const cameraView = 2 * Math.tan(0.5 * degToRad(view.camera3D.fov));
+
+    // Compute the initial distance needed to fit the object within the camera view
+    let distance = objectSize / cameraView;
+
+    // Add additional distance based on the object's size for optimal positioning
+    distance += objectSize;
+
+    // Calculate the direction vector from the camera to the object
+    const dirCameraObject = view.camera3D
+      .getWorldPosition(new THREE.Vector3())
+      .sub(cloneObject.getWorldPosition(new THREE.Vector3()));
+
+    // Move the clone along the calculated direction vector by the computed distance
+    cloneObject.translateOnAxis(dirCameraObject.normalize(), distance);
+
+    // Update the world matrix of the clone to apply the transformations
+    cloneObject.updateMatrixWorld();
+
+    // Return the modified clone, now positioned consistently with the camera view
+    return cloneObject;
   };
 
+  let bHelpers = [];
   window.addEventListener('keydown', (event) => {
     if (event.key == '*') {
-      console.log(computeCameraConsistentOrientation().toArray());
-      cameraController.setCameraFromArray(
-        computeCameraConsistentOrientation().toArray()
+      // console.log(getFocusTransformForCurrentSTShape().toArray());
+      view.camera3D.position.copy(
+        getFocusTransformForCurrentSTShape().position
       );
-      console.log(getCurrentSTShape().stLayer.rootObject3D.position);
-      console.log(orbitControls.target);
+
+      // console.log(getCurrentSTShape().stLayer.rootObject3D.position);
+      // console.log(orbitControls.target);
+
       orbitControls.target.setFromMatrixPosition(
         getCurrentSTShape().stLayer.rootObject3D.matrixWorld
       );
       orbitControls.update();
+    }
+    if (event.key == 'b') {
+      const rootObject3D = getCurrentSTShape().stLayer.rootObject3D;
+      const box3 = new THREE.Box3Helper(
+        new THREE.Box3().setFromObject(rootObject3D),
+        0xff0000
+      );
+      box3.updateMatrixWorld();
+      view.scene.add(box3);
+      bHelpers.push(box3);
+    }
+    if (event.key == 'c') {
+      bHelpers.forEach((bh) => {
+        bh.removeFromParent();
+      });
+      bHelpers = [];
     }
   });
 
