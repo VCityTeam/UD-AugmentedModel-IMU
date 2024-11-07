@@ -7,7 +7,8 @@
         "name": "Industrie",
         "slideShowId": "slide_0",
         "guidedTourId": "tour_0",
-        "dates": [2000, 2009, 2011, 2012, 2015, 2018, 2030]
+        "dates": [2000, 2009, 2011, 2012, 2015, 2018, 2030],
+        "eventCode": "Numpad7"
       },
       {
         "id": "theme_1",
@@ -27,7 +28,8 @@
         "name": "Industrie",
         "slideShowId": "slide_0",
         "guidedTourId": "tour_0",
-        "dates": [2000, 2009, 2011, 2012, 2015, 2018, 2030]
+        "dates": [2000, 2009, 2011, 2012, 2015, 2018, 2030],
+        "eventCode": "Numpad7"
       },
       {
         "id": "theme_1",
