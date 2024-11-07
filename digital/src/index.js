@@ -82,9 +82,7 @@ loadMultipleJSON([
   divSaveLoad.style.display = 'flex';
   document.body.appendChild(divSaveLoad);
 
-  const loadCameraButton = document.createElement('button');
-  loadCameraButton.innerText = 'LOAD CAMERA SAVED';
-  divSaveLoad.appendChild(loadCameraButton);
+  const loadCameraButton = document.getElementById('load_camera')
   loadCameraButton.onclick = () => {
     cameraController.setCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
     orbitControls.target.copy(
@@ -92,9 +90,7 @@ loadMultipleJSON([
     );
   };
 
-  const saveCameraButton = document.createElement('button');
-  saveCameraButton.innerText = 'SAVE CAMERA';
-  divSaveLoad.appendChild(saveCameraButton);
+  const saveCameraButton = document.getElementById('save_camera')
   saveCameraButton.onclick = () => {
     save(DATA_ID.CAMERA, cameraController.toJSON());
     save(DATA_ID.ORBIT_CONTROLS, {
