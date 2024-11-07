@@ -70,6 +70,9 @@
   display: block;
   width: 140px;
   padding: 10px 20px;
+  background-color: ButtonFace;
+  border-radius: 4px;
+  border: 1px solid rgb(118, 118, 118);
 }
 
 #themes_container span::before {
@@ -80,12 +83,6 @@
   top: 50%;
   margin-top: -7px;
   left: 10px;
-  border: 1px solid rgb(118, 118, 118);
-}
-
-#themes_container span {
-  background-color: ButtonFace;
-  border-radius: 4px;
   border: 1px solid rgb(118, 118, 118);
 }
 
