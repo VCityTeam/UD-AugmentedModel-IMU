@@ -90,26 +90,26 @@ export class ThemeController {
         }
       },
     });
-    const updateSlider = () => {
-      const stepIndex = this.guidedTour.currentIndex;
-      this.updateButtonsVisibility();
-      this.sendEventUpdate(stepIndex);
-      const closestIndex = Math.max(
-        ...Object.values(this.stepByDate).filter((x) => x <= stepIndex)
-      );
-      const date = Object.keys(this.stepByDate).find(
-        (d) => this.stepByDate[d] == closestIndex
-      );
-      this.slider.setCursor(null, date);
-    };
-    this.guidedTour.nextButton.addEventListener(
-      'click',
-      updateSlider
+
+    this.guidedTour.nextButton.addEventListener('click', () => {
+      this.updateSlider();
+    });
+    this.guidedTour.previousButton.addEventListener('click', () => {
+      this.updateSlider();
+    });
+  }
+
+  updateSlider() {
+    const stepIndex = this.guidedTour.currentIndex;
+    this.updateButtonsVisibility();
+    this.sendEventUpdate(stepIndex);
+    const closestIndex = Math.max(
+      ...Object.values(this.stepByDate).filter((x) => x <= stepIndex)
     );
-    this.guidedTour.previousButton.addEventListener(
-      'click',
-      updateSlider
+    const date = Object.keys(this.stepByDate).find(
+      (d) => this.stepByDate[d] == closestIndex
     );
+    this.slider.setCursor(null, date);
   }
 
   sendEventUpdate(stepIndex) {
