@@ -623,6 +623,18 @@ loadMultipleJSON([
       });
       bHelpers = [];
     }
+    if (themeController && themeController.guidedTour) {
+      const tour = themeController.guidedTour;
+      const index = tour.currentIndex;
+      if (event.key == '0' && index != tour.startIndex) {
+        tour.goToStep(tour.getCurrentStep().previous);
+        themeController.updateSlider()
+      }
+      if (event.key == '.' && index != tour.endIndex) {
+        tour.goToStep(tour.getCurrentStep().next);
+        themeController.updateSlider()
+      }
+    }
   });
 
   hideElement('shape_div');
