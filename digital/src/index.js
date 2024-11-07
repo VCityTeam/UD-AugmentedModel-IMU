@@ -82,7 +82,7 @@ loadMultipleJSON([
   divSaveLoad.style.display = 'flex';
   document.body.appendChild(divSaveLoad);
 
-  const loadCameraButton = document.getElementById('load_camera')
+  const loadCameraButton = document.getElementById('load_camera');
   loadCameraButton.onclick = () => {
     cameraController.setCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
     orbitControls.target.copy(
@@ -90,7 +90,7 @@ loadMultipleJSON([
     );
   };
 
-  const saveCameraButton = document.getElementById('save_camera')
+  const saveCameraButton = document.getElementById('save_camera');
   saveCameraButton.onclick = () => {
     save(DATA_ID.CAMERA, cameraController.toJSON());
     save(DATA_ID.ORBIT_CONTROLS, {
@@ -273,22 +273,28 @@ loadMultipleJSON([
       themesContainer.innerHTML = '';
       themesConfigs.themes.forEach((config) => {
         themes[config.id] = config;
-        const themeLabelInput = createLabelInput(config.name, 'checkbox');
-        themesContainer.appendChild(themeLabelInput.parent);
-        themeLabelInput.input.id = config.id;
+        const themeLabel = document.createElement('label');
+        const themeInput = document.createElement('input');
+        themeInput.setAttribute('type', 'checkbox');
+        themeLabel.appendChild(themeInput);
+        const themeSpan = document.createElement('span');
+        themeSpan.innerText = config.name;
+        themeLabel.appendChild(themeSpan);
+        themesContainer.appendChild(themeLabel);
+        themeInput.id = config.id;
         /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
         if (config.eventCode) {
           const newListener = (event) => {
             if (event.code == config.eventCode) {
-              themeLabelInput.input.checked = !themeLabelInput.input.checked;
-              themeLabelInput.input.dispatchEvent(new Event('input'));
+              themeInput.checked = !themeInput.checked;
+              themeInput.dispatchEvent(new Event('input'));
             }
           };
           listenersToggle.push(newListener);
           window.addEventListener('keypress', newListener);
         }
-        themeInputs.push(themeLabelInput.input);
+        themeInputs.push(themeInput);
       });
     } else {
       themeDiv.hidden = true;

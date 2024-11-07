@@ -1,5 +1,10 @@
 body {
   overflow: hidden;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h2 {
+ font-size: 21px;
 }
 
 .full_screen {
