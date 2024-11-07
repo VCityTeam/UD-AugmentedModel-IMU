@@ -80,7 +80,7 @@
   top: 50%;
   margin-top: -7px;
   left: 10px;
-  border: 1px solid #b4b4b4;
+  border: 1px solid rgb(118, 118, 118);
 }
 
 #themes_container span {
@@ -90,7 +90,7 @@
 }
 
 #themes_container input:checked ~ span::before {
-  background-color: #b4b4b4;
+  background-color: rgb(118, 118, 118);
 }
 
 #themes_container span:hover {
