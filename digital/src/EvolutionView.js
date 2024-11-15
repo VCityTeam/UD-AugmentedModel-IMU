@@ -10,6 +10,8 @@ const baseUrl = 'http://localhost:8000/';
 
 export class EvolutionView {
   constructor(configs, view, controls) {
+    this.view = view;
+
     const extensions = new itowns.C3DTExtensions();
     extensions.registerExtension(extensions3DTilesTemporal.ID, {
       [itowns.C3DTilesTypes.batchtable]:
@@ -21,7 +23,7 @@ export class EvolutionView {
     });
 
     // CREATE HTML
-    const selectDataset = document.getElementById('select_dataset');
+    this.selectDataset = document.getElementById('select_dataset');
     const datasetConfigs = {};
     configs['3DTiles_STS_data']
       .concat(configs['3DTiles_temporal'])
@@ -30,47 +32,47 @@ export class EvolutionView {
         const dataOption = document.createElement('option');
         dataOption.value = config.id;
         dataOption.innerText = config.name;
-        selectDataset.appendChild(dataOption);
+        this.selectDataset.appendChild(dataOption);
       });
 
     const getDataset = () => {
-      return datasetConfigs[selectDataset.selectedOptions[0].value];
+      return datasetConfigs[this.selectDataset.selectedOptions[0].value];
     };
 
     const getThemes = () => {
       return configs['themes'].find(
-        (config) => config.dataId == selectDataset.selectedOptions[0].value
+        (config) => config.dataId == this.selectDataset.selectedOptions[0].value
       );
     };
 
-    const selectMode = document.getElementById('select_mode');
+    this.selectMode = document.getElementById('select_mode');
 
     for (const mode in extensions3DTilesTemporal.STS_DISPLAY_MODE) {
       const optionMode = document.createElement('option');
       optionMode.innerText = extensions3DTilesTemporal.STS_DISPLAY_MODE[mode];
-      selectMode.appendChild(optionMode);
+      this.selectMode.appendChild(optionMode);
     }
 
     const getCurrentMode = () => {
-      return selectMode.selectedOptions[0].value;
+      return this.selectMode.selectedOptions[0].value;
     };
 
-    const selectSTShape = document.getElementById('select_shape');
+    this.selectSTShape = document.getElementById('select_shape');
     const shapeName = document.getElementById('shape_name');
-    const defaultShape = document.getElementById('default_shape');
-    const themeDiv = document.getElementById('theme_div');
-    const themesContainer = document.getElementById('themes_container');
+    this.defaultShape = document.getElementById('default_shape');
+    this.themeDiv = document.getElementById('theme_div');
+    this.themesContainer = document.getElementById('themes_container');
     const navButtonsDiv = document.getElementById('nav_buttons_div');
 
     // CIRCLE HTML
-    const uiCircle = document.getElementById('circle_div');
+    this.uiCircle = document.getElementById('circle_div');
     const radiusParameter = document.getElementById('circle_radius');
     const heightParameter = document.getElementById('circle_height');
     const selectDate = document.getElementById('circle_year');
     const updateCheckBox = document.getElementById('circle_rotation');
 
     // PARABOLA HTML
-    const uiParabola = document.getElementById('parabola_div');
+    this.uiParabola = document.getElementById('parabola_div');
     const parabolaDistAxisX = document.getElementById('parabola_distx');
     const parabolaDistAxisY = document.getElementById('parabola_disty');
     const parabolaHeight = document.getElementById('parabola_height');
@@ -78,52 +80,32 @@ export class EvolutionView {
 
     // CREATE SHAPES AND 3DTILES
 
-    const stsCircle = new extensions3DTilesTemporal.STSCircle();
-    const stsParabola = new extensions3DTilesTemporal.STSParabola();
-    let themeController = null;
-
-    const getShapesWithUi = () => {
-      return [
-        {
-          stShape: stsCircle,
-          ui: uiCircle,
-        },
-        { stShape: stsParabola, ui: uiParabola },
-      ];
-    };
-
-    const tryGetCurrentSTShape = () => {
-      try {
-        return getShapesWithUi().find((element) => {
-          return element.stShape.displayed;
-        }).stShape;
-      } catch {
-        return false;
-      }
-    };
+    this.stsCircle = new extensions3DTilesTemporal.STSCircle();
+    this.stsParabola = new extensions3DTilesTemporal.STSParabola();
+    this.themeController = null;
 
     // EVENTS
-    let versions = [];
+    this.versions = [];
     const listenersToggle = [];
 
-    selectDataset.onchange = () => {
-      selectMode.hidden = false;
-      defaultShape.selected = true;
-      if (versions.length > 0) {
-        versions.forEach((v) => {
-          view.removeLayer(v.c3DTLayer.id);
+    this.selectDataset.onchange = () => {
+      this.selectMode.hidden = false;
+      this.defaultShape.selected = true;
+      if (this.versions.length > 0) {
+        this.versions.forEach((v) => {
+          this.view.removeLayer(v.c3DTLayer.id);
         });
-        versions = [];
+        this.versions = [];
       }
-      if (themeController != null) {
-        themeController.dispose();
-        themeController = null;
+      if (this.themeController != null) {
+        this.themeController.dispose();
+        this.themeController = null;
       }
 
       fetch(`${baseUrl}selectedDataId`, {
         method: 'POST',
         body: JSON.stringify({
-          selectedDataId: selectDataset.selectedOptions[0].value,
+          selectedDataId: this.selectDataset.selectedOptions[0].value,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -134,8 +116,8 @@ export class EvolutionView {
       const themeInputs = [];
       const themes = {};
       if (themesConfigs != undefined) {
-        themeDiv.hidden = false;
-        themesContainer.innerHTML = '';
+        this.themeDiv.hidden = false;
+        this.themesContainer.innerHTML = '';
         themesConfigs.themes.forEach((config) => {
           themes[config.id] = config;
           const themeLabel = document.createElement('label');
@@ -145,7 +127,7 @@ export class EvolutionView {
           const themeSpan = document.createElement('span');
           themeSpan.innerText = config.name;
           themeLabel.appendChild(themeSpan);
-          themesContainer.appendChild(themeLabel);
+          this.themesContainer.appendChild(themeLabel);
           themeInput.id = config.id;
           /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
@@ -162,7 +144,7 @@ export class EvolutionView {
           themeInputs.push(themeInput);
         });
       } else {
-        themeDiv.hidden = true;
+        this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
         listenersToggle.forEach((listener) => {
           window.removeEventListener('keypress', listener);
@@ -178,9 +160,9 @@ export class EvolutionView {
               selectedThemeIds.push(id);
             }
           });
-          if (themeController != null) {
-            themeController.dispose();
-            themeController = null;
+          if (this.themeController != null) {
+            this.themeController.dispose();
+            this.themeController = null;
           }
           if (selectedThemes.length > 0) {
             fetch(`${baseUrl}selectedThemeIds`, {
@@ -191,16 +173,20 @@ export class EvolutionView {
               },
             }).then((response) => response.json());
 
-            themeController = new ThemeController(
-              view,
+            this.themeController = new ThemeController(
+              this.view,
               selectedThemes,
               configs['guided_tour']
             );
-            document.body.appendChild(themeController.guidedTour.domElement);
-            navButtonsDiv.appendChild(
-              themeController.guidedTour.previousButton
+            document.body.appendChild(
+              this.themeController.guidedTour.domElement
             );
-            navButtonsDiv.appendChild(themeController.guidedTour.nextButton);
+            navButtonsDiv.appendChild(
+              this.themeController.guidedTour.previousButton
+            );
+            navButtonsDiv.appendChild(
+              this.themeController.guidedTour.nextButton
+            );
           }
         });
       });
@@ -221,9 +207,9 @@ export class EvolutionView {
               }),
               registeredExtensions: registerExtensions,
             },
-            view
+            this.view
           );
-          itowns.View.prototype.addLayer.call(view, c3DTilesLayer);
+          itowns.View.prototype.addLayer.call(this.view, c3DTilesLayer);
           promisesTileContentLoaded.push(
             new Promise((resolve) => {
               c3DTilesLayer.addEventListener(
@@ -246,20 +232,20 @@ export class EvolutionView {
               temporalsWrapper.styleDate = date - 2;
             }
           }
-          versions.push({ date: date, c3DTLayer: c3DTilesLayer });
+          this.versions.push({ date: date, c3DTLayer: c3DTilesLayer });
         });
       });
 
       const stLayer = new extensions3DTilesTemporal.STLayer(
-        view,
+        this.view,
         new THREE.Object3D(),
-        versions
+        this.versions
       );
 
       Promise.all(promisesTileContentLoaded).then(() => {
         shapeName.hidden = true;
 
-        getShapesWithUi().forEach((element) => {
+        this.getShapesWithUi().forEach((element) => {
           if (element.stShape.displayed) {
             element.stShape.dispose();
             element.ui.hidden = true;
@@ -269,58 +255,58 @@ export class EvolutionView {
 
         // STSCircle
         selectDate.innerHTML = '';
-        versions.forEach((v) => {
+        this.versions.forEach((v) => {
           const date = v.date;
           const optionDate = document.createElement('option');
           optionDate.innerText = date.toString();
-          if (versions.indexOf(v) == 0) {
+          if (this.versions.indexOf(v) == 0) {
             optionDate.selected = true;
-            stsCircle.selectedDate = date;
+            this.stsCircle.selectedDate = date;
           }
           selectDate.appendChild(optionDate);
         });
 
         // STSParabola
         selectDateParabola.innerHTML = '';
-        versions.forEach((v) => {
+        this.versions.forEach((v) => {
           const date = v.date;
           const optionDate = document.createElement('option');
           optionDate.innerText = date.toString();
-          if (date == stsParabola.middleDate) optionDate.selected = true;
+          if (date == this.stsParabola.middleDate) optionDate.selected = true;
           selectDateParabola.appendChild(optionDate);
         });
       });
     };
 
-    selectSTShape.onchange = () => {
+    this.selectSTShape.onchange = () => {
       shapeName.hidden = false;
-      shapeName.innerText = selectSTShape.selectedOptions[0].innerText;
-      getShapesWithUi().forEach((element) => {
+      shapeName.innerText = this.selectSTShape.selectedOptions[0].innerText;
+      this.getShapesWithUi().forEach((element) => {
         if (element.stShape != null && element.stShape.displayed) {
           element.stShape.dispose();
           element.ui.hidden = true;
         }
       });
-      switch (selectSTShape.selectedOptions[0].value) {
+      switch (this.selectSTShape.selectedOptions[0].value) {
         case 'circle':
-          stsCircle.display(getCurrentMode());
-          uiCircle.hidden = false;
-          radiusParameter.value = stsCircle.radius;
-          heightParameter.value = stsCircle.height;
+          this.stsCircle.display(getCurrentMode());
+          this.uiCircle.hidden = false;
+          radiusParameter.value = this.stsCircle.radius;
+          heightParameter.value = this.stsCircle.height;
           break;
         case 'parabola':
-          stsParabola.display(getCurrentMode());
-          uiParabola.hidden = false;
-          parabolaDistAxisX.value = stsParabola.distAxisX;
-          parabolaDistAxisY.value = stsParabola.distAxisY;
-          parabolaHeight.value = stsParabola.height;
+          this.stsParabola.display(getCurrentMode());
+          this.uiParabola.hidden = false;
+          parabolaDistAxisX.value = this.stsParabola.distAxisX;
+          parabolaDistAxisY.value = this.stsParabola.distAxisY;
+          parabolaHeight.value = this.stsParabola.height;
           break;
       }
     };
 
-    selectMode.onchange = () => {
-      getShapesWithUi().forEach((element) => {
-        selectSTShape.hidden = false;
+    this.selectMode.onchange = () => {
+      this.getShapesWithUi().forEach((element) => {
+        this.selectSTShape.hidden = false;
         if (element.stShape != null && element.stShape.displayed) {
           element.stShape.display(getCurrentMode());
         }
@@ -328,63 +314,63 @@ export class EvolutionView {
     };
 
     radiusParameter.addEventListener('input', (event) => {
-      stsCircle.radius = Number(event.target.value);
-      stsCircle.display(getCurrentMode());
-      stsCircle.selectVersion(selectDate.selectedOptions[0].value);
+      this.stsCircle.radius = Number(event.target.value);
+      this.stsCircle.display(getCurrentMode());
+      this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });
 
     heightParameter.addEventListener('input', (event) => {
-      stsCircle.height = Number(event.target.value);
-      stsCircle.display(getCurrentMode());
-      stsCircle.selectVersion(selectDate.selectedOptions[0].value);
+      this.stsCircle.height = Number(event.target.value);
+      this.stsCircle.display(getCurrentMode());
+      this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });
 
     updateCheckBox.onchange = () => {
-      stsCircle.pause = updateCheckBox.checked;
+      this.stsCircle.pause = updateCheckBox.checked;
     };
 
     selectDate.onchange = () => {
-      stsCircle.selectVersion(selectDate.selectedOptions[0].value);
+      this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     };
 
     selectDateParabola.onchange = () => {
-      stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
-      stsParabola.display(getCurrentMode());
+      this.stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
+      this.stsParabola.display(getCurrentMode());
     };
 
     parabolaDistAxisX.addEventListener('input', (event) => {
-      stsParabola.distAxisX = Number(event.target.value);
-      stsParabola.display(getCurrentMode());
+      this.stsParabola.distAxisX = Number(event.target.value);
+      this.stsParabola.display(getCurrentMode());
     });
 
     parabolaDistAxisY.addEventListener('input', (event) => {
-      stsParabola.distAxisY = Number(event.target.value);
-      stsParabola.display(getCurrentMode());
+      this.stsParabola.distAxisY = Number(event.target.value);
+      this.stsParabola.display(getCurrentMode());
     });
 
     parabolaHeight.addEventListener('input', (event) => {
-      stsParabola.height = Number(event.target.value);
-      stsParabola.display(getCurrentMode());
+      this.stsParabola.height = Number(event.target.value);
+      this.stsParabola.display(getCurrentMode());
     });
 
     document.body.addEventListener('valuechanged', () => {
       if (
-        themeController != null &&
-        themeController.slider &&
-        versions.length > 0
+        this.themeController != null &&
+        this.themeController.slider &&
+        this.versions.length > 0
       ) {
-        const date = parseInt(themeController.slider.getValue());
+        const date = parseInt(this.themeController.slider.getValue());
         const closestDate = Math.max(
-          ...versions.map((v) => v.date).filter((d) => d <= date),
-          versions[0].date
+          ...this.versions.map((v) => v.date).filter((d) => d <= date),
+          this.versions[0].date
         );
-        if (stsCircle && stsCircle.displayed) {
-          stsCircle.selectVersion(closestDate);
+        if (this.stsCircle && this.stsCircle.displayed) {
+          this.stsCircle.selectVersion(closestDate);
           selectDate.value = closestDate.toString();
         }
-        if (stsParabola && stsParabola.displayed) {
-          stsParabola.middleDate = closestDate;
-          stsParabola.display(getCurrentMode());
+        if (this.stsParabola && this.stsParabola.displayed) {
+          this.stsParabola.middleDate = closestDate;
+          this.stsParabola.display(getCurrentMode());
           selectDateParabola.value = closestDate.toString();
         }
       }
@@ -397,7 +383,7 @@ export class EvolutionView {
      */
     const getFocusTransformForCurrentSTShape = () => {
       // Retrieve the current shape in the scene (assumed to be a 3D object)
-      const currentSTShape = tryGetCurrentSTShape();
+      const currentSTShape = this.tryGetCurrentSTShape();
 
       // Clone the 3D object to work with it independently of the original
       const cloneObject = currentSTShape.stLayer.rootObject3D.clone();
@@ -416,7 +402,7 @@ export class EvolutionView {
         Math.max(objectSizes.x, objectSizes.y, objectSizes.z) * 2;
 
       // Calculate the vertical field of view at a 1-meter distance from the camera
-      const cameraView = 2 * Math.tan(0.5 * degToRad(view.camera3D.fov));
+      const cameraView = 2 * Math.tan(0.5 * degToRad(this.view.camera3D.fov));
 
       // Calculate an initial distance to fit the object within the camera's field of view
       let distance = objectSize / cameraView;
@@ -428,7 +414,7 @@ export class EvolutionView {
       const angle = 90;
 
       // Clone the camera's position for manipulations without affecting the original camera position
-      const cameraPositionClone = view.camera3D.position.clone();
+      const cameraPositionClone = this.view.camera3D.position.clone();
       cameraPositionClone.z = cloneObject.position.z;
 
       // Convert the angle to radians
@@ -444,10 +430,10 @@ export class EvolutionView {
       );
 
       // Update the camera's position to the newly calculated position
-      view.camera3D.position.copy(newPosition);
+      this.view.camera3D.position.copy(newPosition);
 
       // Calculate the direction vector from the camera to the object
-      const dirCameraObject = view.camera3D
+      const dirCameraObject = this.view.camera3D
         .getWorldPosition(new THREE.Vector3())
         .sub(cloneObject.getWorldPosition(new THREE.Vector3()));
 
@@ -464,24 +450,24 @@ export class EvolutionView {
     let bHelpers = [];
     window.addEventListener('keydown', (event) => {
       if (event.key == '*') {
-        if (!tryGetCurrentSTShape()) return;
-        view.camera3D.position.copy(
+        if (!this.tryGetCurrentSTShape()) return;
+        this.view.camera3D.position.copy(
           getFocusTransformForCurrentSTShape().position
         );
 
         controls.target.setFromMatrixPosition(
-          tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
+          this.tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
         );
         controls.update();
       }
       if (event.key == 'b') {
-        const rootObject3D = tryGetCurrentSTShape().stLayer.rootObject3D;
+        const rootObject3D = this.tryGetCurrentSTShape().stLayer.rootObject3D;
         const box3 = new THREE.Box3Helper(
           new THREE.Box3().setFromObject(rootObject3D),
           0xff0000
         );
         box3.updateMatrixWorld();
-        view.scene.add(box3);
+        this.view.scene.add(box3);
         bHelpers.push(box3);
       }
       if (event.key == 'c') {
@@ -490,16 +476,16 @@ export class EvolutionView {
         });
         bHelpers = [];
       }
-      if (themeController && themeController.guidedTour) {
-        const tour = themeController.guidedTour;
+      if (this.themeController && this.themeController.guidedTour) {
+        const tour = this.themeController.guidedTour;
         const index = tour.currentIndex;
         if (event.key == '0' && index != tour.startIndex) {
           tour.goToStep(tour.getCurrentStep().previous);
-          themeController.updateSlider();
+          this.themeController.updateSlider();
         }
         if (event.key == '.' && index != tour.endIndex) {
           tour.goToStep(tour.getCurrentStep().next);
-          themeController.updateSlider();
+          this.themeController.updateSlider();
         }
       }
     });
@@ -508,7 +494,49 @@ export class EvolutionView {
     hideElement('shape_div');
   }
 
+  getShapesWithUi = () => {
+    return [
+      {
+        stShape: this.stsCircle,
+        ui: this.uiCircle,
+      },
+      { stShape: this.stsParabola, ui: this.uiParabola },
+    ];
+  };
+
+  tryGetCurrentSTShape = () => {
+    try {
+      return this.getShapesWithUi().find((element) => {
+        return element.stShape.displayed;
+      }).stShape;
+    } catch {
+      return false;
+    }
+  };
+
   dispose() {
+    if (this.themeController != null) {
+      this.themeController.dispose();
+    }
+
+    const shape = this.tryGetCurrentSTShape();
+    if (shape) shape.dispose();
+
+    if (this.versions.length > 0) {
+      this.versions.forEach((v) => {
+        this.view.removeLayer(v.c3DTLayer.id);
+      });
+    }
+
+    this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
+    this.selectDataset.firstElementChild.selected = true;
+    this.selectMode.hidden = true;
+    this.selectMode.replaceChildren(this.selectMode.firstElementChild);
+    this.selectMode.firstElementChild.selected = true;
+    this.selectSTShape.hidden = true;
+    this.defaultShape.selected = true;
+    this.themeDiv.hidden = true;
+    this.themesContainer.innerHTML = '';
     hideElement('evolution_div');
   }
 }
