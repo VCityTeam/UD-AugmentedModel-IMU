@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import { ThemeController } from './ThemeController';
 
-import { hideElement } from './uiUtils';
+import { hideElement, showElement } from './uiUtils';
 import { degToRad } from 'three/src/math/MathUtils.js';
 
 const baseUrl = 'http://localhost:8000/';
@@ -504,10 +504,11 @@ export class EvolutionView {
       }
     });
 
+    showElement('evolution_div');
     hideElement('shape_div');
   }
 
   dispose() {
-    
+    hideElement('evolution_div');
   }
 }

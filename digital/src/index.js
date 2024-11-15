@@ -10,8 +10,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CameraController } from './CameraController';
 import { DATA_ID, load, save } from './saveAndLoad.js';
+import { hideElement, showElement } from './uiUtils.js';
 
-import { EvolutionView } from './EvolutionView.js'
+import { EvolutionView } from './EvolutionView.js';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -142,6 +143,26 @@ loadMultipleJSON([
   );
 
   let currentView = null;
+  hideElement('evolution_div');
+  hideElement('multimedia_div');
 
-  currentView = new EvolutionView(configs, view, orbitControls);
+  const evolutionButton = document.getElementById('evolution_button');
+  evolutionButton.onclick = () => {
+    hideElement('view_choice_div');
+    currentView = new EvolutionView(configs, view, orbitControls);
+  };
+
+  const multimediaButton = document.getElementById('multimedia_button');
+  multimediaButton.onclick = () => {
+    hideElement('view_choice_div');
+    currentView = new EvolutionView(configs, view, orbitControls);
+  };
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key == 'Enter' && currentView != null) {
+      currentView.dispose();
+      showElement('view_choice_div');
+      currentView = null;
+    }
+  });
 });

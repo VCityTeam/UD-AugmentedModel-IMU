@@ -4,11 +4,13 @@ body {
 }
 
 h2 {
- font-size: 21px;
+  font-size: 21px;
 }
 
 .full_screen,
-#evolution_div, #multimedia_div {
+#evolution_div,
+#multimedia_div {
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
@@ -46,4 +48,20 @@ h2 {
 .camera_div button {
   width: 70px;
   height: 30px;
+}
+
+#view_choice_div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  position: absolute;
+  bottom: 30%;
+  width: 100%;
+}
+
+#view_choice_div > button {
+  z-index: 3;
+  width: 200px;
+  height: 90px;
+  font-size: 24px;
 }
