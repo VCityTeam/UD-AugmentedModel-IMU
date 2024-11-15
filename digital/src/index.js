@@ -75,28 +75,27 @@ loadMultipleJSON([
   });
   cameraController.targetPosition = orbitControls.target;
 
-  const divSaveLoad = document.createElement('div');
-  divSaveLoad.style.position = 'absolute';
-  divSaveLoad.style.right = '0';
-  divSaveLoad.style.zIndex = '3';
-  divSaveLoad.style.display = 'flex';
-  document.body.appendChild(divSaveLoad);
+  const loadCameraButtons = document.getElementsByClassName('load_camera');
+  Array.from(loadCameraButtons).forEach((loadCameraButton) => {
+    loadCameraButton.onclick = () => {
+      cameraController.setCameraFromArray(
+        load(DATA_ID.CAMERA).arrayMatrixWorld
+      );
+      orbitControls.target.copy(
+        new THREE.Vector3().fromArray(load(DATA_ID.ORBIT_CONTROLS).arrayTarget)
+      );
+    };
+  });
 
-  const loadCameraButton = document.getElementById('load_camera');
-  loadCameraButton.onclick = () => {
-    cameraController.setCameraFromArray(load(DATA_ID.CAMERA).arrayMatrixWorld);
-    orbitControls.target.copy(
-      new THREE.Vector3().fromArray(load(DATA_ID.ORBIT_CONTROLS).arrayTarget)
-    );
-  };
-
-  const saveCameraButton = document.getElementById('save_camera');
-  saveCameraButton.onclick = () => {
-    save(DATA_ID.CAMERA, cameraController.toJSON());
-    save(DATA_ID.ORBIT_CONTROLS, {
-      arrayTarget: orbitControls.target.toArray(),
-    });
-  };
+  const saveCameraButtons = document.getElementsByClassName('save_camera');
+  Array.from(saveCameraButtons).forEach((saveCameraButton) => {
+    saveCameraButton.onclick = () => {
+      save(DATA_ID.CAMERA, cameraController.toJSON());
+      save(DATA_ID.ORBIT_CONTROLS, {
+        arrayTarget: orbitControls.target.toArray(),
+      });
+    };
+  });
 
   orbitControls.target.copy(extent.center().toVector3().clone());
   orbitControls.update();
@@ -628,11 +627,11 @@ loadMultipleJSON([
       const index = tour.currentIndex;
       if (event.key == '0' && index != tour.startIndex) {
         tour.goToStep(tour.getCurrentStep().previous);
-        themeController.updateSlider()
+        themeController.updateSlider();
       }
       if (event.key == '.' && index != tour.endIndex) {
         tour.goToStep(tour.getCurrentStep().next);
-        themeController.updateSlider()
+        themeController.updateSlider();
       }
     }
   });

@@ -30,21 +30,6 @@
   margin: 5px auto;
 }
 
-#camera_div > h2 {
-  margin-top: 0px;
-}
-
-#camera_div > div {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-#camera_div button {
-  width: 70px;
-  height: 30px;
-}
-
 #themes_container {
   display: flex;
   flex-direction: column;
@@ -92,4 +77,42 @@
 
 #themes_container span:hover {
   filter: brightness(85%);
+}
+
+#nav_div {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 120px;
+  z-index: 3;
+  width: 100%;
+}
+
+#nav_buttons_div {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 45px;
+  width: 50%;
+  justify-content: space-evenly;
+}
+
+#nav_buttons_div button {
+  cursor: pointer;
+  width: 80px;
+  height: 40px;
+  background: url('../img/arrow.png') no-repeat;
+  border: none;
+}
+
+#nav_buttons_div button:hover {
+  filter: brightness(90%);
+}
+
+#previous {
+  transform: rotate(180deg);
+}
+
+#slider_div {
+  width: 75%;
 }

@@ -5,7 +5,7 @@
     <title>Digital replica</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <link rel="stylesheet" href="./assets/css/digital.css" />
-    <link rel="stylesheet" href="./assets/css/space_time_shape.css" />
+    <link rel="stylesheet" href="./assets/css/evolution.css" />
     <link rel="stylesheet" href="./assets/css/guided_tour.css" />
     <link rel="stylesheet" href="./assets/css/rSlider.css" />
   </head>
@@ -15,79 +15,82 @@
       <img class="logo" src="./assets/img/logo-imu.png" />
       <img class="logo" src="./assets/img/logo-liris.png" />
     </div>
-    <div id="sts_div">
-      <div id="camera_div">
-        <h2>Camera Position</h2>
-        <div>
-          <button id="save_camera">Save</button>
-          <button id="load_camera">Load</button>
-        </div>
-      </div>
-      <div id="select_div">
-        <h2>Space Time Shape</h2>
-        <select id="select_dataset">
-          <option selected disabled hidden>Choose a Dataset</option>
-        </select>
-        <select id="select_mode" hidden>
-          <option selected disabled hidden>Choose a Mode</option>
-        </select>
-        <select id="select_shape" hidden>
-          <option id="default_shape" selected disabled hidden>
-            Choose a Shape
-          </option>
-          <option value="circle">Circle</option>
-          <option value="parabola">Parabola</option>
-        </select>
-      </div>
-      <div id="shape_div">
-        <h2 id="shape_name"></h2>
-        <div id="circle_div" hidden>
-          <div id="circle_radius_div">
-            <label>Radius</label>
-            <input id="circle_radius" type="number" name="Radius" />
-          </div>
-          <div id="circle_height_div">
-            <label>Height</label>
-            <input id="circle_height" type="number" name="Height" />
-          </div>
-          <div id="circle_year_div">
-            <label>Year</label>
-            <select id="circle_year"></select>
-          </div>
-          <div id="circle_rotation_div">
-            <label>Freeze rotation</label>
-            <input id="circle_rotation" type="checkbox" name="Rotation" />
+    <div id="evolution_div">
+      <div id="sts_div">
+        <div class="camera_div">
+          <h2>Camera Position</h2>
+          <div>
+            <button class="save_camera">Save</button>
+            <button class="load_camera">Load</button>
           </div>
         </div>
-        <div id="parabola_div" hidden>
-          <div id="parabola_distx_div">
-            <label>Distance on X axis</label>
-            <input id="parabola_distx" type="number" name="DistX" />
+        <div id="select_div">
+          <h2>Space Time Shape</h2>
+          <select id="select_dataset">
+            <option selected disabled hidden>Choose a Dataset</option>
+          </select>
+          <select id="select_mode" hidden>
+            <option selected disabled hidden>Choose a Mode</option>
+          </select>
+          <select id="select_shape" hidden>
+            <option id="default_shape" selected disabled hidden>
+              Choose a Shape
+            </option>
+            <option value="circle">Circle</option>
+            <option value="parabola">Parabola</option>
+          </select>
+        </div>
+        <div id="shape_div">
+          <h2 id="shape_name"></h2>
+          <div id="circle_div" hidden>
+            <div id="circle_radius_div">
+              <label>Radius</label>
+              <input id="circle_radius" type="number" name="Radius" />
+            </div>
+            <div id="circle_height_div">
+              <label>Height</label>
+              <input id="circle_height" type="number" name="Height" />
+            </div>
+            <div id="circle_year_div">
+              <label>Year</label>
+              <select id="circle_year"></select>
+            </div>
+            <div id="circle_rotation_div">
+              <label>Freeze rotation</label>
+              <input id="circle_rotation" type="checkbox" name="Rotation" />
+            </div>
           </div>
-          <div id="parabola_disty_div">
-            <label>Distance on Y axis</label>
-            <input id="parabola_disty" type="number" name="DistY" />
-          </div>
-          <div id="parabola_height_div">
-            <label>Height</label>
-            <input id="parabola_height" type="number" name="Height" />
-          </div>
-          <div id="parabola_radius_div">
-            <label>Year</label>
-            <select id="parabola_year"></select>
+          <div id="parabola_div" hidden>
+            <div id="parabola_distx_div">
+              <label>Distance on X axis</label>
+              <input id="parabola_distx" type="number" name="DistX" />
+            </div>
+            <div id="parabola_disty_div">
+              <label>Distance on Y axis</label>
+              <input id="parabola_disty" type="number" name="DistY" />
+            </div>
+            <div id="parabola_height_div">
+              <label>Height</label>
+              <input id="parabola_height" type="number" name="Height" />
+            </div>
+            <div id="parabola_radius_div">
+              <label>Year</label>
+              <select id="parabola_year"></select>
+            </div>
           </div>
         </div>
+        <div id="theme_div" hidden>
+          <h2>Themes</h2>
+          <div id="themes_container"></div>
+        </div>
       </div>
-      <div id="theme_div" hidden>
-        <h2>Themes</h2>
-        <div id="themes_container"></div>
+      <div id="nav_div">
+        <div id="nav_buttons_div"></div>
+        <div id="slider_div">
+          <input type="text" id="theme_slider" hidden />
+        </div>
       </div>
     </div>
-    <div id="nav_div">
-      <div id="nav_buttons_div"></div>
-      <div id="slider_div">
-        <input type="text" id="theme_slider" hidden />
-      </div>
-    </div>
+    <div id="multimedia_div"></div>
   </body>
 </html>

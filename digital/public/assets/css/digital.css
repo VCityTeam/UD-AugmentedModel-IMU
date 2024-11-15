@@ -7,7 +7,8 @@ h2 {
  font-size: 21px;
 }
 
-.full_screen {
+.full_screen,
+#evolution_div, #multimedia_div {
   position: absolute;
   top: 0;
   left: 0;
@@ -32,40 +33,17 @@ h2 {
   max-height: 80px;
 }
 
-#nav_div {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  bottom: 120px;
-  z-index: 3;
-  width: 100%;
+.camera_div > h2 {
+  margin-top: 0px;
 }
 
-#nav_buttons_div {
+.camera_div > div {
   display: flex;
   flex-direction: row;
-  padding-bottom: 45px;
-  width: 50%;
   justify-content: space-evenly;
 }
 
-#nav_buttons_div button {
-  cursor: pointer;
-  width: 80px;
-  height: 40px;
-  background: url('../img/arrow.png') no-repeat;
-  border: none;
-}
-
-#nav_buttons_div button:hover {
-    filter: brightness(90%);
-}
-
-#previous {
-  transform: rotate(180deg);
-}
-
-#slider_div {
-  width: 75%;
+.camera_div button {
+  width: 70px;
+  height: 30px;
 }
