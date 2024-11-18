@@ -164,15 +164,16 @@ export class EvolutionView {
             this.themeController.dispose();
             this.themeController = null;
           }
-          if (selectedThemes.length > 0) {
-            fetch(`${baseUrl}selectedThemeIds`, {
-              method: 'POST',
-              body: JSON.stringify({ selectedThemeIds }),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }).then((response) => response.json());
 
+          fetch(`${baseUrl}selectedThemeIds`, {
+            method: 'POST',
+            body: JSON.stringify({ selectedThemeIds }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }).then((response) => response.json());
+
+          if (selectedThemes.length > 0) {
             this.themeController = new ThemeController(
               this.view,
               selectedThemes,
@@ -527,6 +528,14 @@ export class EvolutionView {
         this.view.removeLayer(v.c3DTLayer.id);
       });
     }
+
+    fetch(`${baseUrl}selectedThemeIds`, {
+      method: 'POST',
+      body: JSON.stringify({ selectedThemeIds: [] }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json());
 
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;

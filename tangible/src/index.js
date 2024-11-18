@@ -102,7 +102,14 @@ loadMultipleJSON([
         }
       })
       .then((json) => {
-        if (
+        if (json.length == 0) {
+          if (themeController) {
+            themeController.dispose();
+            themeController = null;
+            guidedTourConfig = null;
+          }
+          dataThemes.selectedThemeIds = [];
+        } else if (
           (forceRefresh && json.length) ||
           JSON.stringify(json) != JSON.stringify(dataThemes.selectedThemeIds)
         ) {
