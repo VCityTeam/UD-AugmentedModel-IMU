@@ -23,7 +23,9 @@ export class EvolutionView {
     });
 
     // CREATE HTML
-    this.selectDataset = document.getElementById('select_dataset');
+    this.selectDataset = document
+      .getElementById('evolution_div')
+      .getElementsByClassName('select_dataset')[0];
     const datasetConfigs = {};
     configs['3DTiles_STS_data']
       .concat(configs['3DTiles_temporal'])

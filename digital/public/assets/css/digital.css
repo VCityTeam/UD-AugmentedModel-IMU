@@ -35,6 +35,38 @@ h2 {
   max-height: 80px;
 }
 
+.view_div {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(220, 220, 220, 0.7);
+  padding: 10px;
+  border-radius: 15px;
+  left: 0%;
+  top: 0%;
+  z-index: 2;
+  min-width: 300px;
+}
+
+.view_div button,
+.view_div select,
+.view_div span {
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.select_div {
+  display: flex;
+  flex-direction: column;
+}
+
+.select_div > select {
+  width: 200px;
+  height: 30px;
+  margin: 5px auto;
+}
+
 .camera_div > h2 {
   margin-top: 0px;
 }

@@ -6,6 +6,7 @@
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <link rel="stylesheet" href="./assets/css/digital.css" />
     <link rel="stylesheet" href="./assets/css/evolution.css" />
+    <link rel="stylesheet" href="./assets/css/multimedia.css" />
     <link rel="stylesheet" href="./assets/css/guided_tour.css" />
     <link rel="stylesheet" href="./assets/css/rSlider.css" />
   </head>
@@ -20,7 +21,7 @@
       <button id="multimedia_button">Multimedia</button>
     </div>
     <div id="evolution_div">
-      <div id="sts_div">
+      <div class="view_div">
         <div class="camera_div">
           <h2>Camera Position</h2>
           <div>
@@ -28,9 +29,9 @@
             <button class="load_camera">Load</button>
           </div>
         </div>
-        <div id="select_div">
+        <div class="select_div">
           <h2>Space Time Shape</h2>
-          <select id="select_dataset">
+          <select class="select_dataset">
             <option selected disabled hidden>Choose a Dataset</option>
           </select>
           <select id="select_mode" hidden>
@@ -95,6 +96,26 @@
         </div>
       </div>
     </div>
-    <div id="multimedia_div"></div>
+    <div id="multimedia_div">
+      <div class="view_div">
+        <div class="camera_div">
+          <h2>Camera Position</h2>
+          <div>
+            <button class="save_camera">Save</button>
+            <button class="load_camera">Load</button>
+          </div>
+        </div>
+        <div class="select_div">
+          <h2>Space Time Shape</h2>
+          <select class="select_dataset">
+            <option selected disabled hidden>Choose a Dataset</option>
+          </select>
+        </div>
+        <div id="media_div" hidden>
+          <h2>Multimedia</h2>
+          <div id="media_container"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

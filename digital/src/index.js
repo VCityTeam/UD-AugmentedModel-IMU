@@ -13,6 +13,7 @@ import { DATA_ID, load, save } from './saveAndLoad.js';
 import { hideElement, showElement } from './uiUtils.js';
 
 import { EvolutionView } from './EvolutionView.js';
+import { MultimediaView } from './MultimediaView.js';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -155,7 +156,7 @@ loadMultipleJSON([
   const multimediaButton = document.getElementById('multimedia_button');
   multimediaButton.onclick = () => {
     hideElement('view_choice_div');
-    currentView = new EvolutionView(configs, view, orbitControls);
+    currentView = new MultimediaView(configs, view);
   };
 
   window.addEventListener('keydown', (event) => {
