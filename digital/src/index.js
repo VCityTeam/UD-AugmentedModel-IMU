@@ -160,7 +160,7 @@ loadMultipleJSON([
   };
 
   window.addEventListener('keydown', (event) => {
-    if (event.key == 'Enter' && currentView != null) {
+    if (event.key == 'Enter' && currentView != null && currentView.canBeDisposed()) {
       currentView.dispose();
       showElement('view_choice_div');
       currentView = null;

@@ -517,6 +517,10 @@ export class EvolutionView {
     }
   };
 
+  canBeDisposed() {
+    return true;
+  }
+
   dispose() {
     if (this.themeController != null) {
       this.themeController.dispose();

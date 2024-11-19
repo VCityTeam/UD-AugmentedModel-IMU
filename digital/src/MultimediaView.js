@@ -183,22 +183,21 @@ export class MultimediaView {
     };
 
     window.addEventListener('keydown', (event) => {
-      console.log(event.key);
+      if (event.key == 'Enter' && this.themeId != null) {
+        this.clean();
+      }
     });
 
     showElement('multimedia_div');
     hideElement('shape_div');
   }
 
-  dispose() {
+  clean() {
+    this.themeId = null;
+
     if (this.themeController != null) {
       this.themeController.dispose();
-    }
-
-    if (this.versions.length > 0) {
-      this.versions.forEach((v) => {
-        this.view.removeLayer(v.c3DTLayer.id);
-      });
+      this.themeController = null;
     }
 
     fetch(`${baseUrl}selectedThemeIds`, {
@@ -209,9 +208,24 @@ export class MultimediaView {
       },
     }).then((response) => response.json());
 
+    this.selectMedia.firstElementChild.selected = true;
+  }
+
+  canBeDisposed() {
+    return this.themeId == null;
+  }
+
+  dispose() {
+    this.clean();
+
+    if (this.versions.length > 0) {
+      this.versions.forEach((v) => {
+        this.view.removeLayer(v.c3DTLayer.id);
+      });
+    }
+
     this.themeDiv.hidden = true;
     this.selectMedia.replaceChildren(this.selectMedia.firstElementChild);
-    this.selectMedia.firstElementChild.selected = true;
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
     hideElement('multimedia_div');
