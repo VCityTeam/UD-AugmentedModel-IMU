@@ -96,9 +96,9 @@ export class MultimediaView {
           themeInput.id = config.id;
           /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
-          if (config.eventCode) {
+          if (config.key) {
             const newListener = (event) => {
-              if (event.code == config.eventCode) {
+              if (event.key == config.key) {
                 themeInput.checked = !themeInput.checked;
                 themeInput.dispatchEvent(new Event('input'));
               }
