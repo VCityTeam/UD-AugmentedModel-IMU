@@ -47,9 +47,10 @@ export class MultimediaView {
     };
 
     this.themeDiv = document.getElementById('media_div');
-    this.themesContainer = document.getElementById('media_container');
+    this.selectMedia = document.getElementById('select_media');
 
     this.themeController = null;
+    this.themeId = null;
 
     // EVENTS
     this.versions = [];
@@ -78,35 +79,29 @@ export class MultimediaView {
       }).then((response) => response.text());
 
       const themesConfigs = getThemes();
-      const themeInputs = [];
       const themes = {};
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
-        this.themesContainer.innerHTML = '';
+        this.selectMedia.replaceChildren(this.selectMedia.firstElementChild);
+        this.selectMedia.firstElementChild.selected = true;
         themesConfigs.themes.forEach((config) => {
           themes[config.id] = config;
-          const themeLabel = document.createElement('label');
-          const themeInput = document.createElement('input');
-          themeInput.setAttribute('type', 'checkbox');
-          themeLabel.appendChild(themeInput);
-          const themeSpan = document.createElement('span');
-          themeSpan.innerText = config.name;
-          themeLabel.appendChild(themeSpan);
-          this.themesContainer.appendChild(themeLabel);
-          themeInput.id = config.id;
+          const mediaOption = document.createElement('option');
+          mediaOption.value = config.id;
+          mediaOption.innerText = '#' + config.key + ' ' + config.name;
+          this.selectMedia.appendChild(mediaOption);
           /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
           if (config.key) {
             const newListener = (event) => {
               if (event.key == config.key) {
-                themeInput.checked = !themeInput.checked;
-                themeInput.dispatchEvent(new Event('input'));
+                mediaOption.selected = true;
+                this.selectMedia.dispatchEvent(new Event('change'));
               }
             };
             listenersToggle.push(newListener);
             window.addEventListener('keypress', newListener);
           }
-          themeInputs.push(themeInput);
         });
       } else {
         this.themeDiv.hidden = true;
@@ -115,43 +110,31 @@ export class MultimediaView {
           window.removeEventListener('keypress', listener);
         });
       }
-      themeInputs.forEach((input) => {
-        input.addEventListener('input', () => {
-          const selectedThemes = [];
-          const selectedThemeIds = [];
-          themeInputs.forEach(({ checked, id }) => {
-            if (checked) {
-              selectedThemes.push(themes[id]);
-              selectedThemeIds.push(id);
-            }
-          });
-          if (this.themeController != null) {
-            this.themeController.dispose();
-            this.themeController = null;
-          }
+      this.selectMedia.onchange = () => {
+        this.themeId = this.selectMedia.selectedOptions[0].value;
 
-          fetch(`${baseUrl}selectedThemeIds`, {
-            method: 'POST',
-            body: JSON.stringify({ selectedThemeIds }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }).then((response) => response.json());
+        if (this.themeController != null) {
+          this.themeController.dispose();
+          this.themeController = null;
+        }
 
-          if (selectedThemes.length > 0) {
-            this.themeController = new ThemeController(
-              this.view,
-              selectedThemes,
-              configs['guided_tour']
-            );
-            document.body.appendChild(
-              this.themeController.guidedTour.domElement
-            );
-            this.themeController.guidedTour.previousButton.remove();
-            this.themeController.guidedTour.nextButton.remove();
-          }
-        });
-      });
+        fetch(`${baseUrl}selectedThemeIds`, {
+          method: 'POST',
+          body: JSON.stringify({ selectedThemeIds: [this.themeId] }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((response) => response.json());
+
+        this.themeController = new ThemeController(
+          this.view,
+          [themes[this.themeId]],
+          configs['guided_tour']
+        );
+        document.body.appendChild(this.themeController.guidedTour.domElement);
+        this.themeController.guidedTour.previousButton.remove();
+        this.themeController.guidedTour.nextButton.remove();
+      };
 
       const c3dtilesConfigs = getDataset();
       const promisesTileContentLoaded = [];
@@ -226,10 +209,11 @@ export class MultimediaView {
       },
     }).then((response) => response.json());
 
+    this.themeDiv.hidden = true;
+    this.selectMedia.replaceChildren(this.selectMedia.firstElementChild);
+    this.selectMedia.firstElementChild.selected = true;
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
-    this.themeDiv.hidden = true;
-    this.themesContainer.innerHTML = '';
     hideElement('multimedia_div');
   }
 }
