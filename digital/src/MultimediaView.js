@@ -1,5 +1,4 @@
 import * as itowns from 'itowns';
-import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import { ThemeController } from './ThemeController';
 
@@ -84,25 +83,27 @@ export class MultimediaView {
         this.themeDiv.hidden = false;
         this.selectMedia.replaceChildren(this.selectMedia.firstElementChild);
         this.selectMedia.firstElementChild.selected = true;
-        themesConfigs.themes.forEach((config) => {
-          themes[config.id] = config;
-          const mediaOption = document.createElement('option');
-          mediaOption.value = config.id;
-          mediaOption.innerText = '#' + config.key + ' ' + config.name;
-          this.selectMedia.appendChild(mediaOption);
-          /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
+        themesConfigs.themes
+          .filter((theme) => theme.type == 'multimedia')
+          .forEach((config) => {
+            themes[config.id] = config;
+            const mediaOption = document.createElement('option');
+            mediaOption.value = config.id;
+            mediaOption.innerText = '#' + config.key + ' ' + config.name;
+            this.selectMedia.appendChild(mediaOption);
+            /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
-          if (config.key) {
-            const newListener = (event) => {
-              if (event.key == config.key) {
-                mediaOption.selected = true;
-                this.selectMedia.dispatchEvent(new Event('change'));
-              }
-            };
-            listenersToggle.push(newListener);
-            window.addEventListener('keypress', newListener);
-          }
-        });
+            if (config.key) {
+              const newListener = (event) => {
+                if (event.key == config.key) {
+                  mediaOption.selected = true;
+                  this.selectMedia.dispatchEvent(new Event('change'));
+                }
+              };
+              listenersToggle.push(newListener);
+              window.addEventListener('keypress', newListener);
+            }
+          });
       } else {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/

@@ -120,31 +120,33 @@ export class EvolutionView {
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
         this.themesContainer.innerHTML = '';
-        themesConfigs.themes.forEach((config) => {
-          themes[config.id] = config;
-          const themeLabel = document.createElement('label');
-          const themeInput = document.createElement('input');
-          themeInput.setAttribute('type', 'checkbox');
-          themeLabel.appendChild(themeInput);
-          const themeSpan = document.createElement('span');
-          themeSpan.innerText = config.name;
-          themeLabel.appendChild(themeSpan);
-          this.themesContainer.appendChild(themeLabel);
-          themeInput.id = config.id;
-          /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
+        themesConfigs.themes
+          .filter((theme) => theme.type == 'evolution')
+          .forEach((config) => {
+            themes[config.id] = config;
+            const themeLabel = document.createElement('label');
+            const themeInput = document.createElement('input');
+            themeInput.setAttribute('type', 'checkbox');
+            themeLabel.appendChild(themeInput);
+            const themeSpan = document.createElement('span');
+            themeSpan.innerText = config.name;
+            themeLabel.appendChild(themeSpan);
+            this.themesContainer.appendChild(themeLabel);
+            themeInput.id = config.id;
+            /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
-          if (config.key) {
-            const newListener = (event) => {
-              if (event.key == config.key) {
-                themeInput.checked = !themeInput.checked;
-                themeInput.dispatchEvent(new Event('input'));
-              }
-            };
-            listenersToggle.push(newListener);
-            window.addEventListener('keypress', newListener);
-          }
-          themeInputs.push(themeInput);
-        });
+            if (config.key) {
+              const newListener = (event) => {
+                if (event.key == config.key) {
+                  themeInput.checked = !themeInput.checked;
+                  themeInput.dispatchEvent(new Event('input'));
+                }
+              };
+              listenersToggle.push(newListener);
+              window.addEventListener('keypress', newListener);
+            }
+            themeInputs.push(themeInput);
+          });
       } else {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
