@@ -53,7 +53,7 @@ export class MultimediaView {
 
     // EVENTS
     this.versions = [];
-    const listenersToggle = [];
+    this.listenersToggle = [];
 
     this.selectDataset.onchange = () => {
       if (this.versions.length > 0) {
@@ -100,14 +100,14 @@ export class MultimediaView {
                   this.selectMedia.dispatchEvent(new Event('change'));
                 }
               };
-              listenersToggle.push(newListener);
+              this.listenersToggle.push(newListener);
               window.addEventListener('keypress', newListener);
             }
           });
       } else {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
-        listenersToggle.forEach((listener) => {
+        this.listenersToggle.forEach((listener) => {
           window.removeEventListener('keypress', listener);
         });
       }
@@ -210,6 +210,10 @@ export class MultimediaView {
     }).then((response) => response.json());
 
     this.selectMedia.firstElementChild.selected = true;
+
+    this.listenersToggle.forEach((listener) => {
+      window.removeEventListener('keypress', listener);
+    });
   }
 
   canBeDisposed() {

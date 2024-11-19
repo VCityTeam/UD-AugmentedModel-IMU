@@ -88,7 +88,7 @@ export class EvolutionView {
 
     // EVENTS
     this.versions = [];
-    const listenersToggle = [];
+    this.listenersToggle = [];
 
     this.selectDataset.onchange = () => {
       this.selectMode.hidden = false;
@@ -142,7 +142,7 @@ export class EvolutionView {
                   themeInput.dispatchEvent(new Event('input'));
                 }
               };
-              listenersToggle.push(newListener);
+              this.listenersToggle.push(newListener);
               window.addEventListener('keypress', newListener);
             }
             themeInputs.push(themeInput);
@@ -150,7 +150,7 @@ export class EvolutionView {
       } else {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
-        listenersToggle.forEach((listener) => {
+        this.listenersToggle.forEach((listener) => {
           window.removeEventListener('keypress', listener);
         });
       }
@@ -555,5 +555,9 @@ export class EvolutionView {
     this.themeDiv.hidden = true;
     this.themesContainer.innerHTML = '';
     hideElement('evolution_div');
+
+    this.listenersToggle.forEach((listener) => {
+      window.removeEventListener('keypress', listener);
+    });
   }
 }
