@@ -41,9 +41,7 @@ loadMultipleJSON([
   const viewDomElement = document.createElement('div');
   viewDomElement.classList.add('full_screen');
   document.body.appendChild(viewDomElement);
-  const view = new itowns.PlanarView(viewDomElement, extent, {
-    noControls: true,
-  });
+  const view = new itowns.PlanarView(viewDomElement, extent);
   // view.controls.enabled = false;
   // init scene 3D
   initScene(
@@ -52,7 +50,7 @@ loadMultipleJSON([
     view.scene
   );
 
-  // view.controls.enabled = false;
+  view.controls.enabled = false;
   const orbitControls = new OrbitControls(
     view.camera.camera3D,
     view.mainLoop.gfxEngine.label2dRenderer.domElement
