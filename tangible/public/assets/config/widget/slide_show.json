@@ -27,6 +27,22 @@
         "2018.png",
         "init.png"
       ]
+    },
+    {
+      "id": "slide_2",
+      "name": "Lyon temporel",
+      "folder": "../assets/img",
+      "diapositives": [
+        "init.png"
+      ]
+    },
+    {
+      "id": "slide_3",
+      "name": "Lyon temporel",
+      "folder": "../assets/img",
+      "diapositives": [
+        "2009.png"
+      ]
     }
   ],
   "textureRotation": 0,

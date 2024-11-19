@@ -258,5 +258,55 @@
                 "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
             }
         ]
+    },
+    {
+        "tour": {
+            "id": "tour_2",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 0,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 0,
+                    "media": [
+                        "IMG_00"
+                    ]
+                }
+            ]
+        },
+        "media": [
+            {
+                "id": "IMG_00",
+                "type": "image",
+                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+            }
+        ]
+    },
+    {
+        "tour": {
+            "id": "tour_3",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 0,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 0,
+                    "media": [
+                        "VID_00"
+                    ]
+                }
+            ]
+        },
+        "media": [
+            {
+                "id": "VID_00",
+                "type": "video",
+                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            }
+        ]
     }
 ]
