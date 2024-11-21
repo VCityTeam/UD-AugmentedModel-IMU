@@ -15,7 +15,7 @@ import { hideElement, showElement } from './uiUtils.js';
 import { EvolutionView } from './EvolutionView.js';
 import { MultimediaView } from './MultimediaView.js';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 loadMultipleJSON([
   './assets/config/extents.json',
@@ -25,7 +25,7 @@ loadMultipleJSON([
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
-  `${baseUrl}assets/themes.json`,
+  `${baseUrl}/assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 

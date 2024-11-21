@@ -2,11 +2,15 @@ import { Vector2, Vector3 } from 'three';
 import { SlideShow } from '@ud-viz/widget_slide_show';
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
 import { dragElement } from './draggable';
+import { createPin } from './object3DUtil';
+
+const baseUrl = window.location.origin;
 
 export class ThemeController {
   constructor(view, themeConfigs, slideShowConfigs, guidedTourConfig, extent) {
     this.slideShow = null;
     this.mergedSlideShowConfig = null;
+    this.pins = {};
 
     this.view = view;
     this.extent = extent;
@@ -25,6 +29,15 @@ export class ThemeController {
     const allSteps = [];
     let name = '';
     for (const themeConfig of this.themeConfigs) {
+      console.log(themeConfig)
+      if (themeConfig.pin) {
+        const pin = createPin(
+          themeConfig.pin.position,
+          baseUrl + '/' + themeConfig.pin.sprite
+        );
+        this.view.scene.add(pin);
+        this.pins[themeConfig.id] = pin;
+      }
       const slideShowId = themeConfig.slideShowId;
       const dates = themeConfig.dates || [0];
       const slideShow = this.slideShowConfigs.slides.find(
@@ -39,6 +52,7 @@ export class ThemeController {
       }
       name += slideShow.name;
     }
+    this.view.notifyChange();
     allSteps.sort((a, b) => a.date - b.date);
     const mergedSlideShow = {
       id: 'mergedSlideShow',
@@ -119,5 +133,11 @@ export class ThemeController {
   dispose() {
     this.slideShow.dispose();
     if (this.guidedTour) this.guidedTour.domElement.remove();
+
+    Object.values(this.pins).forEach((pin) => {
+      this.view.scene.remove(pin);
+      pin.material.dispose();
+    });
+    this.view.notifyChange();
   }
 }

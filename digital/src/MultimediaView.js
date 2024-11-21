@@ -5,7 +5,7 @@ import { createPin } from './object3DUtil';
 
 import { hideElement, showElement } from './uiUtils';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 export class MultimediaView {
   constructor(configs, view) {
@@ -70,7 +70,7 @@ export class MultimediaView {
         this.themeController = null;
       }
 
-      fetch(`${baseUrl}selectedDataId`, {
+      fetch(`${baseUrl}/selectedDataId`, {
         method: 'POST',
         body: JSON.stringify({
           selectedDataId: this.selectDataset.selectedOptions[0].value,
@@ -99,7 +99,7 @@ export class MultimediaView {
             } else {
               mediaOption.innerText = '#' + config.key + ' ' + config.name;
               if (config.pin) {
-                const pin = createPin(config.pin.position, config.pin.sprite);
+                const pin = createPin(config.pin.position, baseUrl + '/' + config.pin.sprite);
                 this.view.scene.add(pin);
                 this.pins[config.id] = pin;
               }
@@ -129,7 +129,7 @@ export class MultimediaView {
           this.themeController = null;
         }
 
-        fetch(`${baseUrl}selectedThemeIds`, {
+        fetch(`${baseUrl}/selectedThemeIds`, {
           method: 'POST',
           body: JSON.stringify({ selectedThemeIds: [this.themeId] }),
           headers: {
@@ -211,7 +211,7 @@ export class MultimediaView {
       this.themeController = null;
     }
 
-    fetch(`${baseUrl}selectedThemeIds`, {
+    fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'POST',
       body: JSON.stringify({ selectedThemeIds: [] }),
       headers: {

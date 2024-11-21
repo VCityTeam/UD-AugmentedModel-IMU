@@ -8,13 +8,13 @@ import * as itowns from 'itowns';
 import * as THREE from 'three';
 import { ThemeController } from './ThemeController';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin
 
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
   './assets/config/widget/slide_show.json',
-  `${baseUrl}assets/themes.json`,
+  `${baseUrl}/assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -67,7 +67,7 @@ loadMultipleJSON([
   };
 
   function getDataId() {
-    fetch(`${baseUrl}selectedDataId`, {
+    fetch(`${baseUrl}/selectedDataId`, {
       method: 'GET',
     })
       .then((response) => {
@@ -88,7 +88,7 @@ loadMultipleJSON([
   }
 
   function getSelectedThemeIds(forceRefresh) {
-    fetch(`${baseUrl}selectedThemeIds`, {
+    fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'GET',
     })
       .then((response) => {
@@ -126,7 +126,7 @@ loadMultipleJSON([
   }
 
   function getGuidedTourConfig() {
-    fetch(`${baseUrl}guidedTourConfig`, {
+    fetch(`${baseUrl}/guidedTourConfig`, {
       method: 'GET',
     })
       .then((response) => {
@@ -155,7 +155,7 @@ loadMultipleJSON([
   }
 
   function getStepIndex() {
-    fetch(`${baseUrl}stepIndex`, {
+    fetch(`${baseUrl}/stepIndex`, {
       method: 'GET',
     })
       .then((response) => {

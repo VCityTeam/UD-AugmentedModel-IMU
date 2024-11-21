@@ -6,7 +6,7 @@ import { ThemeController } from './ThemeController';
 import { hideElement, showElement } from './uiUtils';
 import { degToRad } from 'three/src/math/MathUtils.js';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 export class EvolutionView {
   constructor(configs, view, controls) {
@@ -104,7 +104,7 @@ export class EvolutionView {
         this.themeController = null;
       }
 
-      fetch(`${baseUrl}selectedDataId`, {
+      fetch(`${baseUrl}/selectedDataId`, {
         method: 'POST',
         body: JSON.stringify({
           selectedDataId: this.selectDataset.selectedOptions[0].value,
@@ -169,7 +169,7 @@ export class EvolutionView {
             this.themeController = null;
           }
 
-          fetch(`${baseUrl}selectedThemeIds`, {
+          fetch(`${baseUrl}/selectedThemeIds`, {
             method: 'POST',
             body: JSON.stringify({ selectedThemeIds }),
             headers: {
@@ -521,7 +521,7 @@ export class EvolutionView {
       });
     }
 
-    fetch(`${baseUrl}selectedThemeIds`, {
+    fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'POST',
       body: JSON.stringify({ selectedThemeIds: [] }),
       headers: {
