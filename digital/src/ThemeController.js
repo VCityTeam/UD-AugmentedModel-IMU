@@ -26,7 +26,7 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const tourId = themeConfig.guidedTourId;
-      const dates = themeConfig.dates;
+      const dates = themeConfig.dates || [0];
       const tour = this.tourConfigs.find((config) => config.tour.id == tourId);
       for (let i = 0; i < dates.length; i++) {
         allSteps.push({ date: dates[i], tourId: tourId, stepIndex: i });
