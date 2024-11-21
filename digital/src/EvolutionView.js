@@ -465,22 +465,6 @@ export class EvolutionView {
         );
         controls.update();
       }
-      if (event.key == 'b') {
-        const rootObject3D = this.tryGetCurrentSTShape().stLayer.rootObject3D;
-        const box3 = new THREE.Box3Helper(
-          new THREE.Box3().setFromObject(rootObject3D),
-          0xff0000
-        );
-        box3.updateMatrixWorld();
-        this.view.scene.add(box3);
-        bHelpers.push(box3);
-      }
-      if (event.key == 'c') {
-        bHelpers.forEach((bh) => {
-          bh.removeFromParent();
-        });
-        bHelpers = [];
-      }
       if (this.themeController && this.themeController.guidedTour) {
         const tour = this.themeController.guidedTour;
         const index = tour.currentIndex;
