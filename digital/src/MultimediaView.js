@@ -1,6 +1,7 @@
 import * as itowns from 'itowns';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import { ThemeController } from './ThemeController';
+import { createPin } from './object3DUtil';
 
 import { hideElement, showElement } from './uiUtils';
 
@@ -55,6 +56,7 @@ export class MultimediaView {
     // EVENTS
     this.versions = [];
     this.listenersToggle = [];
+    this.pins = {};
 
     this.selectDataset.onchange = () => {
       if (this.versions.length > 0) {
@@ -80,6 +82,7 @@ export class MultimediaView {
 
       const themesConfigs = getThemes();
       const themes = {};
+      this.pins = {};
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
         this.selectMedia.innerHTML = '';
@@ -95,6 +98,11 @@ export class MultimediaView {
               mediaOption.selected = true;
             } else {
               mediaOption.innerText = '#' + config.key + ' ' + config.name;
+              if (config.pin) {
+                const pin = createPin(config.pin.position, config.pin.sprite);
+                this.view.scene.add(pin);
+                this.pins[config.id] = pin;
+              }
             }
             /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
               element and dispatches a new input event */
@@ -107,6 +115,7 @@ export class MultimediaView {
             this.listenersToggle.push(newListener);
             window.addEventListener('keypress', newListener);
           });
+        this.view.notifyChange();
       } else {
         this.clean();
       }
@@ -133,7 +142,7 @@ export class MultimediaView {
           [themes[this.themeId]],
           configs['guided_tour']
         );
-        if (this.themeController.guidedTour.mediaConfig.length > 0){
+        if (this.themeController.guidedTour.mediaConfig.length > 0) {
           document.body.appendChild(this.themeController.guidedTour.domElement);
           this.themeController.guidedTour.previousButton.remove();
           this.themeController.guidedTour.nextButton.remove();
@@ -215,6 +224,12 @@ export class MultimediaView {
     this.listenersToggle.forEach((listener) => {
       window.removeEventListener('keypress', listener);
     });
+
+    Object.values(this.pins).forEach((pin) => {
+      this.view.scene.remove(pin);
+      pin.material.dispose();
+    });
+    this.view.notifyChange();
   }
 
   canBeDisposed() {

@@ -32,6 +32,14 @@
         "id": "theme_2",
         "type": "multimedia",
         "name": "Multimedia 1",
+        "pin": {
+          "position": {
+            "x": 1842952,
+            "y": 5174583,
+            "z": 400
+          },
+          "sprite": "./assets/img/pins/1.png"
+        },
         "slideShowId": "slide_3",
         "guidedTourId": "tour_3",
         "key": "1"
@@ -40,6 +48,14 @@
         "id": "theme_3",
         "type": "multimedia",
         "name": "Multimedia 2",
+        "pin": {
+          "position": {
+            "x": 1843766,
+            "y": 5172988,
+            "z": 400
+          },
+          "sprite": "./assets/img/pins/2.png"
+        },
         "slideShowId": "slide_4",
         "guidedTourId": "tour_4",
         "key": "2"
@@ -79,6 +95,14 @@
         "id": "theme_2",
         "type": "multimedia",
         "name": "Multimedia 1",
+        "pin": {
+          "position": {
+            "x": 1842952,
+            "y": 5174583,
+            "z": 400
+          },
+          "sprite": "./assets/img/pins/1.png"
+        },
         "slideShowId": "slide_3",
         "guidedTourId": "tour_3",
         "key": "1"
@@ -87,6 +111,14 @@
         "id": "theme_3",
         "type": "multimedia",
         "name": "Multimedia 2",
+        "pin": {
+          "position": {
+            "x": 1843766,
+            "y": 5172988,
+            "z": 400
+          },
+          "sprite": "./assets/img/pins/2.png"
+        },
         "slideShowId": "slide_4",
         "guidedTourId": "tour_4",
         "key": "2"
