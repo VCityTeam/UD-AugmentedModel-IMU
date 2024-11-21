@@ -97,6 +97,10 @@ export class ThemeController {
   }
 
   createGuidedTourWidget() {
+    this.guidedTourConfig.tour.steps.forEach((step) => {
+      step.position = undefined;
+      step.rotation = undefined;
+    });
     this.guidedTour = new GuidedTour(
       this.view,
       this.guidedTourConfig.tour,
@@ -107,7 +111,9 @@ export class ThemeController {
     this.guidedTour.previousButton.remove();
     this.guidedTour.nextButton.remove();
     dragElement(this.guidedTour.mediaContainer, this.guidedTour.domElement);
-    document.body.appendChild(this.guidedTour.domElement);
+    if (this.guidedTour.mediaConfig.length > 0) {
+      document.body.appendChild(this.guidedTour.domElement);
+    }
   }
 
   dispose() {

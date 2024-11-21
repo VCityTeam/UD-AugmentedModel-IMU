@@ -133,9 +133,11 @@ export class MultimediaView {
           [themes[this.themeId]],
           configs['guided_tour']
         );
-        document.body.appendChild(this.themeController.guidedTour.domElement);
-        this.themeController.guidedTour.previousButton.remove();
-        this.themeController.guidedTour.nextButton.remove();
+        if (this.themeController.guidedTour.mediaConfig.length > 0){
+          document.body.appendChild(this.themeController.guidedTour.domElement);
+          this.themeController.guidedTour.previousButton.remove();
+          this.themeController.guidedTour.nextButton.remove();
+        }
       };
       if (Object.keys(themes).length > 0) {
         this.selectMedia.dispatchEvent(new Event('change'));
