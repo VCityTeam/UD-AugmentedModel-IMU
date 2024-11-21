@@ -88,13 +88,6 @@ loadMultipleJSON([
         if (datasetChanged) {
           clean();
 
-          Object.values(pins).forEach((pin) => {
-            view.scene.remove(pin);
-            pin.material.dispose();
-          });
-          pins = {};
-          view.notifyChange();
-
           const themesConfig = configs['themes'].find(
             (config) => config.dataId == dataThemes.dataId
           );
@@ -139,10 +132,17 @@ loadMultipleJSON([
             JSON.stringify(json) == JSON.stringify(dataThemes.selectedThemeIds))
         )
           return;
-        clean();
         dataThemes.selectedThemeIds = json;
         stepIndex = 0;
-        if (dataThemes.selectedThemeIds.length) getGuidedTourConfig();
+        clean(dataThemes.selectedThemeIds.length == 0);
+        if (dataThemes.selectedThemeIds.length) {
+          Object.entries(pins).forEach(([themeId, pin]) => {
+            pin.visible =
+              dataThemes.selectedThemeIds[0] == 'default' ||
+              dataThemes.selectedThemeIds.includes(themeId);
+          });
+          getGuidedTourConfig();
+        }
       });
   }
 
@@ -201,9 +201,18 @@ loadMultipleJSON([
       });
   }
 
-  function clean() {
+  function clean(cleanPins = true) {
     if (themeController) themeController.dispose();
     themeController = null;
     guidedTourConfig = null;
+
+    if (cleanPins) {
+      Object.values(pins).forEach((pin) => {
+        view.scene.remove(pin);
+        pin.material.dispose();
+      });
+      pins = {};
+      view.notifyChange();
+    }
   }
 });
