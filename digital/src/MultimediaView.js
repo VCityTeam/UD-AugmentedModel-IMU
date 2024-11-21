@@ -65,10 +65,7 @@ export class MultimediaView {
         });
         this.versions = [];
       }
-      if (this.themeController != null) {
-        this.themeController.dispose();
-        this.themeController = null;
-      }
+      this.clean();
 
       fetch(`${baseUrl}/selectedDataId`, {
         method: 'POST',
@@ -99,7 +96,10 @@ export class MultimediaView {
             } else {
               mediaOption.innerText = '#' + config.key + ' ' + config.name;
               if (config.pin) {
-                const pin = createPin(config.pin.position, baseUrl + '/' + config.pin.sprite);
+                const pin = createPin(
+                  config.pin.position,
+                  baseUrl + '/' + config.pin.sprite
+                );
                 this.view.scene.add(pin);
                 this.pins[config.id] = pin;
               }
@@ -116,8 +116,6 @@ export class MultimediaView {
             window.addEventListener('keypress', newListener);
           });
         this.view.notifyChange();
-      } else {
-        this.clean();
       }
       this.selectMedia.onchange = () => {
         if (this.themeId == this.selectMedia.selectedOptions[0].value) return;
