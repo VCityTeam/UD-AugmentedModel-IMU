@@ -7,8 +7,9 @@ import proj4 from 'proj4';
 import * as itowns from 'itowns';
 import * as THREE from 'three';
 import { ThemeController } from './ThemeController';
+import { createPin } from './object3DUtil';
 
-const baseUrl = window.location.origin
+const baseUrl = window.location.origin;
 
 loadMultipleJSON([
   './assets/config/extents.json',
@@ -58,6 +59,7 @@ loadMultipleJSON([
   const dataThemes = { dataId: null, selectedThemeIds: [] };
   let stepIndex = 0;
   let guidedTourConfig = null;
+  let pins = {};
 
   const getThemesByIds = (ids) => {
     const themeConfig = configs['themes'].find((config) => {
@@ -81,13 +83,42 @@ loadMultipleJSON([
         }
       })
       .then((text) => {
-        let forceRefresh = text != dataThemes.dataId;
+        let datasetChanged = text != dataThemes.dataId;
         dataThemes.dataId = text;
-        getSelectedThemeIds(forceRefresh);
+        if (datasetChanged) {
+          clean();
+
+          Object.values(pins).forEach((pin) => {
+            view.scene.remove(pin);
+            pin.material.dispose();
+          });
+          pins = {};
+          view.notifyChange();
+
+          const themesConfig = configs['themes'].find(
+            (config) => config.dataId == dataThemes.dataId
+          );
+          if (themesConfig) {
+            themesConfig.themes
+              .filter((theme) => theme.type == 'multimedia')
+              .forEach((config) => {
+                if (config.pin) {
+                  const pin = createPin(
+                    config.pin.position,
+                    baseUrl + '/' + config.pin.sprite
+                  );
+                  view.scene.add(pin);
+                  pins[config.id] = pin;
+                }
+              });
+            view.notifyChange();
+          }
+        }
+        getSelectedThemeIds(datasetChanged);
       });
   }
 
-  function getSelectedThemeIds(forceRefresh) {
+  function getSelectedThemeIds(datasetChanged) {
     fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'GET',
     })
@@ -102,26 +133,16 @@ loadMultipleJSON([
         }
       })
       .then((json) => {
-        if (json.length == 0) {
-          if (themeController) {
-            themeController.dispose();
-            themeController = null;
-            guidedTourConfig = null;
-          }
-          dataThemes.selectedThemeIds = [];
-        } else if (
-          (forceRefresh && json.length) ||
-          JSON.stringify(json) != JSON.stringify(dataThemes.selectedThemeIds)
-        ) {
-          dataThemes.selectedThemeIds = json;
-          if (themeController) {
-            themeController.dispose();
-            themeController = null;
-            guidedTourConfig = null;
-          }
-          stepIndex = 0;
-          getGuidedTourConfig();
-        }
+        if (
+          !json ||
+          (!datasetChanged &&
+            JSON.stringify(json) == JSON.stringify(dataThemes.selectedThemeIds))
+        )
+          return;
+        clean();
+        dataThemes.selectedThemeIds = json;
+        stepIndex = 0;
+        if (dataThemes.selectedThemeIds.length) getGuidedTourConfig();
       });
   }
 
@@ -178,5 +199,11 @@ loadMultipleJSON([
           }
         }
       });
+  }
+
+  function clean() {
+    if (themeController) themeController.dispose();
+    themeController = null;
+    guidedTourConfig = null;
   }
 });
