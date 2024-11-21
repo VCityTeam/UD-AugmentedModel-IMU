@@ -26,7 +26,7 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const slideShowId = themeConfig.slideShowId;
-      const dates = themeConfig.dates;
+      const dates = themeConfig.dates || [0];
       const slideShow = this.slideShowConfigs.slides.find(
         (config) => config.id == slideShowId
       );
