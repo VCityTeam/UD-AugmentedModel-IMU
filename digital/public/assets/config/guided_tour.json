@@ -270,19 +270,47 @@
                 {
                     "previous": 0,
                     "next": 0,
+                    "media": [],
+                    "position": {
+                        "x": 1844817,
+                        "y": 5175845,
+                        "z": 13958
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0,
+                        "w": 1
+                    }
+                }
+            ]
+        },
+        "media": []
+    },
+    {
+        "tour": {
+            "id": "tour_3",
+            "name": "Tour example",
+            "description": "This is an example of guided tour",
+            "startIndex": 0,
+            "endIndex": 0,
+            "steps": [
+                {
+                    "previous": 0,
+                    "next": 0,
                     "media": [
                         "IMG_00"
                     ],
                     "position": {
-                        "x": 1843766,
-                        "y": 5172988,
-                        "z": 860
+                        "x": 1842952,
+                        "y": 5174583,
+                        "z": 1710
                     },
                     "rotation": {
-                        "x": 0.3040,
-                        "y": -0.1773,
-                        "z": -0.4715,
-                        "w": 0.8085
+                        "x": 0.3517,
+                        "y": 0.0974,
+                        "z": 0.2485,
+                        "w": 0.8971
                     }
                 }
             ]
@@ -297,7 +325,7 @@
     },
     {
         "tour": {
-            "id": "tour_3",
+            "id": "tour_4",
             "name": "Tour example",
             "description": "This is an example of guided tour",
             "startIndex": 0,
@@ -310,15 +338,15 @@
                         "VID_00"
                     ],
                     "position": {
-                        "x": 1844817,
-                        "y": 5175845,
-                        "z": 13958
+                        "x": 1843766,
+                        "y": 5172988,
+                        "z": 860
                     },
                     "rotation": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0,
-                        "w": 1
+                        "x": 0.3040,
+                        "y": -0.1773,
+                        "z": -0.4715,
+                        "w": 0.8085
                     }
                 }
             ]

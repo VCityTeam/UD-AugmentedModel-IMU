@@ -21,19 +21,27 @@
         "key": "2"
       },
       {
+        "id": "default",
+        "type": "multimedia",
+        "name": "All multimedia",
+        "slideShowId": "slide_2",
+        "guidedTourId": "tour_2",
+        "key": "Enter"
+      },
+      {
         "id": "theme_2",
         "type": "multimedia",
         "name": "Multimedia 1",
-        "slideShowId": "slide_2",
-        "guidedTourId": "tour_2",
+        "slideShowId": "slide_3",
+        "guidedTourId": "tour_3",
         "key": "1"
       },
       {
         "id": "theme_3",
         "type": "multimedia",
         "name": "Multimedia 2",
-        "slideShowId": "slide_3",
-        "guidedTourId": "tour_3",
+        "slideShowId": "slide_4",
+        "guidedTourId": "tour_4",
         "key": "2"
       }
     ]
@@ -60,19 +68,27 @@
         "key": "2"
       },
       {
+        "id": "default",
+        "type": "multimedia",
+        "name": "All multimedia",
+        "slideShowId": "slide_2",
+        "guidedTourId": "tour_2",
+        "key": "Enter"
+      },
+      {
         "id": "theme_2",
         "type": "multimedia",
         "name": "Multimedia 1",
-        "slideShowId": "slide_2",
-        "guidedTourId": "tour_2",
+        "slideShowId": "slide_3",
+        "guidedTourId": "tour_3",
         "key": "1"
       },
       {
         "id": "theme_3",
         "type": "multimedia",
         "name": "Multimedia 2",
-        "slideShowId": "slide_3",
-        "guidedTourId": "tour_3",
+        "slideShowId": "slide_4",
+        "guidedTourId": "tour_4",
         "key": "2"
       }
     ]

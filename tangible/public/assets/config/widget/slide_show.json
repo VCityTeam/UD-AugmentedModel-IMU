@@ -43,6 +43,14 @@
       "diapositives": [
         "2009.png"
       ]
+    },
+    {
+      "id": "slide_4",
+      "name": "Lyon temporel",
+      "folder": "../assets/img",
+      "diapositives": [
+        "2012.png"
+      ]
     }
   ],
   "textureRotation": 0,
