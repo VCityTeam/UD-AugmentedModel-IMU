@@ -145,6 +145,9 @@ export class MultimediaView {
           this.themeController.guidedTour.previousButton.remove();
           this.themeController.guidedTour.nextButton.remove();
         }
+        Object.entries(this.pins).forEach(([themeId, pin]) => {
+          pin.visible = this.defaultDisplayed || this.themeId == themeId;
+        });
       };
       if (Object.keys(themes).length > 0) {
         this.selectMedia.dispatchEvent(new Event('change'));
