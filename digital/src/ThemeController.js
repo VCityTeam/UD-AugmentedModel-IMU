@@ -7,7 +7,7 @@ export class ThemeController {
     this.guidedTour = null;
     this.mergedTourConfig = null;
     this.slider = null;
-    this.baseUrl = window.location.origin
+    this.baseUrl = window.location.origin;
 
     this.view = view;
     this.themeConfigs = themeConfigs;
@@ -26,8 +26,8 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const tourId = themeConfig.guidedTourId;
-      const dates = themeConfig.dates || [0];
       const tour = this.tourConfigs.find((config) => config.tour.id == tourId);
+      const dates = themeConfig.dates || Array(tour.tour.endIndex + 1).fill(0);
       for (let i = 0; i < dates.length; i++) {
         allSteps.push({ date: dates[i], tourId: tourId, stepIndex: i });
       }

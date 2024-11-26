@@ -452,7 +452,6 @@ export class EvolutionView {
       return cloneObject;
     };
 
-    let bHelpers = [];
     window.addEventListener('keydown', (event) => {
       if (event.key == '*') {
         if (!this.tryGetCurrentSTShape()) return;

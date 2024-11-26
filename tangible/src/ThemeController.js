@@ -26,10 +26,11 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const slideShowId = themeConfig.slideShowId;
-      const dates = themeConfig.dates || [0];
       const slideShow = this.slideShowConfigs.slides.find(
         (config) => config.id == slideShowId
       );
+      const dates =
+        themeConfig.dates || Array(slideShow.diapositives.length).fill(0);
       for (let i = 0; i < dates.length; i++) {
         allSteps.push({
           date: dates[i],

@@ -52,8 +52,6 @@ export class MultimediaView {
     this.themeController = null;
     this.themeId = null;
     this.defaultDisplayed = true;
-
-    // EVENTS
     this.versions = [];
     this.listenersToggle = [];
     this.pins = {};
@@ -198,7 +196,26 @@ export class MultimediaView {
         });
       });
     };
-
+    window.addEventListener('keydown', (event) => {
+      if (this.themeController && this.themeController.guidedTour) {
+        const tour = this.themeController.guidedTour;
+        if (event.key == '0' && tour.currentIndex > tour.startIndex) {
+          tour.currentIndex--;
+        }
+        if (event.key == '.' && tour.currentIndex < tour.endIndex) {
+          tour.currentIndex++;
+        }
+        fetch(`${baseUrl}/stepIndex`, {
+          method: 'POST',
+          body: JSON.stringify({
+            stepIndex: tour.currentIndex,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    });
     showElement('multimedia_div');
     hideElement('shape_div');
   }
