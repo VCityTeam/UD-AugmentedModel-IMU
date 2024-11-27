@@ -45,7 +45,7 @@ loadMultipleJSON([
     view.notifyChange(view.camera.camera3D);
   };
   fitExtent();
-  view.camera.camera3D.rotation.set(0, 0, 0);
+  view.camera.camera3D.rotation.set(0, 0, -Math.PI/2);
 
   // Add UI
   const uiDomElement = document.createElement('div');
