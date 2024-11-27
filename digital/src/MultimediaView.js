@@ -10,20 +10,20 @@ export class MultimediaView {
   constructor(configs, view) {
     this.view = view;
     this.c3DTilesLayer = null;
+    this.frameRequester = null;
 
     // CREATE HTML
     this.selectDataset = document
       .getElementById('multimedia_div')
       .getElementsByClassName('select_dataset')[0];
     const datasetConfig = {};
-    configs['3DTiles']
-      .forEach((config) => {
-        datasetConfig[config.id] = config;
-        const dataOption = document.createElement('option');
-        dataOption.value = config.id;
-        dataOption.innerText = config.name;
-        this.selectDataset.appendChild(dataOption);
-      });
+    configs['3DTiles'].forEach((config) => {
+      datasetConfig[config.id] = config;
+      const dataOption = document.createElement('option');
+      dataOption.value = config.id;
+      dataOption.innerText = config.name;
+      this.selectDataset.appendChild(dataOption);
+    });
 
     const getDataset = () => {
       return datasetConfig[this.selectDataset.selectedOptions[0].value];
@@ -103,6 +103,10 @@ export class MultimediaView {
             window.addEventListener('keypress', newListener);
           });
         this.view.notifyChange();
+        this.frameRequester = this.view.addFrameRequester(
+          itowns.MAIN_LOOP_EVENTS.AFTER_CAMERA_UPDATE,
+          this.updatePinsVisibility.bind(this)
+        );
       }
       this.selectMedia.onchange = () => {
         if (this.themeId == this.selectMedia.selectedOptions[0].value) return;
@@ -178,6 +182,14 @@ export class MultimediaView {
     hideElement('shape_div');
   }
 
+  updatePinsVisibility() {
+    Object.entries(this.pins).forEach(([themeId, pin]) => {
+      pin.visible =
+        (this.defaultDisplayed || this.themeId == themeId)
+        &&  pin.position.distanceTo(this.view.camera3D.position) > 1000;
+    });
+  }
+
   clean() {
     this.themeDiv.hidden = true;
     this.themeId = null;
@@ -206,6 +218,11 @@ export class MultimediaView {
       pin.material.dispose();
     });
     this.view.notifyChange();
+    if (this.frameRequester)
+      this.view.removeFrameRequester(
+        itowns.MAIN_LOOP_EVENTS.AFTER_CAMERA_UPDATE,
+        this.updatePinsVisibility
+      );
   }
 
   canBeDisposed() {
