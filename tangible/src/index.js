@@ -8,6 +8,7 @@ import * as itowns from 'itowns';
 import * as THREE from 'three';
 import { ThemeController } from './ThemeController';
 import { createPin } from './object3DUtil';
+import { cameraSettings } from './uiUtils';
 
 const baseUrl = window.location.origin;
 
@@ -45,7 +46,7 @@ loadMultipleJSON([
     view.notifyChange(view.camera.camera3D);
   };
   fitExtent();
-  view.camera.camera3D.rotation.set(0, 0, -Math.PI/2);
+  view.camera.camera3D.rotation.set(0, 0, -Math.PI / 2);
 
   // Add UI
   const uiDomElement = document.createElement('div');
@@ -215,4 +216,16 @@ loadMultipleJSON([
       view.notifyChange();
     }
   }
+
+  let camSettings = null;
+  window.addEventListener('keydown', (event) => {
+    if (event.key == 'c') {
+      if (camSettings) {
+        camSettings.remove();
+        camSettings = null;
+      } else {
+        camSettings = cameraSettings(view);
+      }
+    }
+  });
 });
