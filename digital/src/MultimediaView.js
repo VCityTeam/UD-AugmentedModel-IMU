@@ -1,5 +1,4 @@
 import * as itowns from 'itowns';
-import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import { ThemeController } from './ThemeController';
 import { createPin } from './object3DUtil';
 
@@ -10,26 +9,16 @@ const baseUrl = window.location.origin;
 export class MultimediaView {
   constructor(configs, view) {
     this.view = view;
-
-    const extensions = new itowns.C3DTExtensions();
-    extensions.registerExtension(extensions3DTilesTemporal.ID, {
-      [itowns.C3DTilesTypes.batchtable]:
-        extensions3DTilesTemporal.C3DTTemporalBatchTable,
-      [itowns.C3DTilesTypes.boundingVolume]:
-        extensions3DTilesTemporal.C3DTTemporalBoundingVolume,
-      [itowns.C3DTilesTypes.tileset]:
-        extensions3DTilesTemporal.C3DTTemporalTileset,
-    });
+    this.c3DTilesLayer = null;
 
     // CREATE HTML
     this.selectDataset = document
       .getElementById('multimedia_div')
       .getElementsByClassName('select_dataset')[0];
-    const datasetConfigs = {};
-    configs['3DTiles_STS_data']
-      .concat(configs['3DTiles_temporal'])
+    const datasetConfig = {};
+    configs['3DTiles']
       .forEach((config) => {
-        datasetConfigs[config.id] = config.versions || [config];
+        datasetConfig[config.id] = config;
         const dataOption = document.createElement('option');
         dataOption.value = config.id;
         dataOption.innerText = config.name;
@@ -37,7 +26,7 @@ export class MultimediaView {
       });
 
     const getDataset = () => {
-      return datasetConfigs[this.selectDataset.selectedOptions[0].value];
+      return datasetConfig[this.selectDataset.selectedOptions[0].value];
     };
 
     const getThemes = () => {
@@ -151,51 +140,20 @@ export class MultimediaView {
         this.selectMedia.dispatchEvent(new Event('change'));
       }
 
-      const c3dtilesConfigs = getDataset();
-      const promisesTileContentLoaded = [];
-      c3dtilesConfigs.forEach((config) => {
-        const isTemporal = !!config.dates;
-        const datesJSON = isTemporal ? config.dates : [config.date];
-        const registerExtensions = isTemporal ? extensions : null;
-        datesJSON.forEach((date) => {
-          const c3DTilesLayer = new itowns.C3DTilesLayer(
-            config.id + '_' + date.toString(),
-            {
-              name: config.id + date.toString(),
-              source: new itowns.C3DTilesSource({
-                url: config.url,
-              }),
-              registeredExtensions: registerExtensions,
-            },
-            this.view
-          );
-          itowns.View.prototype.addLayer.call(this.view, c3DTilesLayer);
-          promisesTileContentLoaded.push(
-            new Promise((resolve) => {
-              c3DTilesLayer.addEventListener(
-                itowns.C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED,
-                () => {
-                  resolve();
-                }
-              );
-            })
-          );
-          if (isTemporal) {
-            const temporalsWrapper =
-              new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
-                c3DTilesLayer
-              );
-
-            if (date == Math.min(...datesJSON)) {
-              temporalsWrapper.styleDate = date + 1;
-            } else {
-              temporalsWrapper.styleDate = date - 2;
-            }
-          }
-          this.versions.push({ date: date, c3DTLayer: c3DTilesLayer });
-        });
-      });
+      const c3dtilesConfig = getDataset();
+      this.c3DTilesLayer = new itowns.C3DTilesLayer(
+        c3dtilesConfig.id,
+        {
+          name: c3dtilesConfig.id,
+          source: new itowns.C3DTilesSource({
+            url: c3dtilesConfig.url,
+          }),
+        },
+        this.view
+      );
+      itowns.View.prototype.addLayer.call(this.view, this.c3DTilesLayer);
     };
+
     window.addEventListener('keydown', (event) => {
       if (this.themeController && this.themeController.guidedTour) {
         const tour = this.themeController.guidedTour;
@@ -256,13 +214,7 @@ export class MultimediaView {
 
   dispose() {
     this.clean();
-
-    if (this.versions.length > 0) {
-      this.versions.forEach((v) => {
-        this.view.removeLayer(v.c3DTLayer.id);
-      });
-    }
-
+    this.view.removeLayer(this.c3DTilesLayer.id);
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
     hideElement('multimedia_div');

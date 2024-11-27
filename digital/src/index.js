@@ -21,6 +21,7 @@ loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
   './assets/config/guided_tour.json',
+  './assets/config/layer/3DTiles.json',
   './assets/config/layer/3DTiles_temporal.json',
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
