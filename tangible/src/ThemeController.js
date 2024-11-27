@@ -59,7 +59,7 @@ export class ThemeController {
     }
     this.mergedSlideShowConfig = {
       slides: [mergedSlideShow],
-      textureRotation: 0,
+      textureRotation: this.slideShowConfigs.textureRotation,
     };
   }
 
@@ -69,18 +69,18 @@ export class ThemeController {
       this.mergedSlideShowConfig,
       this.extent
     );
-    if (this.canvasConfig) {
-      this.slideShow.setSizeInputs(
-        new Vector2(this.canvasConfig.size.height, this.canvasConfig.size.width)
-      );
-      this.slideShow.setCoordinatesInputs(
-        new Vector3(
-          this.canvasConfig.position.x,
-          this.canvasConfig.position.y,
-          this.canvasConfig.position.z
-        )
-      );
-    }
+    // if (this.canvasConfig) {
+    //   this.slideShow.setSizeInputs(
+    //     new Vector2(this.canvasConfig.size.height, this.canvasConfig.size.width)
+    //   );
+    //   this.slideShow.setCoordinatesInputs(
+    //     new Vector3(
+    //       this.canvasConfig.position.x,
+    //       this.canvasConfig.position.y,
+    //       this.canvasConfig.position.z
+    //     )
+    //   );
+    // }
     this.slideShow.domElement.classList.add('widget_slide_show');
     this.slideShow.domElement.style.display = 'none';
     document.body.appendChild(this.slideShow.domElement);

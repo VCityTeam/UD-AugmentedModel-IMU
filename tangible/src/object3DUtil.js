@@ -10,7 +10,7 @@ export function createPin(position, imagePath) {
   });
   const pin = new Sprite(pictureMaterial);
   pin.position.set(position.x, position.y, 0.2);
-  pin.scale.set(1000, 1000, 1000);
+  pin.scale.set(100, 100, 100);
   pin.updateMatrixWorld();
 
   return pin;

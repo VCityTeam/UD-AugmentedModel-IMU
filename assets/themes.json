@@ -1,6 +1,6 @@
 [
   {
-    "dataId": "lyon_1_temporal",
+    "dataId": "gratte_ciel_temporal",
     "themes": [
       {
         "id": "theme_0",
@@ -34,8 +34,8 @@
         "name": "Multimedia 1",
         "pin": {
           "position": {
-            "x": 1842952,
-            "y": 5174583,
+            "x": 1846193.53,
+            "y": 5175713.11,
             "z": 400
           },
           "sprite": "./assets/img/pins/1.png"
@@ -50,8 +50,8 @@
         "name": "Multimedia 2",
         "pin": {
           "position": {
-            "x": 1843766,
-            "y": 5172988,
+            "x": 1846169.6,
+            "y": 5176101.9,
             "z": 400
           },
           "sprite": "./assets/img/pins/2.png"
@@ -63,7 +63,7 @@
     ]
   },
   {
-    "dataId": "sts_lyon",
+    "dataId": "sts_gratte_ciel",
     "themes": [
       {
         "id": "theme_0",
@@ -81,46 +81,6 @@
         "slideShowId": "slide_1",
         "guidedTourId": "tour_1",
         "dates": [1960, 2007, 2012, 2015, 2018, 2019, 2024],
-        "key": "2"
-      },
-      {
-        "id": "default",
-        "type": "multimedia",
-        "name": "All multimedia",
-        "slideShowId": "slide_2",
-        "guidedTourId": "tour_2",
-        "key": "Enter"
-      },
-      {
-        "id": "theme_2",
-        "type": "multimedia",
-        "name": "Multimedia 1",
-        "pin": {
-          "position": {
-            "x": 1842952,
-            "y": 5174583,
-            "z": 400
-          },
-          "sprite": "./assets/img/pins/1.png"
-        },
-        "slideShowId": "slide_3",
-        "guidedTourId": "tour_3",
-        "key": "1"
-      },
-      {
-        "id": "theme_3",
-        "type": "multimedia",
-        "name": "Multimedia 2",
-        "pin": {
-          "position": {
-            "x": 1843766,
-            "y": 5172988,
-            "z": 400
-          },
-          "sprite": "./assets/img/pins/2.png"
-        },
-        "slideShowId": "slide_4",
-        "guidedTourId": "tour_4",
         "key": "2"
       }
     ]
