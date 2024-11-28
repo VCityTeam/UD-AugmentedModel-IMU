@@ -1,3 +1,4 @@
+import { Vector2 } from 'three';
 import { SlideShow } from '@ud-viz/widget_slide_show';
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
 import { dragElement } from './draggable';
@@ -68,6 +69,11 @@ export class ThemeController {
       this.mergedSlideShowConfig,
       this.extent
     );
+    if (this.canvasConfig) {
+      this.slideShow.setSizeInputs(
+        new Vector2(this.canvasConfig.size.height, this.canvasConfig.size.width)
+      );
+    }
     this.slideShow.domElement.classList.add('widget_slide_show');
     this.slideShow.domElement.style.display = 'none';
     document.body.appendChild(this.slideShow.domElement);

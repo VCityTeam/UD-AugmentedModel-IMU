@@ -34,41 +34,26 @@
       "id": "slide_2",
       "name": "Lyon temporel",
       "folder": "../assets/img",
-      "diapositives": [
-        "init.png"
-      ]
+      "diapositives": ["init.png"]
     },
     {
       "id": "slide_3",
       "name": "Lyon temporel",
       "folder": "../assets/img",
-      "diapositives": [
-        "2009.png",
-        "2012.png",
-        "2015.png"
-      ]
+      "diapositives": ["2009.png", "2012.png", "2015.png"]
     },
     {
       "id": "slide_4",
       "name": "Lyon temporel",
       "folder": "../assets/img",
-      "diapositives": [
-        "2012.png",
-        "2018.png",
-        "2009.png"
-      ]
+      "diapositives": ["2012.png", "2018.png", "2009.png"]
     }
   ],
   "textureRotation": -90,
   "canvasConfig": {
-    "position": {
-      "x": 1841453.5,
-      "y": 5173061,
-      "z": 0.1
-    },
     "size": {
-      "height": 26187,
-      "width": 15828
+      "height": 600,
+      "width": 1000
     }
   }
 }
