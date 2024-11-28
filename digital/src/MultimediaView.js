@@ -83,10 +83,7 @@ export class MultimediaView {
             } else {
               mediaOption.innerText = '#' + config.key + ' ' + config.name;
               if (config.pin) {
-                const pin = createPin(
-                  config.pin.position,
-                  baseUrl + '/' + config.pin.sprite
-                );
+                const pin = createPin(config.pin.position, config.pin.sprite);
                 this.view.scene.add(pin);
                 this.pins[config.id] = pin;
               }
@@ -185,8 +182,8 @@ export class MultimediaView {
   updatePinsVisibility() {
     Object.entries(this.pins).forEach(([themeId, pin]) => {
       pin.visible =
-        (this.defaultDisplayed || this.themeId == themeId)
-        &&  pin.position.distanceTo(this.view.camera3D.position) > 1000;
+        (this.defaultDisplayed || this.themeId == themeId) &&
+        pin.position.distanceTo(this.view.camera3D.position) > 1000;
     });
   }
 

@@ -108,10 +108,7 @@ loadMultipleJSON([
               .filter((theme) => theme.type == 'multimedia')
               .forEach((config) => {
                 if (config.pin) {
-                  const pin = createPin(
-                    config.pin.position,
-                    baseUrl + '/' + config.pin.sprite
-                  );
+                  const pin = createPin(config.pin.position, config.pin.sprite);
                   view.scene.add(pin);
                   pins[config.id] = pin;
                 }
