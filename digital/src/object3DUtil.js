@@ -82,9 +82,6 @@ export function getFocusTransformForCurrentSTShape(view, stShape) {
   // Calculate an initial distance to fit the object within the camera's field of view
   let distance = objectSize / cameraView;
 
-  // Add extra distance based on the object's size to ensure optimal positioning in view
-  distance += objectSize;
-
   // Define an angle to adjust the camera position relative to the object (in degrees)
   const angle = 90;
 
