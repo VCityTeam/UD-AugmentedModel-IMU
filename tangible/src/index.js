@@ -15,6 +15,7 @@ const baseUrl = window.location.origin;
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
+  './assets/config/camera.json',
   './assets/config/widget/slide_show.json',
   `${baseUrl}/assets/themes.json`,
 ]).then((configs) => {
@@ -37,16 +38,26 @@ loadMultipleJSON([
   // init scene 3D
   initScene(view.camera.camera3D, view.mainLoop.gfxEngine.renderer, view.scene);
 
-  const fitExtent = () => {
-    cameraFitRectangle(
-      view.camera.camera3D,
-      new THREE.Vector2(extent.west, extent.south),
-      new THREE.Vector2(extent.east, extent.north)
-    );
-    view.notifyChange(view.camera.camera3D);
-  };
-  fitExtent();
-  view.camera.camera3D.rotation.set(0, 0, -Math.PI / 2);
+  if (configs['camera'].position) {
+    const pos = configs['camera'].position;
+    view.camera.camera3D.position.set(pos.x, pos.y, pos.z);
+  } else {
+    const fitExtent = () => {
+      cameraFitRectangle(
+        view.camera.camera3D,
+        new THREE.Vector2(extent.west, extent.south),
+        new THREE.Vector2(extent.east, extent.north)
+      );
+      view.notifyChange(view.camera.camera3D);
+    };
+    fitExtent();
+  }
+  if (configs['camera'].rotation) {
+    const rot = configs['camera'].rotation;
+    view.camera.camera3D.rotation.set(rot.x, rot.y, rot.z);
+  } else {
+    view.camera.camera3D.rotation.set(0, 0, -Math.PI / 2);
+  }
 
   // Add UI
   const uiDomElement = document.createElement('div');

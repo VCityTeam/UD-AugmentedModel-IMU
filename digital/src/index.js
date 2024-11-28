@@ -165,4 +165,13 @@ loadMultipleJSON([
       currentView = null;
     }
   });
+  window.addEventListener('dblclick', (event) => {
+    console.log(
+      'World Position Picked:',
+      view.getPickingPositionFromDepth(
+        new THREE.Vector2(event.offsetX, event.offsetY),
+        new THREE.Vector3()
+      )
+    );
+  });
 });
