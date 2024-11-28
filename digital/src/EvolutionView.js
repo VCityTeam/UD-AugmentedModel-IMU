@@ -4,13 +4,14 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { hideElement, showElement } from './uiUtils';
-import { degToRad } from 'three/src/math/MathUtils.js';
+import { getFocusTransformForCurrentSTShape } from './object3DUtil';
 
 const baseUrl = window.location.origin;
 
 export class EvolutionView {
   constructor(configs, view, controls) {
     this.view = view;
+    this.controls = controls;
 
     const extensions = new itowns.C3DTExtensions();
     extensions.registerExtension(extensions3DTilesTemporal.ID, {
@@ -307,6 +308,7 @@ export class EvolutionView {
           parabolaHeight.value = this.stsParabola.height;
           break;
       }
+      this.focusCameraOnShape();
     };
 
     this.selectMode.onchange = () => {
@@ -381,88 +383,9 @@ export class EvolutionView {
       }
     });
 
-    /**
-     * Computes an orientation and position for a 3D object clone that aligns it with the current camera view.
-     * This helps ensure the object appears centered and properly oriented in the camera's field of view.
-     * @returns {THREE.Object3D} - The transformed clone of the 3D object, oriented consistently with the camera view.
-     */
-    const getFocusTransformForCurrentSTShape = () => {
-      // Retrieve the current shape in the scene (assumed to be a 3D object)
-      const currentSTShape = this.tryGetCurrentSTShape();
-
-      // Clone the 3D object to work with it independently of the original
-      const cloneObject = currentSTShape.stLayer.rootObject3D.clone();
-
-      // Reset the rotation of the clone to a base orientation for consistent positioning
-      cloneObject.rotation.set(0, 0, 0);
-
-      // Calculate the bounding box of the clone to determine its spatial dimensions
-      const bounds = new THREE.Box3().setFromObject(cloneObject);
-
-      // Get the dimensions (width, height, depth) of the bounding box
-      const objectSizes = bounds.getSize(new THREE.Vector3());
-
-      // Determine the largest dimension and double it to use as a reference size
-      const objectSize =
-        Math.max(objectSizes.x, objectSizes.y, objectSizes.z) * 2;
-
-      // Calculate the vertical field of view at a 1-meter distance from the camera
-      const cameraView = 2 * Math.tan(0.5 * degToRad(this.view.camera3D.fov));
-
-      // Calculate an initial distance to fit the object within the camera's field of view
-      let distance = objectSize / cameraView;
-
-      // Add extra distance based on the object's size to ensure optimal positioning in view
-      distance += objectSize;
-
-      // Define an angle to adjust the camera position relative to the object (in degrees)
-      const angle = 90;
-
-      // Clone the camera's position for manipulations without affecting the original camera position
-      const cameraPositionClone = this.view.camera3D.position.clone();
-      cameraPositionClone.z = cloneObject.position.z;
-
-      // Convert the angle to radians
-      const radAngle = degToRad(angle);
-
-      // Calculate the new position of the camera in the x-y plane based on the specified rotation angle
-      const newPosition = new THREE.Vector3(
-        cameraPositionClone.x,
-        cameraPositionClone.y * Math.cos(radAngle) -
-          cameraPositionClone.z * Math.sin(radAngle),
-        cameraPositionClone.y * Math.sin(radAngle) +
-          cameraPositionClone.z * Math.cos(radAngle)
-      );
-
-      // Update the camera's position to the newly calculated position
-      this.view.camera3D.position.copy(newPosition);
-
-      // Calculate the direction vector from the camera to the object
-      const dirCameraObject = this.view.camera3D
-        .getWorldPosition(new THREE.Vector3())
-        .sub(cloneObject.getWorldPosition(new THREE.Vector3()));
-
-      // Move the cloned object along the direction vector so that it is properly positioned in view
-      cloneObject.translateOnAxis(dirCameraObject.normalize(), distance);
-
-      // Apply transformations to the clone's world matrix
-      cloneObject.updateMatrixWorld();
-
-      // Return the transformed clone, now positioned consistently with the camera view
-      return cloneObject;
-    };
-
     window.addEventListener('keydown', (event) => {
       if (event.key == '*') {
-        if (!this.tryGetCurrentSTShape()) return;
-        this.view.camera3D.position.copy(
-          getFocusTransformForCurrentSTShape().position
-        );
-
-        controls.target.setFromMatrixPosition(
-          this.tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
-        );
-        controls.update();
+        this.focusCameraOnShape();
       }
       if (this.themeController && this.themeController.guidedTour) {
         const tour = this.themeController.guidedTour;
@@ -480,6 +403,19 @@ export class EvolutionView {
 
     showElement('evolution_div');
     hideElement('shape_div');
+  }
+
+  focusCameraOnShape() {
+    if (!this.tryGetCurrentSTShape()) return;
+    this.view.camera3D.position.copy(
+      getFocusTransformForCurrentSTShape(this.view, this.tryGetCurrentSTShape())
+        .position
+    );
+
+    this.controls.target.setFromMatrixPosition(
+      this.tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
+    );
+    this.controls.update();
   }
 
   getShapesWithUi = () => {
