@@ -113,95 +113,125 @@
         {
           "previous": 0,
           "next": 1,
-          "media": ["TEXT_10", "TEXT_11", "VID_01"]
+          "media": ["title", "text_1930", "IMG_02"]
         },
         {
           "previous": 0,
           "next": 2,
-          "media": ["TEXT_10", "TEXT_12", "VID_01"]
+          "media": ["title", "text_1963", "IMG_03"]
         },
         {
           "previous": 1,
           "next": 3,
-          "media": ["TEXT_10", "TEXT_13", "IMG_01"]
+          "media": ["title", "text_1991", "IMG_04"]
         },
         {
           "previous": 2,
           "next": 4,
-          "media": ["TEXT_10", "TEXT_14", "IMG_01"]
+          "media": ["title", "text_2004", "IMG_05"]
         },
         {
           "previous": 3,
           "next": 5,
-          "media": ["TEXT_10", "TEXT_15"]
+          "media": ["title", "text_2009"]
         },
         {
           "previous": 4,
           "next": 6,
-          "media": ["TEXT_10", "TEXT_16", "AUD_01"]
+          "media": ["title", "text_2012"]
         },
         {
           "previous": 5,
-          "next": 6,
-          "media": ["TEXT_10", "TEXT_17", "AUD_01"]
+          "next": 7,
+          "media": ["title", "text_2015"]
+        },
+        {
+          "previous": 6,
+          "next": 8,
+          "media": ["title", "text_2018"]
+        },
+        {
+          "previous": 7,
+          "next": 8,
+          "media": ["title", "text_2025", "IMG_06"]
         }
       ]
     },
     "media": [
       {
-        "id": "TEXT_10",
+        "id": "title",
         "type": "text",
-        "value": "Histoire"
+        "value": "Histoire des Gratte-Ciel de Villeurbanne"
       },
       {
-        "id": "TEXT_11",
+        "id": "text_1930",
         "type": "text",
-        "value": "1960"
+        "value": "1930 - construction du quartier"
       },
       {
-        "id": "TEXT_12",
+        "id": "text_1963",
         "type": "text",
-        "value": "2007"
+        "value": " 1963 - 1964 : Une synagogue a été construite dans la rue Malherbe en 1963-1964, adossée à un des immeubles. Elle est l’œuvre d’un groupe de jeunes allemands de la RDA sous la direction de l’architecte R. Carpe au titre des réparations morales et matérielles des crimes nazis. Elle accueille la population juive qui s’est installée dans le quartier dans le dernier quart du XXe siècle"
       },
       {
-        "id": "TEXT_13",
+        "id": "text_1991",
         "type": "text",
-        "value": "2012"
+        "value": " 1991 : L’hôtel de Ville est inscrit à l’Inventaire supplémentaire des monuments Historiques en 1991. En 1993, une zone de protection du patrimoine architectural, urbain et paysager (ZPPAUP) vise à protéger l’ensemble du quartier des Gratte-ciel. Elle préconise une valorisation des espaces de circulation par la création de cheminements piétonniers et l’harmonisation des devantures commerciales."
       },
       {
-        "id": "TEXT_14",
+        "id": "text_2004",
         "type": "text",
-        "value": "2015"
+        "value": "2004 : La place du Docteur-Lazare-Goujon a été rénovée entre 2004 et 2006. Un parking est construit sous celle-ci. La surface des bassins a été réduite et ils sont agrémentés de fontaines très basses."
       },
       {
-        "id": "TEXT_15",
+        "id": "text_2009",
         "type": "text",
-        "value": "2018"
+        "value": "2009 : Représentation des données du dataGrandlyon de 2009"
       },
       {
-        "id": "TEXT_16",
+        "id": "text_2012",
         "type": "text",
-        "value": "2019"
+        "value": "2012 : Représentation des données du dataGrandlyon de 2012"
       },
       {
-        "id": "TEXT_17",
+        "id": "text_2015",
         "type": "text",
-        "value": "2024"
+        "value": "2015 : Représentation des données du dataGrandlyon de 2015"
       },
       {
-        "id": "IMG_01",
+        "id": "text_2018",
+        "type": "text",
+        "value": "2018 : Représentation des données du dataGrandlyon de 2018"
+      },
+      {
+        "id": "text_2025",
+        "type": "text",
+        "value": "2025 : Nouveau quartier de 2025"
+      },
+      {
+        "id": "IMG_02",
         "type": "image",
-        "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fen.geneanet.org%2Fpublic%2Fimg%2Fgallery%2Fpictures%2Fcartes_postales%2Fbe%2F6869329%2Flarge.jpg&f=1&nofb=1&ipt=33a39f1018b8c8b2b34a9be33c298fc1f36fc381552c4d08b90ad626f11a2138&ipo=images"
       },
       {
-        "id": "VID_01",
-        "type": "video",
-        "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        "id": "IMG_03",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffr.geneawiki.com%2Fimages%2Fthumb%2F9%2F95%2F69266_-_Villeurbanne_Synagogue_Gratte_ciel.JPG%2F640px-69266_-_Villeurbanne_Synagogue_Gratte_ciel.JPG&f=1&nofb=1&ipt=4c72e5d9fc3fe110b88507000235ebb163dfa87f05405bc1db45f180dedf3b07&ipo=images"
       },
       {
-        "id": "AUD_01",
-        "type": "audio",
-        "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+        "id": "IMG_04",
+        "type": "image",
+        "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_monument_historique_-_rouge_ombré%2C_encadré.svg/220px-Logo_monument_historique_-_rouge_ombré%2C_encadré.svg.png"
+      },
+      {
+        "id": "IMG_05",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Flandezine.com%2Fwp-content%2Fuploads%2F2012%2F10%2FIN-SITU-Place-Lazare-Goujon-03.jpg&f=1&nofb=1&ipt=35ee96178eec22b8e317c91625df5c076f96fa3b29471c016d944b87835333c8&ipo=images"
+      },
+      {
+        "id": "IMG_06",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.20mn.fr%2FEHjwBBQoQ1qzGZq0o2hg3g%2F1200x768_projet-prolongement-quartier-gratte-ciel-villeurbanne&f=1&nofb=1&ipt=9b58ebda3c4f3a57a7a20d034a65cdea9adc3a6a12083a3a8106528564c4e1f7&ipo=images"
       }
     ]
   },
@@ -317,7 +347,7 @@
       {
         "id": "VID_00",
         "type": "video",
-        "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        "value": "https://media-hub.ina.fr/video/NGDZNAHhuvaPGNGz1tgOeOzjktEVXcuasREkAVTmBQVYodXNK3+9QJ8QcnjqSyk8undCMl5OxRO7ABccgapvB6S0PpKk6d5Vu2ypzzjCP+D7of/5xEXt8+rYkFjno0a4wmlBZa7FZ/hiPHXibFEdUA==/sl_iv/HcqVp17Ig6PTkK/gS+YAuA==/sl_hm/owyub3IUUtx2WbVSJNh37rYsxiuulpF2ZEA9p/+tcrB4PvUqruJ+ibEX9MAdxURMTTCipOrmGiVDbv5wA5j/uA==/sl_e/1734000124"
       }
     ]
   }
