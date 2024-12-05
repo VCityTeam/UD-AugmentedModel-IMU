@@ -183,7 +183,7 @@ loadMultipleJSON([
           extent
         );
         themeController.slideShow.addListeners();
-        themeController.guidedTour.goToStep(stepIndex);
+        themeController.goToTourStep(stepIndex);
         view.scene.add(themeController.slideShow.plane);
       });
   }
@@ -208,7 +208,7 @@ loadMultipleJSON([
           if (themeController) {
             themeController.slideShow.setTexture(stepIndex);
             if (themeController.guidedTour)
-              themeController.guidedTour.goToStep(stepIndex);
+              themeController.goToTourStep(stepIndex);
           }
         }
       });

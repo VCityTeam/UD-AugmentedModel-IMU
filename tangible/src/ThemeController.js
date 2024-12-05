@@ -111,6 +111,18 @@ export class ThemeController {
     }
   }
 
+  goToTourStep(stepIndex) {
+    this.guidedTour.goToStep(stepIndex);
+    const videos = [
+      ...this.guidedTour.domElement.getElementsByTagName('video'),
+    ];
+    videos.forEach((video) => {
+      // Video has to be be muted to autoplay if the user didn't interact with the page
+      video.muted = true;
+      video.play();
+    });
+  }
+
   dispose() {
     this.slideShow.dispose();
     if (this.guidedTour) this.guidedTour.domElement.remove();
