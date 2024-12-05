@@ -15,17 +15,18 @@ import { hideElement, showElement } from './uiUtils.js';
 import { EvolutionView } from './EvolutionView.js';
 import { MultimediaView } from './MultimediaView.js';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 loadMultipleJSON([
   './assets/config/extents.json',
   './assets/config/crs.json',
   './assets/config/guided_tour.json',
+  './assets/config/layer/3DTiles.json',
   './assets/config/layer/3DTiles_temporal.json',
   './assets/config/layer/3DTiles_STS_data.json',
   './assets/config/layer/base_maps.json',
   './assets/config/layer/elevation.json',
-  `${baseUrl}assets/themes.json`,
+  `${baseUrl}/assets/themes.json`,
 ]).then((configs) => {
   proj4.defs(configs['crs'][0].name, configs['crs'][0].transform);
 
@@ -41,9 +42,7 @@ loadMultipleJSON([
   const viewDomElement = document.createElement('div');
   viewDomElement.classList.add('full_screen');
   document.body.appendChild(viewDomElement);
-  const view = new itowns.PlanarView(viewDomElement, extent, {
-    noControls: true,
-  });
+  const view = new itowns.PlanarView(viewDomElement, extent);
   // view.controls.enabled = false;
   // init scene 3D
   initScene(
@@ -52,7 +51,7 @@ loadMultipleJSON([
     view.scene
   );
 
-  // view.controls.enabled = false;
+  view.controls.enabled = false;
   const orbitControls = new OrbitControls(
     view.camera.camera3D,
     view.mainLoop.gfxEngine.label2dRenderer.domElement
@@ -160,10 +159,19 @@ loadMultipleJSON([
   };
 
   window.addEventListener('keydown', (event) => {
-    if (event.key == 'Enter' && currentView != null) {
+    if (event.key == 'Enter' && currentView != null && currentView.canBeDisposed()) {
       currentView.dispose();
       showElement('view_choice_div');
       currentView = null;
     }
+  });
+  window.addEventListener('dblclick', (event) => {
+    console.log(
+      'World Position Picked:',
+      view.getPickingPositionFromDepth(
+        new THREE.Vector2(event.offsetX, event.offsetY),
+        new THREE.Vector3()
+      )
+    );
   });
 });

@@ -4,13 +4,14 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import { ThemeController } from './ThemeController';
 
 import { hideElement, showElement } from './uiUtils';
-import { degToRad } from 'three/src/math/MathUtils.js';
+import { getFocusTransformForCurrentSTShape } from './object3DUtil';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 export class EvolutionView {
   constructor(configs, view, controls) {
     this.view = view;
+    this.controls = controls;
 
     const extensions = new itowns.C3DTExtensions();
     extensions.registerExtension(extensions3DTilesTemporal.ID, {
@@ -88,7 +89,7 @@ export class EvolutionView {
 
     // EVENTS
     this.versions = [];
-    const listenersToggle = [];
+    this.listenersToggle = [];
 
     this.selectDataset.onchange = () => {
       this.selectMode.hidden = false;
@@ -104,7 +105,7 @@ export class EvolutionView {
         this.themeController = null;
       }
 
-      fetch(`${baseUrl}selectedDataId`, {
+      fetch(`${baseUrl}/selectedDataId`, {
         method: 'POST',
         body: JSON.stringify({
           selectedDataId: this.selectDataset.selectedOptions[0].value,
@@ -120,35 +121,37 @@ export class EvolutionView {
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
         this.themesContainer.innerHTML = '';
-        themesConfigs.themes.forEach((config) => {
-          themes[config.id] = config;
-          const themeLabel = document.createElement('label');
-          const themeInput = document.createElement('input');
-          themeInput.setAttribute('type', 'checkbox');
-          themeLabel.appendChild(themeInput);
-          const themeSpan = document.createElement('span');
-          themeSpan.innerText = config.name;
-          themeLabel.appendChild(themeSpan);
-          this.themesContainer.appendChild(themeLabel);
-          themeInput.id = config.id;
-          /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
+        themesConfigs.themes
+          .filter((theme) => theme.type == 'evolution')
+          .forEach((config) => {
+            themes[config.id] = config;
+            const themeLabel = document.createElement('label');
+            const themeInput = document.createElement('input');
+            themeInput.setAttribute('type', 'checkbox');
+            themeLabel.appendChild(themeInput);
+            const themeSpan = document.createElement('span');
+            themeSpan.innerText = config.name;
+            themeLabel.appendChild(themeSpan);
+            this.themesContainer.appendChild(themeLabel);
+            themeInput.id = config.id;
+            /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
        element and dispatches a new input event */
-          if (config.key) {
-            const newListener = (event) => {
-              if (event.key == config.key) {
-                themeInput.checked = !themeInput.checked;
-                themeInput.dispatchEvent(new Event('input'));
-              }
-            };
-            listenersToggle.push(newListener);
-            window.addEventListener('keypress', newListener);
-          }
-          themeInputs.push(themeInput);
-        });
+            if (config.key) {
+              const newListener = (event) => {
+                if (event.key == config.key) {
+                  themeInput.checked = !themeInput.checked;
+                  themeInput.dispatchEvent(new Event('input'));
+                }
+              };
+              this.listenersToggle.push(newListener);
+              window.addEventListener('keypress', newListener);
+            }
+            themeInputs.push(themeInput);
+          });
       } else {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
-        listenersToggle.forEach((listener) => {
+        this.listenersToggle.forEach((listener) => {
           window.removeEventListener('keypress', listener);
         });
       }
@@ -167,7 +170,7 @@ export class EvolutionView {
             this.themeController = null;
           }
 
-          fetch(`${baseUrl}selectedThemeIds`, {
+          fetch(`${baseUrl}/selectedThemeIds`, {
             method: 'POST',
             body: JSON.stringify({ selectedThemeIds }),
             headers: {
@@ -181,9 +184,9 @@ export class EvolutionView {
               selectedThemes,
               configs['guided_tour']
             );
-            document.body.appendChild(
-              this.themeController.guidedTour.domElement
-            );
+            // document.body.appendChild(
+            //   this.themeController.guidedTour.domElement
+            // );
             navButtonsDiv.appendChild(
               this.themeController.guidedTour.previousButton
             );
@@ -305,6 +308,7 @@ export class EvolutionView {
           parabolaHeight.value = this.stsParabola.height;
           break;
       }
+      this.focusCameraOnShape();
     };
 
     this.selectMode.onchange = () => {
@@ -379,105 +383,9 @@ export class EvolutionView {
       }
     });
 
-    /**
-     * Computes an orientation and position for a 3D object clone that aligns it with the current camera view.
-     * This helps ensure the object appears centered and properly oriented in the camera's field of view.
-     * @returns {THREE.Object3D} - The transformed clone of the 3D object, oriented consistently with the camera view.
-     */
-    const getFocusTransformForCurrentSTShape = () => {
-      // Retrieve the current shape in the scene (assumed to be a 3D object)
-      const currentSTShape = this.tryGetCurrentSTShape();
-
-      // Clone the 3D object to work with it independently of the original
-      const cloneObject = currentSTShape.stLayer.rootObject3D.clone();
-
-      // Reset the rotation of the clone to a base orientation for consistent positioning
-      cloneObject.rotation.set(0, 0, 0);
-
-      // Calculate the bounding box of the clone to determine its spatial dimensions
-      const bounds = new THREE.Box3().setFromObject(cloneObject);
-
-      // Get the dimensions (width, height, depth) of the bounding box
-      const objectSizes = bounds.getSize(new THREE.Vector3());
-
-      // Determine the largest dimension and double it to use as a reference size
-      const objectSize =
-        Math.max(objectSizes.x, objectSizes.y, objectSizes.z) * 2;
-
-      // Calculate the vertical field of view at a 1-meter distance from the camera
-      const cameraView = 2 * Math.tan(0.5 * degToRad(this.view.camera3D.fov));
-
-      // Calculate an initial distance to fit the object within the camera's field of view
-      let distance = objectSize / cameraView;
-
-      // Add extra distance based on the object's size to ensure optimal positioning in view
-      distance += objectSize;
-
-      // Define an angle to adjust the camera position relative to the object (in degrees)
-      const angle = 90;
-
-      // Clone the camera's position for manipulations without affecting the original camera position
-      const cameraPositionClone = this.view.camera3D.position.clone();
-      cameraPositionClone.z = cloneObject.position.z;
-
-      // Convert the angle to radians
-      const radAngle = degToRad(angle);
-
-      // Calculate the new position of the camera in the x-y plane based on the specified rotation angle
-      const newPosition = new THREE.Vector3(
-        cameraPositionClone.x,
-        cameraPositionClone.y * Math.cos(radAngle) -
-          cameraPositionClone.z * Math.sin(radAngle),
-        cameraPositionClone.y * Math.sin(radAngle) +
-          cameraPositionClone.z * Math.cos(radAngle)
-      );
-
-      // Update the camera's position to the newly calculated position
-      this.view.camera3D.position.copy(newPosition);
-
-      // Calculate the direction vector from the camera to the object
-      const dirCameraObject = this.view.camera3D
-        .getWorldPosition(new THREE.Vector3())
-        .sub(cloneObject.getWorldPosition(new THREE.Vector3()));
-
-      // Move the cloned object along the direction vector so that it is properly positioned in view
-      cloneObject.translateOnAxis(dirCameraObject.normalize(), distance);
-
-      // Apply transformations to the clone's world matrix
-      cloneObject.updateMatrixWorld();
-
-      // Return the transformed clone, now positioned consistently with the camera view
-      return cloneObject;
-    };
-
-    let bHelpers = [];
     window.addEventListener('keydown', (event) => {
       if (event.key == '*') {
-        if (!this.tryGetCurrentSTShape()) return;
-        this.view.camera3D.position.copy(
-          getFocusTransformForCurrentSTShape().position
-        );
-
-        controls.target.setFromMatrixPosition(
-          this.tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
-        );
-        controls.update();
-      }
-      if (event.key == 'b') {
-        const rootObject3D = this.tryGetCurrentSTShape().stLayer.rootObject3D;
-        const box3 = new THREE.Box3Helper(
-          new THREE.Box3().setFromObject(rootObject3D),
-          0xff0000
-        );
-        box3.updateMatrixWorld();
-        this.view.scene.add(box3);
-        bHelpers.push(box3);
-      }
-      if (event.key == 'c') {
-        bHelpers.forEach((bh) => {
-          bh.removeFromParent();
-        });
-        bHelpers = [];
+        this.focusCameraOnShape();
       }
       if (this.themeController && this.themeController.guidedTour) {
         const tour = this.themeController.guidedTour;
@@ -495,6 +403,19 @@ export class EvolutionView {
 
     showElement('evolution_div');
     hideElement('shape_div');
+  }
+
+  focusCameraOnShape() {
+    if (!this.tryGetCurrentSTShape()) return;
+    this.view.camera3D.position.copy(
+      getFocusTransformForCurrentSTShape(this.view, this.tryGetCurrentSTShape())
+        .position
+    );
+
+    this.controls.target.setFromMatrixPosition(
+      this.tryGetCurrentSTShape().stLayer.rootObject3D.matrixWorld
+    );
+    this.controls.update();
   }
 
   getShapesWithUi = () => {
@@ -517,6 +438,10 @@ export class EvolutionView {
     }
   };
 
+  canBeDisposed() {
+    return true;
+  }
+
   dispose() {
     if (this.themeController != null) {
       this.themeController.dispose();
@@ -531,7 +456,7 @@ export class EvolutionView {
       });
     }
 
-    fetch(`${baseUrl}selectedThemeIds`, {
+    fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'POST',
       body: JSON.stringify({ selectedThemeIds: [] }),
       headers: {
@@ -549,5 +474,9 @@ export class EvolutionView {
     this.themeDiv.hidden = true;
     this.themesContainer.innerHTML = '';
     hideElement('evolution_div');
+
+    this.listenersToggle.forEach((listener) => {
+      window.removeEventListener('keypress', listener);
+    });
   }
 }
