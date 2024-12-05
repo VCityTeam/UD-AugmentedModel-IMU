@@ -184,9 +184,9 @@ export class EvolutionView {
               selectedThemes,
               configs['guided_tour']
             );
-            document.body.appendChild(
-              this.themeController.guidedTour.domElement
-            );
+            // document.body.appendChild(
+            //   this.themeController.guidedTour.domElement
+            // );
             navButtonsDiv.appendChild(
               this.themeController.guidedTour.previousButton
             );

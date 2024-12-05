@@ -128,11 +128,7 @@ export class MultimediaView {
           [themes[this.themeId]],
           configs['guided_tour']
         );
-        if (this.themeController.guidedTour.mediaConfig.length > 0) {
-          document.body.appendChild(this.themeController.guidedTour.domElement);
-          this.themeController.guidedTour.previousButton.remove();
-          this.themeController.guidedTour.nextButton.remove();
-        }
+        // document.body.appendChild(this.themeController.guidedTour.domElement);
         Object.entries(this.pins).forEach(([themeId, pin]) => {
           pin.visible = this.defaultDisplayed || this.themeId == themeId;
         });
