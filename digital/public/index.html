@@ -28,9 +28,11 @@
           <select class="select_dataset">
             <option selected disabled hidden>Choose a Dataset</option>
           </select>
+          <li id="evolution_list_dataset"></li>
           <select id="select_mode" hidden>
             <option selected disabled hidden>Choose a Mode</option>
           </select>
+          <li id="evolution_list_mode" hidden></li>
           <select id="select_shape" hidden>
             <option id="default_shape" selected disabled hidden>
               Choose a Shape
@@ -38,6 +40,14 @@
             <option value="circle">Circle</option>
             <option value="parabola">Parabola</option>
           </select>
+          <li id="evolution_list_shape" hidden>
+            <ul>
+              1 - Circle
+            </ul>
+            <ul>
+              2 - Parabola
+            </ul>
+          </li>
         </div>
         <div id="shape_div">
           <h2 id="shape_name"></h2>

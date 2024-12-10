@@ -28,6 +28,8 @@ export class EvolutionView {
       .getElementById('evolution_div')
       .getElementsByClassName('select_dataset')[0];
     const datasetConfigs = {};
+    this.listDataset = document.getElementById('evolution_list_dataset');
+
     configs['3DTiles_STS_data']
       .concat(configs['3DTiles_temporal'])
       .forEach((config) => {
@@ -36,10 +38,25 @@ export class EvolutionView {
         dataOption.value = config.id;
         dataOption.innerText = config.name;
         this.selectDataset.appendChild(dataOption);
+        const ul = document.createElement('ul');
+        ul.innerText = `${this.selectDataset.options.length - 1} ${
+          config.name
+        }`;
+        this.listDataset.appendChild(ul);
       });
 
     const getDataset = () => {
       return datasetConfigs[this.selectDataset.selectedOptions[0].value];
+    };
+    const getMode = () => {
+      const selectedMode = this.selectMode.selectedOptions[0];
+
+      return selectedMode.index > 0 ? selectedMode.value : false;
+    };
+
+    const getShape = () => {
+      const selectedShape = this.selectSTShape.selectedOptions[0];
+      return selectedShape.index > 0 ? selectedShape.value : false;
     };
 
     const getThemes = () => {
@@ -49,17 +66,20 @@ export class EvolutionView {
     };
 
     this.selectMode = document.getElementById('select_mode');
+    this.listMode = document.getElementById('evolution_list_mode');
 
     for (const mode in extensions3DTilesTemporal.STS_DISPLAY_MODE) {
       const optionMode = document.createElement('option');
       optionMode.innerText = extensions3DTilesTemporal.STS_DISPLAY_MODE[mode];
       this.selectMode.appendChild(optionMode);
+      const ul = document.createElement('ul');
+      ul.innerText = `${this.selectMode.options.length - 1} ${
+        optionMode.innerText
+      }`;
+      this.listMode.appendChild(ul);
     }
 
-    const getCurrentMode = () => {
-      return this.selectMode.selectedOptions[0].value;
-    };
-
+    this.listShape = document.getElementById('evolution_list_shape');
     this.selectSTShape = document.getElementById('select_shape');
     const shapeName = document.getElementById('shape_name');
     this.defaultShape = document.getElementById('default_shape');
@@ -92,7 +112,9 @@ export class EvolutionView {
     this.listenersToggle = [];
 
     this.selectDataset.onchange = () => {
+      this.listDataset.innerHTML = '';
       this.selectMode.hidden = false;
+      this.listMode.hidden = false;
       this.defaultShape.selected = true;
       if (this.versions.length > 0) {
         this.versions.forEach((v) => {
@@ -130,7 +152,7 @@ export class EvolutionView {
             themeInput.setAttribute('type', 'checkbox');
             themeLabel.appendChild(themeInput);
             const themeSpan = document.createElement('span');
-            themeSpan.innerText = config.name;
+            themeSpan.innerText = `${config.key} ${config.name}`;
             themeLabel.appendChild(themeSpan);
             this.themesContainer.appendChild(themeLabel);
             themeInput.id = config.id;
@@ -138,13 +160,13 @@ export class EvolutionView {
        element and dispatches a new input event */
             if (config.key) {
               const newListener = (event) => {
+                if (!getDataset() || !getMode() || !getShape()) return;
                 if (event.key == config.key) {
                   themeInput.checked = !themeInput.checked;
                   themeInput.dispatchEvent(new Event('input'));
                 }
               };
               this.listenersToggle.push(newListener);
-              window.addEventListener('keypress', newListener);
             }
             themeInputs.push(themeInput);
           });
@@ -152,7 +174,7 @@ export class EvolutionView {
         this.themeDiv.hidden = true;
         /* Removing event listeners from all the functions in the `listenersToggle`*/
         this.listenersToggle.forEach((listener) => {
-          window.removeEventListener('keypress', listener);
+          window.removeEventListener('keydown', listener);
         });
       }
       themeInputs.forEach((input) => {
@@ -284,7 +306,9 @@ export class EvolutionView {
       });
     };
 
+    let selectedFirstTime = true;
     this.selectSTShape.onchange = () => {
+      this.listShape.hidden = true;
       shapeName.hidden = false;
       shapeName.innerText = this.selectSTShape.selectedOptions[0].innerText;
       this.getShapesWithUi().forEach((element) => {
@@ -295,13 +319,13 @@ export class EvolutionView {
       });
       switch (this.selectSTShape.selectedOptions[0].value) {
         case 'circle':
-          this.stsCircle.display(getCurrentMode());
+          this.stsCircle.display(getMode());
           this.uiCircle.hidden = false;
           radiusParameter.value = this.stsCircle.radius;
           heightParameter.value = this.stsCircle.height;
           break;
         case 'parabola':
-          this.stsParabola.display(getCurrentMode());
+          this.stsParabola.display(getMode());
           this.uiParabola.hidden = false;
           parabolaDistAxisX.value = this.stsParabola.distAxisX;
           parabolaDistAxisY.value = this.stsParabola.distAxisY;
@@ -309,26 +333,34 @@ export class EvolutionView {
           break;
       }
       this.focusCameraOnShape();
+      if (selectedFirstTime) {
+        this.listenersToggle.forEach((newListener) => {
+          window.addEventListener('keydown', newListener);
+        });
+        selectedFirstTime = false;
+      }
     };
 
     this.selectMode.onchange = () => {
+      this.listMode.innerHTML = '';
       this.getShapesWithUi().forEach((element) => {
         this.selectSTShape.hidden = false;
+        this.listShape.hidden = false;
         if (element.stShape != null && element.stShape.displayed) {
-          element.stShape.display(getCurrentMode());
+          element.stShape.display(getMode());
         }
       });
     };
 
     radiusParameter.addEventListener('input', (event) => {
       this.stsCircle.radius = Number(event.target.value);
-      this.stsCircle.display(getCurrentMode());
+      this.stsCircle.display(getMode());
       this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });
 
     heightParameter.addEventListener('input', (event) => {
       this.stsCircle.height = Number(event.target.value);
-      this.stsCircle.display(getCurrentMode());
+      this.stsCircle.display(getMode());
       this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });
 
@@ -342,22 +374,22 @@ export class EvolutionView {
 
     selectDateParabola.onchange = () => {
       this.stsParabola.middleDate = selectDateParabola.selectedOptions[0].value;
-      this.stsParabola.display(getCurrentMode());
+      this.stsParabola.display(getMode());
     };
 
     parabolaDistAxisX.addEventListener('input', (event) => {
       this.stsParabola.distAxisX = Number(event.target.value);
-      this.stsParabola.display(getCurrentMode());
+      this.stsParabola.display(getMode());
     });
 
     parabolaDistAxisY.addEventListener('input', (event) => {
       this.stsParabola.distAxisY = Number(event.target.value);
-      this.stsParabola.display(getCurrentMode());
+      this.stsParabola.display(getMode());
     });
 
     parabolaHeight.addEventListener('input', (event) => {
       this.stsParabola.height = Number(event.target.value);
-      this.stsParabola.display(getCurrentMode());
+      this.stsParabola.display(getMode());
     });
 
     document.body.addEventListener('valuechanged', () => {
@@ -377,13 +409,39 @@ export class EvolutionView {
         }
         if (this.stsParabola && this.stsParabola.displayed) {
           this.stsParabola.middleDate = closestDate;
-          this.stsParabola.display(getCurrentMode());
+          this.stsParabola.display(getMode());
           selectDateParabola.value = closestDate.toString();
         }
       }
     });
 
-    window.addEventListener('keydown', (event) => {
+    this.listenerKeydown = (event) => {
+      if (!getDataset()) {
+        const options = this.selectDataset.options;
+        const index = Number(event.key);
+        const isNumber = event.key.match(/^[1-9]$/);
+        if (isNumber && index >= 1 && index < options.length) {
+          this.selectDataset.selectedIndex = event.key;
+          this.selectDataset.dispatchEvent(new Event('change'));
+        }
+      } else if (!getMode()) {
+        const options = this.selectMode.options;
+        const index = Number(event.key);
+        const isNumber = event.key.match(/^[1-9]$/);
+        if (isNumber && index >= 1 && index < options.length) {
+          this.selectMode.selectedIndex = event.key;
+          this.selectMode.dispatchEvent(new Event('change'));
+        }
+      } else if (!getShape()) {
+        const options = this.selectSTShape.options;
+        const index = Number(event.key);
+        const isNumber = event.key.match(/^[1-9]$/);
+        if (isNumber && index >= 1 && index < options.length) {
+          this.selectSTShape.selectedIndex = event.key;
+          this.selectSTShape.dispatchEvent(new Event('change'));
+        }
+      }
+
       if (event.key == '*') {
         this.focusCameraOnShape();
       }
@@ -399,7 +457,9 @@ export class EvolutionView {
           this.themeController.updateSlider();
         }
       }
-    });
+    };
+
+    window.addEventListener('keydown', this.listenerKeydown);
 
     showElement('evolution_div');
     hideElement('shape_div');
@@ -466,17 +526,21 @@ export class EvolutionView {
 
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
+    this.listDataset.innerHTML = '';
     this.selectMode.hidden = true;
+    this.listMode.hidden = true;
     this.selectMode.replaceChildren(this.selectMode.firstElementChild);
     this.selectMode.firstElementChild.selected = true;
     this.selectSTShape.hidden = true;
+    this.listShape.hidden = true;
     this.defaultShape.selected = true;
     this.themeDiv.hidden = true;
     this.themesContainer.innerHTML = '';
     hideElement('evolution_div');
 
+    window.removeEventListener('keydown', this.listenerKeydown);
     this.listenersToggle.forEach((listener) => {
-      window.removeEventListener('keypress', listener);
+      window.removeEventListener('keydown', listener);
     });
   }
 }
