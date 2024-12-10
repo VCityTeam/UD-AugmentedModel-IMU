@@ -1,4 +1,4 @@
-import { Vector2, Vector3 } from 'three';
+import { Vector2 } from 'three';
 import { SlideShow } from '@ud-viz/widget_slide_show';
 import { GuidedTour } from '@ud-viz/widget_guided_tour';
 import { dragElement } from './draggable';
@@ -26,10 +26,11 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const slideShowId = themeConfig.slideShowId;
-      const dates = themeConfig.dates;
       const slideShow = this.slideShowConfigs.slides.find(
         (config) => config.id == slideShowId
       );
+      const dates =
+        themeConfig.dates || Array(slideShow.diapositives.length).fill(0);
       for (let i = 0; i < dates.length; i++) {
         allSteps.push({
           date: dates[i],
@@ -39,6 +40,7 @@ export class ThemeController {
       }
       name += slideShow.name;
     }
+    this.view.notifyChange();
     allSteps.sort((a, b) => a.date - b.date);
     const mergedSlideShow = {
       id: 'mergedSlideShow',
@@ -57,7 +59,7 @@ export class ThemeController {
     }
     this.mergedSlideShowConfig = {
       slides: [mergedSlideShow],
-      textureRotation: 0,
+      textureRotation: this.slideShowConfigs.textureRotation,
     };
   }
 
@@ -70,13 +72,6 @@ export class ThemeController {
     if (this.canvasConfig) {
       this.slideShow.setSizeInputs(
         new Vector2(this.canvasConfig.size.height, this.canvasConfig.size.width)
-      );
-      this.slideShow.setCoordinatesInputs(
-        new Vector3(
-          this.canvasConfig.position.x,
-          this.canvasConfig.position.y,
-          this.canvasConfig.position.z
-        )
       );
     }
     this.slideShow.domElement.classList.add('widget_slide_show');
@@ -97,6 +92,10 @@ export class ThemeController {
   }
 
   createGuidedTourWidget() {
+    this.guidedTourConfig.tour.steps.forEach((step) => {
+      step.position = undefined;
+      step.rotation = undefined;
+    });
     this.guidedTour = new GuidedTour(
       this.view,
       this.guidedTourConfig.tour,
@@ -107,7 +106,21 @@ export class ThemeController {
     this.guidedTour.previousButton.remove();
     this.guidedTour.nextButton.remove();
     dragElement(this.guidedTour.mediaContainer, this.guidedTour.domElement);
-    document.body.appendChild(this.guidedTour.domElement);
+    if (this.guidedTour.mediaConfig.length > 0) {
+      document.body.appendChild(this.guidedTour.domElement);
+    }
+  }
+
+  goToTourStep(stepIndex) {
+    this.guidedTour.goToStep(stepIndex);
+    const videos = [
+      ...this.guidedTour.domElement.getElementsByTagName('video'),
+    ];
+    videos.forEach((video) => {
+      // Video has to be be muted to autoplay if the user didn't interact with the page
+      video.muted = true;
+      video.play();
+    });
   }
 
   dispose() {
