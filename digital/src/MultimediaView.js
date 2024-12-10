@@ -17,12 +17,16 @@ export class MultimediaView {
       .getElementById('multimedia_div')
       .getElementsByClassName('select_dataset')[0];
     const datasetConfig = {};
+    this.listDataset = document.getElementById('multimedia_list_dataset');
     configs['3DTiles'].forEach((config) => {
       datasetConfig[config.id] = config;
       const dataOption = document.createElement('option');
       dataOption.value = config.id;
       dataOption.innerText = config.name;
       this.selectDataset.appendChild(dataOption);
+      const ul = document.createElement('ul');
+      ul.innerText = `${this.selectDataset.options.length - 1} ${config.name}`;
+      this.listDataset.appendChild(ul);
     });
 
     const getDataset = () => {
@@ -67,6 +71,8 @@ export class MultimediaView {
       const themesConfigs = getThemes();
       const themes = {};
       this.pins = {};
+      const listMedia = document.getElementById('multimedia_list_media');
+      listMedia.innerHTML = '';
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
         this.selectMedia.innerHTML = '';
@@ -97,7 +103,10 @@ export class MultimediaView {
               }
             };
             this.listenersToggle.push(newListener);
-            window.addEventListener('keypress', newListener);
+            window.addEventListener('keydown', newListener);
+            const ul = document.createElement('ul');
+            ul.innerText = `${config.key} ${config.name}`;
+            listMedia.appendChild(ul);
           });
         this.view.notifyChange();
         this.frameRequester = this.view.addFrameRequester(
@@ -151,7 +160,17 @@ export class MultimediaView {
       itowns.View.prototype.addLayer.call(this.view, this.c3DTilesLayer);
     };
 
-    window.addEventListener('keydown', (event) => {
+    this.listenerKeydown = (event) => {
+      if (!getDataset()) {
+        const options = this.selectDataset.options;
+        const index = Number(event.key);
+        const isNumber = event.key.match(/^[1-9]$/);
+        if (isNumber && index >= 1 && index < options.length) {
+          this.selectDataset.selectedIndex = event.key;
+          this.selectDataset.dispatchEvent(new Event('change'));
+        }
+      }
+
       if (this.themeController && this.themeController.guidedTour) {
         const tour = this.themeController.guidedTour;
         if (event.key == '0' && tour.currentIndex > tour.startIndex) {
@@ -170,7 +189,9 @@ export class MultimediaView {
           },
         });
       }
-    });
+    };
+
+    window.addEventListener('keydown', this.listenerKeydown);
     showElement('multimedia_div');
     hideElement('shape_div');
   }
@@ -186,6 +207,7 @@ export class MultimediaView {
   clean() {
     this.themeDiv.hidden = true;
     this.themeId = null;
+    this.listDataset.innerHTML = '';
 
     if (this.themeController != null) {
       this.themeController.dispose();
@@ -203,8 +225,9 @@ export class MultimediaView {
     this.selectMedia.innerHTML = '';
 
     this.listenersToggle.forEach((listener) => {
-      window.removeEventListener('keypress', listener);
+      window.removeEventListener('keydown', listener);
     });
+    this.listenersToggle = [];
 
     Object.values(this.pins).forEach((pin) => {
       this.view.scene.remove(pin);
@@ -224,9 +247,10 @@ export class MultimediaView {
 
   dispose() {
     this.clean();
-    this.view.removeLayer(this.c3DTilesLayer.id);
+    if (this.c3DTilesLayer) this.view.removeLayer(this.c3DTilesLayer.id);
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
+    window.removeEventListener('keydown', this.listenerKeydown);
     hideElement('multimedia_div');
   }
 }

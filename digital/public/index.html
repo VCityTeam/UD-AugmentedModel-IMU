@@ -17,18 +17,12 @@
       <img class="logo" src="./assets/img/logo-liris.png" />
     </div>
     <div id="view_choice_div">
-      <button id="evolution_button">Evolution</button>
-      <button id="multimedia_button">Multimedia</button>
+      <button id="evolution_button">1 - Evolution</button>
+      <button id="multimedia_button">2 - Multimedia</button>
     </div>
     <div id="evolution_div">
       <div class="view_div">
-        <div class="camera_div">
-          <h2>Camera Position</h2>
-          <div>
-            <button class="save_camera">Save</button>
-            <button class="load_camera">Load</button>
-          </div>
-        </div>
+        <h1>Evolution View</h1>
         <div class="select_div">
           <h2>Space Time Shape</h2>
           <select class="select_dataset">
@@ -98,22 +92,19 @@
     </div>
     <div id="multimedia_div">
       <div class="view_div">
-        <div class="camera_div">
-          <h2>Camera Position</h2>
-          <div>
-            <button class="save_camera">Save</button>
-            <button class="load_camera">Load</button>
-          </div>
-        </div>
+        <h1>Multimedia View</h1>
         <div class="select_div">
           <h2>Space Time Shape</h2>
           <select class="select_dataset">
             <option selected disabled hidden>Choose a Dataset</option>
           </select>
+          <li id="multimedia_list_dataset"></li>
         </div>
+
         <div id="media_div" hidden>
           <h2>Multimedia</h2>
           <select id="select_media"></select>
+          <li id="multimedia_list_media"></li>
         </div>
       </div>
     </div>
