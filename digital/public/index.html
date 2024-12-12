@@ -17,26 +17,22 @@
       <img class="logo" src="./assets/img/logo-liris.png" />
     </div>
     <div id="view_choice_div">
-      <button id="evolution_button">Evolution</button>
-      <button id="multimedia_button">Multimedia</button>
+      <button id="evolution_button">1 - Evolution</button>
+      <button id="multimedia_button">2 - Multimedia</button>
     </div>
     <div id="evolution_div">
       <div class="view_div">
-        <div class="camera_div">
-          <h2>Camera Position</h2>
-          <div>
-            <button class="save_camera">Save</button>
-            <button class="load_camera">Load</button>
-          </div>
-        </div>
+        <h1>Evolution View</h1>
         <div class="select_div">
           <h2>Space Time Shape</h2>
           <select class="select_dataset">
             <option selected disabled hidden>Choose a Dataset</option>
           </select>
+          <li id="evolution_list_dataset"></li>
           <select id="select_mode" hidden>
             <option selected disabled hidden>Choose a Mode</option>
           </select>
+          <li id="evolution_list_mode" hidden></li>
           <select id="select_shape" hidden>
             <option id="default_shape" selected disabled hidden>
               Choose a Shape
@@ -44,6 +40,14 @@
             <option value="circle">Circle</option>
             <option value="parabola">Parabola</option>
           </select>
+          <li id="evolution_list_shape" hidden>
+            <ul>
+              1 - Circle
+            </ul>
+            <ul>
+              2 - Parabola
+            </ul>
+          </li>
         </div>
         <div id="shape_div">
           <h2 id="shape_name"></h2>
@@ -98,22 +102,19 @@
     </div>
     <div id="multimedia_div">
       <div class="view_div">
-        <div class="camera_div">
-          <h2>Camera Position</h2>
-          <div>
-            <button class="save_camera">Save</button>
-            <button class="load_camera">Load</button>
-          </div>
-        </div>
+        <h1>Multimedia View</h1>
         <div class="select_div">
           <h2>Space Time Shape</h2>
           <select class="select_dataset">
             <option selected disabled hidden>Choose a Dataset</option>
           </select>
+          <li id="multimedia_list_dataset"></li>
         </div>
+
         <div id="media_div" hidden>
           <h2>Multimedia</h2>
-          <div id="media_container"></div>
+          <select id="select_media"></select>
+          <li id="multimedia_list_media"></li>
         </div>
       </div>
     </div>

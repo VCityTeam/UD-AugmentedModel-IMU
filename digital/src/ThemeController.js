@@ -7,7 +7,7 @@ export class ThemeController {
     this.guidedTour = null;
     this.mergedTourConfig = null;
     this.slider = null;
-    this.baseUrl = 'http://localhost:8000/';
+    this.baseUrl = window.location.origin;
 
     this.view = view;
     this.themeConfigs = themeConfigs;
@@ -26,8 +26,8 @@ export class ThemeController {
     let name = '';
     for (const themeConfig of this.themeConfigs) {
       const tourId = themeConfig.guidedTourId;
-      const dates = themeConfig.dates;
       const tour = this.tourConfigs.find((config) => config.tour.id == tourId);
+      const dates = themeConfig.dates || Array(tour.tour.endIndex + 1).fill(0);
       for (let i = 0; i < dates.length; i++) {
         allSteps.push({ date: dates[i], tourId: tourId, stepIndex: i });
       }
@@ -66,7 +66,7 @@ export class ThemeController {
     this.guidedTour.mediaContainer.classList.add('media_container');
     this.guidedTour.previousButton.id = 'previous';
     this.guidedTour.nextButton.id = 'next';
-    fetch(`${this.baseUrl}guidedTourConfig`, {
+    fetch(`${this.baseUrl}/guidedTourConfig`, {
       method: 'POST',
       body: JSON.stringify(this.mergedTourConfig),
       headers: {
@@ -113,7 +113,7 @@ export class ThemeController {
   }
 
   sendEventUpdate(stepIndex) {
-    fetch(`${this.baseUrl}stepIndex`, {
+    fetch(`${this.baseUrl}/stepIndex`, {
       method: 'POST',
       body: JSON.stringify({
         stepIndex: stepIndex,

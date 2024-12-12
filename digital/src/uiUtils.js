@@ -31,3 +31,31 @@ export function toggleShowHide(elementId) {
     element.style.display = element.style.display === 'none' ? '' : 'none';
   }
 }
+
+export function debugCamera(view) {
+  const debugButton = document.createElement('button');
+  document.body.appendChild(debugButton);
+  debugButton.style.zIndex = 1000;
+  debugButton.style.position = 'absolute';
+  debugButton.style.right = '0px';
+  debugButton.onclick = () => {
+    console.log(
+      '"x: "' +
+        view.camera.camera3D.position.x +
+        ', "y: "' +
+        view.camera.camera3D.position.y +
+        ', "z: "' +
+        view.camera.camera3D.position.z
+    );
+    console.log(
+      '"x: "' +
+        view.camera.camera3D.quaternion._x +
+        ', "y: "' +
+        view.camera.camera3D.quaternion._y +
+        ', "z: "' +
+        view.camera.camera3D.quaternion._z +
+        ', "w: "' +
+        view.camera.camera3D.quaternion._w
+    );
+  };
+}

@@ -1,43 +1,36 @@
 import * as itowns from 'itowns';
-import * as THREE from 'three';
-import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import { ThemeController } from './ThemeController';
+import { createPin } from './object3DUtil';
 
 import { hideElement, showElement } from './uiUtils';
 
-const baseUrl = 'http://localhost:8000/';
+const baseUrl = window.location.origin;
 
 export class MultimediaView {
   constructor(configs, view) {
     this.view = view;
-
-    const extensions = new itowns.C3DTExtensions();
-    extensions.registerExtension(extensions3DTilesTemporal.ID, {
-      [itowns.C3DTilesTypes.batchtable]:
-        extensions3DTilesTemporal.C3DTTemporalBatchTable,
-      [itowns.C3DTilesTypes.boundingVolume]:
-        extensions3DTilesTemporal.C3DTTemporalBoundingVolume,
-      [itowns.C3DTilesTypes.tileset]:
-        extensions3DTilesTemporal.C3DTTemporalTileset,
-    });
+    this.c3DTilesLayer = null;
+    this.frameRequester = null;
 
     // CREATE HTML
     this.selectDataset = document
       .getElementById('multimedia_div')
       .getElementsByClassName('select_dataset')[0];
-    const datasetConfigs = {};
-    configs['3DTiles_STS_data']
-      .concat(configs['3DTiles_temporal'])
-      .forEach((config) => {
-        datasetConfigs[config.id] = config.versions || [config];
-        const dataOption = document.createElement('option');
-        dataOption.value = config.id;
-        dataOption.innerText = config.name;
-        this.selectDataset.appendChild(dataOption);
-      });
+    const datasetConfig = {};
+    this.listDataset = document.getElementById('multimedia_list_dataset');
+    configs['3DTiles'].forEach((config) => {
+      datasetConfig[config.id] = config;
+      const dataOption = document.createElement('option');
+      dataOption.value = config.id;
+      dataOption.innerText = config.name;
+      this.selectDataset.appendChild(dataOption);
+      const ul = document.createElement('ul');
+      ul.innerText = `${this.selectDataset.options.length - 1} ${config.name}`;
+      this.listDataset.appendChild(ul);
+    });
 
     const getDataset = () => {
-      return datasetConfigs[this.selectDataset.selectedOptions[0].value];
+      return datasetConfig[this.selectDataset.selectedOptions[0].value];
     };
 
     const getThemes = () => {
@@ -47,13 +40,14 @@ export class MultimediaView {
     };
 
     this.themeDiv = document.getElementById('media_div');
-    this.themesContainer = document.getElementById('media_container');
+    this.selectMedia = document.getElementById('select_media');
 
     this.themeController = null;
-
-    // EVENTS
+    this.themeId = null;
+    this.defaultDisplayed = true;
     this.versions = [];
-    const listenersToggle = [];
+    this.listenersToggle = [];
+    this.pins = {};
 
     this.selectDataset.onchange = () => {
       if (this.versions.length > 0) {
@@ -62,12 +56,9 @@ export class MultimediaView {
         });
         this.versions = [];
       }
-      if (this.themeController != null) {
-        this.themeController.dispose();
-        this.themeController = null;
-      }
+      this.clean();
 
-      fetch(`${baseUrl}selectedDataId`, {
+      fetch(`${baseUrl}/selectedDataId`, {
         method: 'POST',
         body: JSON.stringify({
           selectedDataId: this.selectDataset.selectedOptions[0].value,
@@ -78,147 +69,152 @@ export class MultimediaView {
       }).then((response) => response.text());
 
       const themesConfigs = getThemes();
-      const themeInputs = [];
       const themes = {};
+      this.pins = {};
+      const listMedia = document.getElementById('multimedia_list_media');
+      listMedia.innerHTML = '';
       if (themesConfigs != undefined) {
         this.themeDiv.hidden = false;
-        this.themesContainer.innerHTML = '';
-        themesConfigs.themes.forEach((config) => {
-          themes[config.id] = config;
-          const themeLabel = document.createElement('label');
-          const themeInput = document.createElement('input');
-          themeInput.setAttribute('type', 'checkbox');
-          themeLabel.appendChild(themeInput);
-          const themeSpan = document.createElement('span');
-          themeSpan.innerText = config.name;
-          themeLabel.appendChild(themeSpan);
-          this.themesContainer.appendChild(themeLabel);
-          themeInput.id = config.id;
-          /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
-       element and dispatches a new input event */
-          if (config.key) {
+        this.selectMedia.innerHTML = '';
+        themesConfigs.themes
+          .filter((theme) => theme.type == 'multimedia')
+          .forEach((config) => {
+            themes[config.id] = config;
+            const mediaOption = document.createElement('option');
+            this.selectMedia.appendChild(mediaOption);
+            mediaOption.value = config.id;
+            if (config.id == 'default') {
+              mediaOption.innerText = config.name;
+              mediaOption.selected = true;
+            } else {
+              mediaOption.innerText = '#' + config.key + ' ' + config.name;
+              if (config.pin) {
+                const pin = createPin(config.pin.position, config.pin.sprite);
+                this.view.scene.add(pin);
+                this.pins[config.id] = pin;
+              }
+            }
+            /* Adding an event listener when a key is pressed, if there is a match, it toggles the checked state of an input
+              element and dispatches a new input event */
             const newListener = (event) => {
               if (event.key == config.key) {
-                themeInput.checked = !themeInput.checked;
-                themeInput.dispatchEvent(new Event('input'));
+                mediaOption.selected = true;
+                this.selectMedia.dispatchEvent(new Event('change'));
               }
             };
-            listenersToggle.push(newListener);
-            window.addEventListener('keypress', newListener);
-          }
-          themeInputs.push(themeInput);
-        });
-      } else {
-        this.themeDiv.hidden = true;
-        /* Removing event listeners from all the functions in the `listenersToggle`*/
-        listenersToggle.forEach((listener) => {
-          window.removeEventListener('keypress', listener);
-        });
-      }
-      themeInputs.forEach((input) => {
-        input.addEventListener('input', () => {
-          const selectedThemes = [];
-          const selectedThemeIds = [];
-          themeInputs.forEach(({ checked, id }) => {
-            if (checked) {
-              selectedThemes.push(themes[id]);
-              selectedThemeIds.push(id);
-            }
+            this.listenersToggle.push(newListener);
+            window.addEventListener('keydown', newListener);
+            const ul = document.createElement('ul');
+            ul.innerText = `${config.key} ${config.name}`;
+            listMedia.appendChild(ul);
           });
-          if (this.themeController != null) {
-            this.themeController.dispose();
-            this.themeController = null;
-          }
+        this.view.notifyChange();
+        this.frameRequester = this.view.addFrameRequester(
+          itowns.MAIN_LOOP_EVENTS.AFTER_CAMERA_UPDATE,
+          this.updatePinsVisibility.bind(this)
+        );
+      }
+      this.selectMedia.onchange = () => {
+        if (this.themeId == this.selectMedia.selectedOptions[0].value) return;
+        this.themeId = this.selectMedia.selectedOptions[0].value;
+        this.defaultDisplayed = this.themeId == 'default';
 
-          fetch(`${baseUrl}selectedThemeIds`, {
-            method: 'POST',
-            body: JSON.stringify({ selectedThemeIds }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }).then((response) => response.json());
+        if (this.themeController != null) {
+          this.themeController.dispose();
+          this.themeController = null;
+        }
 
-          if (selectedThemes.length > 0) {
-            this.themeController = new ThemeController(
-              this.view,
-              selectedThemes,
-              configs['guided_tour']
-            );
-            document.body.appendChild(
-              this.themeController.guidedTour.domElement
-            );
-            this.themeController.guidedTour.previousButton.remove();
-            this.themeController.guidedTour.nextButton.remove();
-          }
+        fetch(`${baseUrl}/selectedThemeIds`, {
+          method: 'POST',
+          body: JSON.stringify({ selectedThemeIds: [this.themeId] }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((response) => response.json());
+
+        this.themeController = new ThemeController(
+          this.view,
+          [themes[this.themeId]],
+          configs['guided_tour']
+        );
+        // document.body.appendChild(this.themeController.guidedTour.domElement);
+        Object.entries(this.pins).forEach(([themeId, pin]) => {
+          pin.visible = this.defaultDisplayed || this.themeId == themeId;
         });
-      });
+      };
+      if (Object.keys(themes).length > 0) {
+        this.selectMedia.dispatchEvent(new Event('change'));
+      }
 
-      const c3dtilesConfigs = getDataset();
-      const promisesTileContentLoaded = [];
-      c3dtilesConfigs.forEach((config) => {
-        const isTemporal = !!config.dates;
-        const datesJSON = isTemporal ? config.dates : [config.date];
-        const registerExtensions = isTemporal ? extensions : null;
-        datesJSON.forEach((date) => {
-          const c3DTilesLayer = new itowns.C3DTilesLayer(
-            config.id + '_' + date.toString(),
-            {
-              name: config.id + date.toString(),
-              source: new itowns.C3DTilesSource({
-                url: config.url,
-              }),
-              registeredExtensions: registerExtensions,
-            },
-            this.view
-          );
-          itowns.View.prototype.addLayer.call(this.view, c3DTilesLayer);
-          promisesTileContentLoaded.push(
-            new Promise((resolve) => {
-              c3DTilesLayer.addEventListener(
-                itowns.C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED,
-                () => {
-                  resolve();
-                }
-              );
-            })
-          );
-          if (isTemporal) {
-            const temporalsWrapper =
-              new extensions3DTilesTemporal.Temporal3DTilesLayerWrapper(
-                c3DTilesLayer
-              );
-
-            if (date == Math.min(...datesJSON)) {
-              temporalsWrapper.styleDate = date + 1;
-            } else {
-              temporalsWrapper.styleDate = date - 2;
-            }
-          }
-          this.versions.push({ date: date, c3DTLayer: c3DTilesLayer });
-        });
-      });
+      const c3dtilesConfig = getDataset();
+      this.c3DTilesLayer = new itowns.C3DTilesLayer(
+        c3dtilesConfig.id,
+        {
+          name: c3dtilesConfig.id,
+          source: new itowns.C3DTilesSource({
+            url: c3dtilesConfig.url,
+          }),
+        },
+        this.view
+      );
+      itowns.View.prototype.addLayer.call(this.view, this.c3DTilesLayer);
     };
 
-    window.addEventListener('keydown', (event) => {
-      console.log(event.key);
-    });
+    this.listenerKeydown = (event) => {
+      if (!getDataset()) {
+        const options = this.selectDataset.options;
+        const index = Number(event.key);
+        const isNumber = event.key.match(/^[1-9]$/);
+        if (isNumber && index >= 1 && index < options.length) {
+          this.selectDataset.selectedIndex = event.key;
+          this.selectDataset.dispatchEvent(new Event('change'));
+        }
+      }
 
+      if (this.themeController && this.themeController.guidedTour) {
+        const tour = this.themeController.guidedTour;
+        if (event.key == '0' && tour.currentIndex > tour.startIndex) {
+          tour.currentIndex--;
+        }
+        if (event.key == '.' && tour.currentIndex < tour.endIndex) {
+          tour.currentIndex++;
+        }
+        fetch(`${baseUrl}/stepIndex`, {
+          method: 'POST',
+          body: JSON.stringify({
+            stepIndex: tour.currentIndex,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    };
+
+    window.addEventListener('keydown', this.listenerKeydown);
     showElement('multimedia_div');
     hideElement('shape_div');
   }
 
-  dispose() {
+  updatePinsVisibility() {
+    Object.entries(this.pins).forEach(([themeId, pin]) => {
+      pin.visible =
+        (this.defaultDisplayed || this.themeId == themeId) &&
+        pin.position.distanceTo(this.view.camera3D.position) > 1000;
+    });
+  }
+
+  clean() {
+    this.themeDiv.hidden = true;
+    this.themeId = null;
+    this.listDataset.innerHTML = '';
+
     if (this.themeController != null) {
       this.themeController.dispose();
+      this.themeController = null;
     }
 
-    if (this.versions.length > 0) {
-      this.versions.forEach((v) => {
-        this.view.removeLayer(v.c3DTLayer.id);
-      });
-    }
-
-    fetch(`${baseUrl}selectedThemeIds`, {
+    fetch(`${baseUrl}/selectedThemeIds`, {
       method: 'POST',
       body: JSON.stringify({ selectedThemeIds: [] }),
       headers: {
@@ -226,10 +222,35 @@ export class MultimediaView {
       },
     }).then((response) => response.json());
 
+    this.selectMedia.innerHTML = '';
+
+    this.listenersToggle.forEach((listener) => {
+      window.removeEventListener('keydown', listener);
+    });
+    this.listenersToggle = [];
+
+    Object.values(this.pins).forEach((pin) => {
+      this.view.scene.remove(pin);
+      pin.material.dispose();
+    });
+    this.view.notifyChange();
+    if (this.frameRequester)
+      this.view.removeFrameRequester(
+        itowns.MAIN_LOOP_EVENTS.AFTER_CAMERA_UPDATE,
+        this.updatePinsVisibility
+      );
+  }
+
+  canBeDisposed() {
+    return this.themeId == null || this.defaultDisplayed;
+  }
+
+  dispose() {
+    this.clean();
+    if (this.c3DTilesLayer) this.view.removeLayer(this.c3DTilesLayer.id);
     this.selectDataset.replaceChildren(this.selectDataset.firstElementChild);
     this.selectDataset.firstElementChild.selected = true;
-    this.themeDiv.hidden = true;
-    this.themesContainer.innerHTML = '';
+    window.removeEventListener('keydown', this.listenerKeydown);
     hideElement('multimedia_div');
   }
 }
