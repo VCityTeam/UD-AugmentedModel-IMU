@@ -529,6 +529,7 @@ export class EvolutionView {
     this.listDataset.innerHTML = '';
     this.selectMode.hidden = true;
     this.listMode.hidden = true;
+    this.listMode.innerHTML = '';
     this.selectMode.replaceChildren(this.selectMode.firstElementChild);
     this.selectMode.firstElementChild.selected = true;
     this.selectSTShape.hidden = true;
