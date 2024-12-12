@@ -109,6 +109,8 @@ export function getFocusTransformForCurrentSTShape(view, stShape) {
     .getWorldPosition(new Vector3())
     .sub(cloneObject.getWorldPosition(new Vector3()));
 
+  cloneObject.rotateZ(degToRad(-90));
+
   // Move the cloned object along the direction vector so that it is properly positioned in view
   cloneObject.translateOnAxis(dirCameraObject.normalize(), distance);
 
