@@ -1,262 +1,354 @@
 [
-    {
-        "tour": {
-            "id": "tour_0",
-            "name": "Tour example",
-            "description": "This is an example of guided tour",
-            "startIndex": 0,
-            "endIndex": 6,
-            "steps": [
-                {
-                    "previous": 0,
-                    "next": 1,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_01",
-                        "VID_00"
-                    ]
-                },
-                {
-                    "previous": 0,
-                    "next": 2,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_02",
-                        "VID_00"
-                    ]
-                },
-                {
-                    "previous": 1,
-                    "next": 3,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_03",
-                        "IMG_00"
-                    ]
-                },
-                {
-                    "previous": 2,
-                    "next": 4,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_04",
-                        "IMG_00"
-                    ]
-                },
-                {
-                    "previous": 3,
-                    "next": 5,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_05"
-                    ]
-                },
-                {
-                    "previous": 4,
-                    "next": 6,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_06",
-                        "AUD_00"
-                    ]
-                },
-                {
-                    "previous": 5,
-                    "next": 6,
-                    "media": [
-                        "TEXT_00",
-                        "TEXT_07",
-                        "AUD_00"
-                    ]
-                }
-            ]
+  {
+    "tour": {
+      "id": "tour_0",
+      "name": "Tour example",
+      "description": "This is an example of guided tour",
+      "startIndex": 0,
+      "endIndex": 6,
+      "steps": [
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["TEXT_00", "TEXT_01", "VID_00"]
         },
-        "media": [
-            {
-                "id": "TEXT_00",
-                "type": "text",
-                "value": "Industrie"
-            },
-            {
-                "id": "TEXT_01",
-                "type": "text",
-                "value": "2000"
-            },
-            {
-                "id": "TEXT_02",
-                "type": "text",
-                "value": "2009"
-            },
-            {
-                "id": "TEXT_03",
-                "type": "text",
-                "value": "2011"
-            },
-            {
-                "id": "TEXT_04",
-                "type": "text",
-                "value": "2012"
-            },
-            {
-                "id": "TEXT_05",
-                "type": "text",
-                "value": "2015"
-            },
-            {
-                "id": "TEXT_06",
-                "type": "text",
-                "value": "2018"
-            },
-            {
-                "id": "TEXT_07",
-                "type": "text",
-                "value": "2030"
-            },
-            {
-                "id": "IMG_00",
-                "type": "image",
-                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
-            },
-            {
-                "id": "VID_00",
-                "type": "video",
-                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            },
-            {
-                "id": "AUD_00",
-                "type": "audio",
-                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
-            }
-        ]
+        {
+          "previous": 0,
+          "next": 2,
+          "media": ["TEXT_00", "TEXT_02", "VID_00"]
+        },
+        {
+          "previous": 1,
+          "next": 3,
+          "media": ["TEXT_00", "TEXT_03", "IMG_00"]
+        },
+        {
+          "previous": 2,
+          "next": 4,
+          "media": ["TEXT_00", "TEXT_04", "IMG_00"]
+        },
+        {
+          "previous": 3,
+          "next": 5,
+          "media": ["TEXT_00", "TEXT_05"]
+        },
+        {
+          "previous": 4,
+          "next": 6,
+          "media": ["TEXT_00", "TEXT_06", "AUD_00"]
+        },
+        {
+          "previous": 5,
+          "next": 6,
+          "media": ["TEXT_00", "TEXT_07", "AUD_00"]
+        }
+      ]
     },
-    {
-        "tour": {
-            "id": "tour_1",
-            "name": "Tour example",
-            "description": "This is an example of guided tour",
-            "startIndex": 0,
-            "endIndex": 6,
-            "steps": [
-                {
-                    "previous": 0,
-                    "next": 1,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_11",
-                        "VID_01"
-                    ]
-                },
-                {
-                    "previous": 0,
-                    "next": 2,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_12",
-                        "VID_01"
-                    ]
-                },
-                {
-                    "previous": 1,
-                    "next": 3,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_13",
-                        "IMG_01"
-                    ]
-                },
-                {
-                    "previous": 2,
-                    "next": 4,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_14",
-                        "IMG_01"
-                    ]
-                },
-                {
-                    "previous": 3,
-                    "next": 5,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_15"
-                    ]
-                },
-                {
-                    "previous": 4,
-                    "next": 6,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_16",
-                        "AUD_01"
-                    ]
-                },
-                {
-                    "previous": 5,
-                    "next": 6,
-                    "media": [
-                        "TEXT_10",
-                        "TEXT_17",
-                        "AUD_01"
-                    ]
-                }
-            ]
+    "media": [
+      {
+        "id": "TEXT_00",
+        "type": "text",
+        "value": "Industrie"
+      },
+      {
+        "id": "TEXT_01",
+        "type": "text",
+        "value": "2000"
+      },
+      {
+        "id": "TEXT_02",
+        "type": "text",
+        "value": "2009"
+      },
+      {
+        "id": "TEXT_03",
+        "type": "text",
+        "value": "2011"
+      },
+      {
+        "id": "TEXT_04",
+        "type": "text",
+        "value": "2012"
+      },
+      {
+        "id": "TEXT_05",
+        "type": "text",
+        "value": "2015"
+      },
+      {
+        "id": "TEXT_06",
+        "type": "text",
+        "value": "2018"
+      },
+      {
+        "id": "TEXT_07",
+        "type": "text",
+        "value": "2030"
+      },
+      {
+        "id": "IMG_00",
+        "type": "image",
+        "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+      },
+      {
+        "id": "VID_00",
+        "type": "video",
+        "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "id": "AUD_00",
+        "type": "audio",
+        "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+      }
+    ]
+  },
+  {
+    "tour": {
+      "id": "tour_1",
+      "name": "Tour example",
+      "description": "This is an example of guided tour",
+      "startIndex": 0,
+      "endIndex": 6,
+      "steps": [
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["title", "text_1930", "IMG_02"]
         },
-        "media": [
-            {
-                "id": "TEXT_10",
-                "type": "text",
-                "value": "Histoire"
-            },
-            {
-                "id": "TEXT_11",
-                "type": "text",
-                "value": "1960"
-            },
-            {
-                "id": "TEXT_12",
-                "type": "text",
-                "value": "2007"
-            },
-            {
-                "id": "TEXT_13",
-                "type": "text",
-                "value": "2012"
-            },
-            {
-                "id": "TEXT_14",
-                "type": "text",
-                "value": "2015"
-            },
-            {
-                "id": "TEXT_15",
-                "type": "text",
-                "value": "2018"
-            },
-            {
-                "id": "TEXT_16",
-                "type": "text",
-                "value": "2019"
-            },
-            {
-                "id": "TEXT_17",
-                "type": "text",
-                "value": "2024"
-            },
-            {
-                "id": "IMG_01",
-                "type": "image",
-                "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
-            },
-            {
-                "id": "VID_01",
-                "type": "video",
-                "value": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            },
-            {
-                "id": "AUD_01",
-                "type": "audio",
-                "value": "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
-            }
-        ]
-    }
+        {
+          "previous": 0,
+          "next": 2,
+          "media": ["title", "text_1963", "IMG_03"]
+        },
+        {
+          "previous": 1,
+          "next": 3,
+          "media": ["title", "text_1991", "IMG_04"]
+        },
+        {
+          "previous": 2,
+          "next": 4,
+          "media": ["title", "text_2004", "IMG_05"]
+        },
+        {
+          "previous": 3,
+          "next": 5,
+          "media": ["title", "text_2009"]
+        },
+        {
+          "previous": 4,
+          "next": 6,
+          "media": ["title", "text_2012"]
+        },
+        {
+          "previous": 5,
+          "next": 7,
+          "media": ["title", "text_2015"]
+        },
+        {
+          "previous": 6,
+          "next": 8,
+          "media": ["title", "text_2018"]
+        },
+        {
+          "previous": 7,
+          "next": 8,
+          "media": ["title", "text_2025", "IMG_06"]
+        }
+      ]
+    },
+    "media": [
+      {
+        "id": "title",
+        "type": "text",
+        "value": "Histoire des Gratte-Ciel de Villeurbanne"
+      },
+      {
+        "id": "text_1930",
+        "type": "text",
+        "value": "1930 - construction du quartier"
+      },
+      {
+        "id": "text_1963",
+        "type": "text",
+        "value": " 1963 - 1964 : Une synagogue a été construite dans la rue Malherbe en 1963-1964, adossée à un des immeubles. Elle est l’œuvre d’un groupe de jeunes allemands de la RDA sous la direction de l’architecte R. Carpe au titre des réparations morales et matérielles des crimes nazis. Elle accueille la population juive qui s’est installée dans le quartier dans le dernier quart du XXe siècle"
+      },
+      {
+        "id": "text_1991",
+        "type": "text",
+        "value": " 1991 : L’hôtel de Ville est inscrit à l’Inventaire supplémentaire des monuments Historiques en 1991. En 1993, une zone de protection du patrimoine architectural, urbain et paysager (ZPPAUP) vise à protéger l’ensemble du quartier des Gratte-ciel. Elle préconise une valorisation des espaces de circulation par la création de cheminements piétonniers et l’harmonisation des devantures commerciales."
+      },
+      {
+        "id": "text_2004",
+        "type": "text",
+        "value": "2004 : La place du Docteur-Lazare-Goujon a été rénovée entre 2004 et 2006. Un parking est construit sous celle-ci. La surface des bassins a été réduite et ils sont agrémentés de fontaines très basses."
+      },
+      {
+        "id": "text_2009",
+        "type": "text",
+        "value": "2009 : Représentation des données du dataGrandlyon de 2009"
+      },
+      {
+        "id": "text_2012",
+        "type": "text",
+        "value": "2012 : Représentation des données du dataGrandlyon de 2012"
+      },
+      {
+        "id": "text_2015",
+        "type": "text",
+        "value": "2015 : Représentation des données du dataGrandlyon de 2015"
+      },
+      {
+        "id": "text_2018",
+        "type": "text",
+        "value": "2018 : Représentation des données du dataGrandlyon de 2018"
+      },
+      {
+        "id": "text_2025",
+        "type": "text",
+        "value": "2025 : Nouveau quartier de 2025"
+      },
+      {
+        "id": "IMG_02",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fen.geneanet.org%2Fpublic%2Fimg%2Fgallery%2Fpictures%2Fcartes_postales%2Fbe%2F6869329%2Flarge.jpg&f=1&nofb=1&ipt=33a39f1018b8c8b2b34a9be33c298fc1f36fc381552c4d08b90ad626f11a2138&ipo=images"
+      },
+      {
+        "id": "IMG_03",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffr.geneawiki.com%2Fimages%2Fthumb%2F9%2F95%2F69266_-_Villeurbanne_Synagogue_Gratte_ciel.JPG%2F640px-69266_-_Villeurbanne_Synagogue_Gratte_ciel.JPG&f=1&nofb=1&ipt=4c72e5d9fc3fe110b88507000235ebb163dfa87f05405bc1db45f180dedf3b07&ipo=images"
+      },
+      {
+        "id": "IMG_04",
+        "type": "image",
+        "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_monument_historique_-_rouge_ombré%2C_encadré.svg/220px-Logo_monument_historique_-_rouge_ombré%2C_encadré.svg.png"
+      },
+      {
+        "id": "IMG_05",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Flandezine.com%2Fwp-content%2Fuploads%2F2012%2F10%2FIN-SITU-Place-Lazare-Goujon-03.jpg&f=1&nofb=1&ipt=35ee96178eec22b8e317c91625df5c076f96fa3b29471c016d944b87835333c8&ipo=images"
+      },
+      {
+        "id": "IMG_06",
+        "type": "image",
+        "value": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.20mn.fr%2FEHjwBBQoQ1qzGZq0o2hg3g%2F1200x768_projet-prolongement-quartier-gratte-ciel-villeurbanne&f=1&nofb=1&ipt=9b58ebda3c4f3a57a7a20d034a65cdea9adc3a6a12083a3a8106528564c4e1f7&ipo=images"
+      }
+    ]
+  },
+  {
+    "tour": {
+      "id": "tour_2",
+      "name": "Tour example",
+      "description": "This is an example of guided tour",
+      "startIndex": 0,
+      "endIndex": 0,
+      "steps": [
+        {
+          "previous": 0,
+          "next": 0,
+          "media": [],
+          "position": {
+            "x": 1844817,
+            "y": 5175845,
+            "z": 13958
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          }
+        }
+      ]
+    },
+    "media": []
+  },
+  {
+    "tour": {
+      "id": "tour_3",
+      "name": "Tour example",
+      "description": "This is an example of guided tour",
+      "startIndex": 0,
+      "endIndex": 2,
+      "steps": [
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["IMG_00"],
+          "position": {
+            "x": 1846403,
+            "y": 5175181,
+            "z": 1217
+          },
+          "rotation": {
+            "x": 0.27795302953951045,
+            "y": 0.04019524391526815,
+            "z": 0.13736263651125566,
+            "w": 0.949872602945825
+          }
+        },
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["IMG_00"]
+        },
+        {
+          "previous": 1,
+          "next": 1,
+          "media": ["IMG_00"]
+        }
+      ]
+    },
+    "media": [
+      {
+        "id": "IMG_00",
+        "type": "image",
+        "value": "https://projet.liris.cnrs.fr/vcity/UD-Viz.png"
+      }
+    ]
+  },
+  {
+    "tour": {
+      "id": "tour_4",
+      "name": "Tour example",
+      "description": "This is an example of guided tour",
+      "startIndex": 0,
+      "endIndex": 2,
+      "steps": [
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["VID_00"],
+          "position": {
+            "x": 1846126,
+            "y": 5176187,
+            "z": 292
+          },
+          "rotation": {
+            "x": -0.07357250481720878,
+            "y": 0.44117424343726647,
+            "z": 0.8822171858595428,
+            "w": -0.14712311319621527
+          }
+        },
+        {
+          "previous": 0,
+          "next": 1,
+          "media": ["VID_00"]
+        },
+        {
+          "previous": 1,
+          "next": 1,
+          "media": ["VID_00"]
+        }
+      ]
+    },
+    "media": [
+      {
+        "id": "VID_00",
+        "type": "video",
+        "value": "https://media-hub.ina.fr/video/NGDZNAHhuvaPGNGz1tgOeOzjktEVXcuasREkAVTmBQVYodXNK3+9QJ8QcnjqSyk8undCMl5OxRO7ABccgapvB6S0PpKk6d5Vu2ypzzjCP+D7of/5xEXt8+rYkFjno0a4wmlBZa7FZ/hiPHXibFEdUA==/sl_iv/HcqVp17Ig6PTkK/gS+YAuA==/sl_hm/owyub3IUUtx2WbVSJNh37rYsxiuulpF2ZEA9p/+tcrB4PvUqruJ+ibEX9MAdxURMTTCipOrmGiVDbv5wA5j/uA==/sl_e/1734000124"
+      }
+    ]
+  }
 ]
