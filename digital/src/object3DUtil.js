@@ -47,9 +47,10 @@ export function createPin(position, imagePath) {
   const pictureMaterial = new SpriteMaterial({
     map: texture,
   });
+  pictureMaterial.sizeAttenuation = true;
   const pin = new Sprite(pictureMaterial);
   pin.position.set(position.x, position.y, position.z);
-  pin.scale.set(500, 500, 500);
+  pin.scale.set(100, 100, 100);
   pin.updateMatrixWorld();
 
   return pin;

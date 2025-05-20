@@ -84,6 +84,8 @@ export class EvolutionView {
     // CREATE SHAPES AND 3DTILES
 
     this.stsCircle = new extensions3DTilesTemporal.STSCircle();
+    this.stsCircle.radius = 500;
+    this.stsCircle.height = 150;
     this.stsParabola = new extensions3DTilesTemporal.STSParabola();
     this.themeController = null;
 
@@ -321,13 +323,13 @@ export class EvolutionView {
     };
 
     radiusParameter.addEventListener('input', (event) => {
-      this.stsCircle.radius = Number(event.target.value);
+      this.stsCircle.radius = 100;
       this.stsCircle.display(getCurrentMode());
       this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });
 
     heightParameter.addEventListener('input', (event) => {
-      this.stsCircle.height = Number(event.target.value);
+      this.stsCircle.height = 100;
       this.stsCircle.display(getCurrentMode());
       this.stsCircle.selectVersion(selectDate.selectedOptions[0].value);
     });

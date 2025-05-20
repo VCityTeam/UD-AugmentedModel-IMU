@@ -5,23 +5,23 @@
     "versions": [
       {
         "id": "Gratte-Ciel-v1",
-        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Fake_Gratte-Ciel/version-1/tileset.json",
-        "date": 300
+        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Villeurbanne_Gratte-Ciel_Temporal_Fake_Data/1930/tileset.json",
+        "date": 1930
       },
       {
         "id": "Gratte-Ciel-v2",
-        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Fake_Gratte-Ciel/version-2/tileset.json",
-        "date": 1588
+        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Villeurbanne_Gratte-Ciel_Temporal_Fake_Data/1963/tileset.json",
+        "date": 1963
       },
       {
         "id": "Gratte-Ciel-v3",
-        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Fake_Gratte-Ciel/version-3/tileset.json",
-        "date": 2050
+        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Villeurbanne_Gratte-Ciel_Temporal_Fake_Data/2004/tileset.json",
+        "date": 2004
       },
       {
         "id": "Gratte-Ciel-v4",
-        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Fake_Gratte-Ciel/version-4/tileset.json",
-        "date": 2077
+        "url": "https://dataset-dl.liris.cnrs.fr/three-d-tiles-lyon-metropolis/Temporal/Villeurbanne_Gratte-Ciel_Temporal_Fake_Data/2018/tileset.json",
+        "date": 2018
       }
     ]
   }
