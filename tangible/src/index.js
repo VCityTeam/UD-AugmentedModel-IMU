@@ -38,6 +38,10 @@ loadMultipleJSON([
   // init scene 3D
   initScene(view.camera.camera3D, view.mainLoop.gfxEngine.renderer, view.scene);
 
+  const planarLayer = view.getLayers().filter((el) => el.id == 'planar')[0];
+
+  planarLayer.visible = false;
+
   if (configs['camera'].position) {
     const pos = configs['camera'].position;
     view.camera.camera3D.position.set(pos.x, pos.y, pos.z);
@@ -179,7 +183,7 @@ loadMultipleJSON([
           extent
         );
         themeController.slideShow.addListeners();
-        themeController.guidedTour.goToStep(stepIndex);
+        themeController.goToTourStep(stepIndex);
         view.scene.add(themeController.slideShow.plane);
       });
   }
@@ -204,7 +208,7 @@ loadMultipleJSON([
           if (themeController) {
             themeController.slideShow.setTexture(stepIndex);
             if (themeController.guidedTour)
-              themeController.guidedTour.goToStep(stepIndex);
+              themeController.goToTourStep(stepIndex);
           }
         }
       });
